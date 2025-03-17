@@ -1,1 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PSFL Rulebook</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background-color: #111;
+      color: white;
+    }
+    header {
+      position: relative;
+      padding: 20px;
+      background-color: #222;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .branding {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo img {
+      width: 60px;
+    }
+    header h1 {
+      font-size: 2.5em;
+      margin: 0;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+    }
+    nav ul li a {
+      display: inline-block;
+      text-decoration: none;
+      color: white;
+      padding: 10px 15px;
+      background: #444;
+      border-radius: 5px;
+      transform: translateY(0);
+      transition: transform 0.7s ease-out;
+    }
+    nav ul li a:hover {
+      animation: oscillate 6s infinite ease-in-out;
+      box-shadow: 0 0 15px 5px orange;
+    }
+    @keyframes oscillate {
+      0%   { transform: translateY(-3px); }
+      50%  { transform: translateY(3px); }
+      100% { transform: translateY(-3px); }
+    }
+    .background {
+      position: relative;
+      min-height: 150vh;
+      background: url('https://cdn.discordapp.com/attachments/1336163903763255307/1351072676608872458/64C8236B-929C-4AE7-A011-A1408D0B9DC0.png') no-repeat center center;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 100px;
+      will-change: background-position;
+    }
+    .background::after {
+      content: "";
+      position: absolute;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+      z-index: 0;
+    }
+    .content {
+      position: relative;
+      z-index: 1;
+      width: 80%;
+      max-width: 900px;
+      margin: 0 auto;
+      color: #ddd;
+      transform: translateX(0);
+      animation: slideIn 0.5s forwards;
+      padding: 20px;
+    }
+    .content h2 {
+      font-size: 1.6em;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+    .content h3 {
+      font-size: 1.3em;
+      margin-top: 25px;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+    .content h4 {
+      font-size: 1.1em;
+      margin-top: 15px;
+      margin-bottom: 8px;
+      color: #eee;
+    }
+    .content p {
+      margin-bottom: 15px;
+      line-height: 1.5em;
+    }
+    .rule-list, .command-list {
+      list-style: none;
+      margin-left: 0;
+      padding-left: 20px;
+    }
+    .rule-list li, .command-list li {
+      margin-bottom: 6px;
+      position: relative;
+    }
+    .rule-list li::before,
+    .command-list li::before {
+      content: "•";
+      color: orange;
+      position: absolute;
+      left: -20px;
+    }
+    .penalty-box {
+      background: #2a2a2a;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    footer {
+      background-color: #222;
+      padding: 15px;
+      margin-top: 20px;
+      text-align: center;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(-200%); opacity: 0; }
+      to   { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+      from { transform: translateX(0); opacity: 1; }
+      to   { transform: translateX(-200%); opacity: 0; }
+    }
+    .page-enter { animation: slideIn 0.5s forwards; }
+    .page-exit  { animation: slideOut 0.8s forwards; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="branding">
+      <div class="logo">
+        <img src="https://cdn.discordapp.com/attachments/1336163903763255307/1351072676608872458/64C8236B-929C-4AE7-A011-A1408D0B9DC0.png" alt="Logo" />
+      </div>
+      <h1>PSFL</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="https://psflrbx.github.io/homepage">Home</a></li>
+        <li><a href="https://psflrbx.github.io/stats">Stats</a></li>
+        <li><a href="rulebook.html">Rulebook</a></li>
+        <li><a href="credits.html">Credits</a></li>
+      </ul>
+    </nav>
+  </header>
+  <section class="background">
+    <div class="content page-enter">
+      <h2>In-Game Rules (Posted in Discord)</h2>
+      <h3>Game Settings</h3>
+      <ul class="rule-list">
+        <li>Public Listing: OFF</li>
+        <li>Max Players: 25</li>
+        <li>Fumble Chances: 1</li>
+        <li>Mercy Rule: 40</li>
+        <li>Play Clock: 25</li>
+        <li>Quarter Length: 4 Minutes</li>
+        <li>Replays: ON</li>
+        <li>Time of Day: Decided by schedule</li>
+        <li>Weather: Decided by schedule</li>
+        <li>Diving: ON</li>
+        <li>Hit Stick: ON</li>
+        <li>Mercy Rule: OFF</li>
+        <li>Sprinting: ON</li>
+        <li>Truck: ON</li>
+        <li>Pass Break Ups: OFF</li>
+      </ul>
+      <p>2 QB Runs Per Drive</p>
 
+      <h3>Challenges</h3>
+      <p>By default, the auto-ref system’s calls are upheld. However, if the system malfunctions or an official believes a call is incorrect, an Athletic Director or Head Coach may request a challenge. Challenges are applicable in these scenarios:</p>
+      <ul class="rule-list">
+        <li>Overturning whether a receiver’s feet were inbounds</li>
+        <li>Addressing a potentially unfair “lag sack” on the QB</li>
+        <li>Determining if the offense used excessive blockers</li>
+      </ul>
+
+      <h3>Penalty Guide</h3>
+      <ul class="rule-list">
+        <li>01 - Delay of Game</li>
+        <li>02 - Too Many Men</li>
+        <li>03 - Ineligible Receiver</li>
+        <li>04 - Lag Sack</li>
+        <li>05 - Grounding</li>
+        <li>06 - OL Rollout</li>
+        <li>07 - Illegal Formation</li>
+        <li>08 - Uneven Teams</li>
+        <li>09 - False Start</li>
+        <li>10 - AFK Rule</li>
+      </ul>
+
+      <h3>Penalties</h3>
+      <div class="penalty-box">
+        <h4>Delay of Game (5yd Penalty + Loss of Down)</h4>
+        <p>Automatically enforced when the play clock expires without a snap.</p>
+      </div>
+      <div class="penalty-box">
+        <h4>Too Many Men (5yd Penalty)</h4>
+        <p>Enforced when a team exceeds the predetermined number of players on the field.</p>
+      </div>
+      <div class="penalty-box">
+        <h4>Ineligible Receiver (Incompletion + Replay Down)</h4>
+        <p>Occurs if the receiver steps out of bounds during the play (applies to offense and defense).</p>
+      </div>
+      <div class="penalty-box">
+        <h4>Lag Sack (5yd Penalty &amp; First Down)</h4>
+        <p>Enforced when the QB is unfairly sacked due to lag. The defense is penalized 5 yards, and offense gains a new first down.</p>
+      </div>
+      <div class="penalty-box">
+        <h4>Intentional Grounding (15yd Penalty &amp; Loss of Down)</h4>
+        <p>Called if the QB throws outside a receiver’s range or out of bounds without a valid target. Results in a 15-yard penalty and loss of down.</p>
+      </div>
+      <div class="penalty-box">
+        <h4>OL Rollout (5yd Penalty &amp; Loss of Down)</h4>
+        <p>Called if an offensive lineman crosses the LOS on a designed pass play. Results in a 5-yard penalty and loss of down.</p>
+      </div>
+      <div class="penalty-box">
+        <h4>Illegal Trucking &amp; Hit Stick (10yd Penalty &amp; Replay Down)</h4>
+        <p>Applies if a player uses Truck or Hit Stick outside the allowed weight range. The responsible team is penalized 10 yards, and the down is replayed.</p>
+        <p>Truck Weight: 185–255 lbs<br>Hit Stick Weight: 165+ lbs</p>
+      </div>
+      <div class="penalty-box">
+        <h4>Holding (5yd Penalty &amp; Replay Down)</h4>
+        <p>Occurs if a player blocks beyond 5 yards from the LOS before the ball crosses it. Results in a 5-yard penalty and replay of down.</p>
+      </div>
+      <div class="penalty-box">
+        <h4>Block in the Back (10yd Penalty &amp; Replay Down)</h4>
+        <p>Called if a player initiates a block from behind another player.</p>
+      </div>
+      <p>The defense may only blitz:</p>
+      <ul class="rule-list">
+        <li>8v8: Up to 4 players</li>
+        <li>7v7: Up to 3 players</li>
+        <li>6v6: Up to 2 players</li>
+      </ul>
+      <div class="penalty-box">
+        <h4>AFK Rule</h4>
+        <p>If a player remains idle for over 3 minutes, their team receives a False Start penalty upon snapping the ball.</p>
+      </div>
+
+      <h3>Commands (Refs)</h3>
+      <ul class="command-list">
+        <li>:Clock "0:00"</li>
+        <li>:startclock</li>
+        <li>:pclock "00"</li>
+        <li>:Pauseclock</li>
+        <li>:Pausepclock</li>
+        <li>:line "-0" / :line "0"</li>
+        <li>:scrimmage "-0" / :scrimmage "0"</li>
+        <li>:flag</li>
+        <li>:challenge</li>
+        <li>:newplay</li>
+        <li>:turnover</li>
+        <li>:down "0"</li>
+        <li>:team "user" away/home/spec/ref</li>
+        <li>:serverlock / :unserverlock</li>
+        <li>:changestate "play" / "kickoff" / "punt" / "field goal"</li>
+        <li>:padmin "user"</li>
+      </ul>
+    </div>
+  </section>
+  <footer>
+    <p>&copy; 2025 PSFL Website. All rights reserved.</p>
+  </footer>
+  <script>
+    let targetY = 0, currentY = 0;
+    const parallaxSpeed = 0.3;
+    function updateParallax() {
+      currentY += (targetY - currentY) * 0.1;
+      document.querySelector('.background').style.backgroundPositionY = currentY + "px";
+      requestAnimationFrame(updateParallax);
+    }
+    window.addEventListener('scroll', function() {
+      targetY = -(window.pageYOffset * parallaxSpeed);
+    });
+    updateParallax();
+
+    const navLinks = document.querySelectorAll('nav ul li a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetUrl = this.href;
+        const content = document.querySelector('.content');
+        content.classList.remove('page-enter');
+        content.classList.add('page-exit');
+        setTimeout(() => {
+          window.location.href = targetUrl;
+        }, 1200);
+      });
+    });
+  </script>
+</body>
+</html>
