@@ -19,28 +19,39 @@
     }
     
     header {
+      position: relative;
       padding: 20px;
       background-color: #222;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
     
-    /* Center only the title text */
+    /* Logo remains on the left */
+    .logo img {
+      width: 60px;
+    }
+    
+    /* Center the title text absolutely */
     header h1 {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
       font-size: 2.5em;
-      text-align: center;
-      margin-bottom: 10px;
+      margin: 0;
     }
     
-    /* Slogan and nav remain left-aligned (or default) */
+    /* Slogan remains below header (optional, if needed) */
     header p.slogan {
       font-size: 1.2em;
       color: #ccc;
-      margin-bottom: 20px;
+      margin-top: 10px;
+      text-align: center;
     }
     
     nav ul {
       list-style: none;
       display: flex;
-      justify-content: center;
       gap: 15px;
     }
     
@@ -55,9 +66,9 @@
       transition: transform 0.7s ease-out;
     }
     
-    /* Slowed oscillating hover animation */
+    /* Slower oscillating animation on hover */
     nav ul li a:hover {
-      animation: oscillate 2s infinite ease-in-out;
+      animation: oscillate 3s infinite ease-in-out;
       box-shadow: 0 0 15px 5px orange;
     }
     
@@ -108,8 +119,10 @@
 </head>
 <body>
   <header>
+    <div class="logo">
+      <img src="logo.png" alt="Logo" />
+    </div>
     <h1>PSFL</h1>
-    <p class="slogan">Unleash Your Passion. Join the League and Redefine the Game!</p>
     <nav>
       <ul>
         <li><a href="#">Home</a></li>
@@ -122,7 +135,7 @@
 
   <section class="background">
     <div class="content">
-      <h2>Unleash Your Passion. Redefine the Game.</h2>
+      <h2>Explore the League</h2>
       <!-- Additional background text or call-to-action content here -->
     </div>
   </section>
