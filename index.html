@@ -1,99 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Game Homepage</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PSFL Homepage</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #111;
-            color: white;
-            text-align: center;
-        }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background-color: #111;
+      color: white;
+      text-align: center;
+    }
 
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px;
-            background-color: #222;
-        }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      background-color: #222;
+    }
 
-        .logo img {
-            width: 60px;
-        }
+    .logo img {
+      width: 60px;
+    }
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 15px;
-        }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+    }
 
-        nav ul li {
-            display: inline;
-        }
+    nav ul li {
+      display: inline;
+    }
 
-        nav ul li a {
-            text-decoration: none;
-            color: white;
-            padding: 10px 15px;
-            background: #444;
-            border-radius: 5px;
-        }
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      padding: 10px 15px;
+      background: #444;
+      border-radius: 5px;
+      /* Apply the floating animation */
+      animation: float 3s ease-in-out infinite;
+      transition: box-shadow 0.3s ease, background 0.3s ease;
+    }
 
-        nav ul li a:hover {
-            background: #666;
-        }
+    /* Keyframes for floating animation */
+    @keyframes float {
+      0% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-5px);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
 
-        .background {
-            height: 60vh;
-            background: url('background.jpg') no-repeat center center/cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2em;
-        }
+    nav ul li a:hover {
+      background: #666;
+      box-shadow: 0 0 15px 5px orange;
+    }
 
-        footer {
-            background-color: #222;
-            padding: 15px;
-            margin-top: 20px;
-        }
-    </style>
+    .background {
+      height: 60vh;
+      background: url('https://cdn.discordapp.com/attachments/1336163903763255307/1351072676608872458/64C8236B-929C-4AE7-A011-A1408D0B9DC0.png?ex=67d90bfb&is=67d7ba7b&hm=4c69a21a53e05f6df967e54a05f7733a51f9d392100f5bc6c0bf4caf306ed82d&') no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2em;
+    }
+
+    footer {
+      background-color: #222;
+      padding: 15px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <div class="logo">
+      <img src="logo.png" alt="Logo" />
+    </div>
+    <h1>Title</h1>
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Stats</a></li>
+        <li><a href="#">Rulebook</a></li>
+        <li><a href="#">Credits</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <header>
-        <div class="logo">
-            <img src="logo.png" alt="Logo">
-        </div>
-        <h1>Title</h1>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Stats</a></li>
-                <li><a href="#">Rulebook</a></li>
-                <li><a href="#">Support</a></li>
-            </ul>
-        </nav>
-    </header>
+  <main>
+    <section class="background">
+      <h2>Background Image Section</h2>
+    </section>
+  </main>
 
-    <main>
-        <section class="background">
-            <h2>Background Image Section</h2>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 My Game. All rights reserved.</p>
-    </footer>
-
+  <footer>
+    <p>&copy; 2025 PSFL Website. All rights reserved.</p>
+  </footer>
 </body>
 </html>
