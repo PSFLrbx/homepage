@@ -11,13 +11,11 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
     body {
       font-family: 'IBM Plex Sans', sans-serif;
       background-color: #111;
       color: white;
     }
-    
     header {
       position: relative;
       padding: 20px;
@@ -26,29 +24,23 @@
       align-items: center;
       justify-content: space-between;
     }
-    
-    /* Branding container for logo and title */
     .branding {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    
     .logo img {
       width: 60px;
     }
-    
     header h1 {
       font-size: 2.5em;
       margin: 0;
     }
-    
     nav ul {
       list-style: none;
       display: flex;
       gap: 15px;
     }
-    
     nav ul li a {
       display: inline-block;
       text-decoration: none;
@@ -59,20 +51,15 @@
       transform: translateY(0);
       transition: transform 0.7s ease-out;
     }
-    
-    /* Slowed oscillating animation on hover with reduced range */
     nav ul li a:hover {
       animation: oscillate 6s infinite ease-in-out;
       box-shadow: 0 0 15px 5px orange;
     }
-    
     @keyframes oscillate {
       0%   { transform: translateY(-3px); }
       50%  { transform: translateY(3px); }
       100% { transform: translateY(-3px); }
     }
-    
-    /* Background section with static image, black frame overlay, and parallax effect */
     .background {
       position: relative;
       min-height: 150vh;
@@ -81,11 +68,9 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding-top: 100px; /* room for header */
+      padding-top: 100px;
       will-change: background-position;
     }
-    
-    /* Black frame overlay (barely visible) behind the content */
     .background::before {
       content: "";
       position: absolute;
@@ -96,14 +81,13 @@
       border: 5px solid rgba(0, 0, 0, 0.2);
       pointer-events: none;
     }
-    
     .background .content {
       position: relative;
       z-index: 1;
       font-size: 2em;
       padding: 20px;
+      text-align: center;
     }
-    
     footer {
       background-color: #222;
       padding: 15px;
@@ -132,8 +116,10 @@
 
   <section class="background">
     <div class="content">
-      <h2>Explore the League</h2>
-      <!-- Additional background text or call-to-action content here -->
+      <h2>Ready to unleash your passion and define the game?</h2>
+      <p>
+        Start your ro-football career today at <a href="https://discord.gg/psfl" style="color:orange; text-decoration:none;">discord.gg/psfl</a>
+      </p>
     </div>
   </section>
 
@@ -142,22 +128,17 @@
   </footer>
 
   <script>
-    // Smooth parallax effect using interpolation
     let targetY = 0;
     let currentY = 0;
-    const parallaxSpeed = 0.3; // Adjust for parallax effect speed
-
+    const parallaxSpeed = 0.3;
     function updateParallax() {
-      // Interpolate currentY towards targetY for a smooth delayed scroll effect
       currentY += (targetY - currentY) * 0.1;
       document.querySelector('.background').style.backgroundPositionY = currentY + "px";
       requestAnimationFrame(updateParallax);
     }
-
     window.addEventListener('scroll', function() {
       targetY = -(window.pageYOffset * parallaxSpeed);
     });
-
     updateParallax();
   </script>
 </body>
