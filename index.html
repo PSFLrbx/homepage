@@ -42,8 +42,8 @@
       box-shadow: 0 0 15px 5px orange;
     }
     @keyframes oscillate {
-      0% { transform: translateY(-3px); }
-      50% { transform: translateY(3px); }
+      0%   { transform: translateY(-3px); }
+      50%  { transform: translateY(3px); }
       100% { transform: translateY(-3px); }
     }
     .background {
@@ -74,18 +74,17 @@
       font-size: 2em;
       padding: 20px;
       text-align: center;
-      /* Prepare for tween animations */
       transform: translateX(0);
     }
     footer { background-color: #222; padding: 15px; margin-top: 20px; text-align: center; }
-    /* Tween-in and tween-out animations */
+    /* Tween animations */
     @keyframes slideIn {
-      from { transform: translateX(-100%); }
+      from { transform: translateX(-150%); }
       to { transform: translateX(0); }
     }
     @keyframes slideOut {
       from { transform: translateX(0); }
-      to { transform: translateX(-100%); }
+      to { transform: translateX(-150%); }
     }
     .page-enter { animation: slideIn 0.5s forwards; }
     .page-exit { animation: slideOut 0.5s forwards; }
@@ -120,6 +119,7 @@
     <p>&copy; 2025 PSFL Website. All rights reserved.</p>
   </footer>
   <script>
+    // Parallax Effect
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
@@ -132,17 +132,15 @@
     });
     updateParallax();
 
-    // Button click delay animation for navigation links
+    // Button click delay with tween-out and tween-in transition
     const navLinks = document.querySelectorAll('nav ul li a');
     navLinks.forEach(link => {
       link.addEventListener('click', function(e) {
         e.preventDefault();
         const targetUrl = this.href;
-        // Add exit animation class to the content element
         const content = document.querySelector('.background .content');
         content.classList.remove('page-enter');
         content.classList.add('page-exit');
-        // Delay navigation until animation finishes
         setTimeout(() => {
           window.location.href = targetUrl;
         }, 500);
