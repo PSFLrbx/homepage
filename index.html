@@ -19,47 +19,43 @@
       text-align: center;
     }
     
-    /* Fixed header so navigation stays visible */
     header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
       padding: 20px;
       background-color: #222;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 10;
     }
     
-    .logo img {
-      width: 60px;
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    
+    header p.slogan {
+      font-size: 1.2em;
+      color: #ccc;
+      margin-bottom: 20px;
     }
     
     nav ul {
       list-style: none;
       display: flex;
+      justify-content: center;
       gap: 15px;
     }
     
-    nav ul li {
-      display: inline;
-    }
-    
     nav ul li a {
-      display: inline-block; /* Needed for transform animations */
+      display: inline-block;
       text-decoration: none;
       color: white;
       padding: 10px 15px;
       background: #444;
       border-radius: 5px;
       transform: translateY(0);
-      transition: transform 0.5s ease-out;
+      transition: transform 0.7s ease-out;
     }
     
-    /* Oscillating animation for hover */
+    /* Slowed oscillating hover animation */
     nav ul li a:hover {
-      animation: oscillate 0.5s infinite ease-in-out;
+      animation: oscillate 2s infinite ease-in-out;
       box-shadow: 0 0 15px 5px orange;
     }
     
@@ -69,39 +65,48 @@
       100% { transform: translateY(-5px); }
     }
     
-    /* Background section extended for scrolling with parallax effect */
+    /* Background section with static image and black frame overlay */
     .background {
-      min-height: 150vh; /* Extended height to enable scrolling */
+      position: relative;
+      min-height: 150vh;
       background: url('https://cdn.discordapp.com/attachments/1336163903763255307/1351072676608872458/64C8236B-929C-4AE7-A011-A1408D0B9DC0.png?ex=67d90bfb&is=67d7ba7b&hm=4c69a21a53e05f6df967e54a05f7733a51f9d392100f5bc6c0bf4caf306ed82d&') no-repeat center center;
       background-size: cover;
-      /* We'll adjust the background position in JS for smooth parallax */
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
-      font-size: 2em;
-      padding-top: 100px; /* to clear the fixed header */
-      will-change: background-position;
+      padding-top: 100px; /* room for header */
     }
     
-    /* Footer positioned after content; scroll required to see it */
+    /* Black frame overlay (barely visible) behind the content */
+    .background::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 5px solid rgba(0, 0, 0, 0.2);
+      pointer-events: none;
+    }
+    
+    .background .content {
+      position: relative;
+      z-index: 1;
+      font-size: 2em;
+      padding: 20px;
+    }
+    
     footer {
       background-color: #222;
       padding: 15px;
       margin-top: 20px;
     }
-    
-    main {
-      padding-top: 80px; /* extra spacing so header doesn't cover content */
-    }
   </style>
 </head>
 <body>
   <header>
-    <div class="logo">
-      <img src="logo.png" alt="Logo" />
-    </div>
-    <h1>Title</h1>
+    <h1>PSFL</h1>
+    <p class="slogan">Unleash Your Passion. Join the League and Redefine the Game!</p>
     <nav>
       <ul>
         <li><a href="#">Home</a></li>
@@ -112,36 +117,15 @@
     </nav>
   </header>
 
-  <main>
-    <section class="background">
-      <h2>Explore the Background</h2>
-      <!-- Additional content can be placed here -->
-    </section>
-  </main>
+  <section class="background">
+    <div class="content">
+      <h2>Explore the League</h2>
+      <!-- Additional background text or call-to-action content here -->
+    </div>
+  </section>
 
   <footer>
     <p>&copy; 2025 PSFL Website. All rights reserved.</p>
   </footer>
-
-  <script>
-    // Smooth parallax effect using interpolation.
-    let targetY = 0;
-    let currentY = 0;
-    const parallaxSpeed = 0.3; // Adjust multiplier for parallax effect speed
-
-    function updateParallax() {
-      // Lerp towards targetY for smooth transition
-      currentY += (targetY - currentY) * 0.1;
-      document.querySelector('.background').style.backgroundPositionY = currentY + "px";
-      requestAnimationFrame(updateParallax);
-    }
-
-    window.addEventListener('scroll', function() {
-      // Set the target position based on scroll, adjusted by our multiplier.
-      targetY = -(window.pageYOffset * parallaxSpeed);
-    });
-
-    updateParallax();
-  </script>
 </body>
 </html>
