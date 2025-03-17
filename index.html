@@ -54,15 +54,9 @@
 
     /* Keyframes for floating animation */
     @keyframes float {
-      0% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-5px);
-      }
-      100% {
-        transform: translateY(0);
-      }
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0); }
     }
 
     nav ul li a:hover {
@@ -71,12 +65,16 @@
     }
 
     .background {
-      height: 60vh;
-      background: url('https://cdn.discordapp.com/attachments/1336163903763255307/1351072676608872458/64C8236B-929C-4AE7-A011-A1408D0B9DC0.png?ex=67d90bfb&is=67d7ba7b&hm=4c69a21a53e05f6df967e54a05f7733a51f9d392100f5bc6c0bf4caf306ed82d&') no-repeat center center/cover;
+      min-height: 150vh; /* Extended height to allow scrolling */
+      background: url('https://cdn.discordapp.com/attachments/1336163903763255307/1351072676608872458/64C8236B-929C-4AE7-A011-A1408D0B9DC0.png?ex=67d90bfb&is=67d7ba7b&hm=4c69a21a53e05f6df967e54a05f7733a51f9d392100f5bc6c0bf4caf306ed82d&') no-repeat center center;
+      background-size: cover;
+      background-attachment: fixed; /* Parallax effect */
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       font-size: 2em;
+      padding-top: 50px;
     }
 
     footer {
@@ -104,7 +102,8 @@
 
   <main>
     <section class="background">
-      <h2>Background Image Section</h2>
+      <h2>Explore the Background</h2>
+      <!-- You can add more content here to guide the scroll if desired -->
     </section>
   </main>
 
