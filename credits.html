@@ -42,7 +42,7 @@
     }
     .background {
       position: relative;
-      min-height: 100vh;
+      min-height: 150vh;
       background: url('https://cdn.discordapp.com/attachments/1336163903763255307/1351072676608872458/64C8236B-929C-4AE7-A011-A1408D0B9DC0.png?ex=67d90bfb&is=67d7ba7b&hm=4c69a21a53e05f6df967e54a05f7733a51f9d392100f5bc6c0bf4caf306ed82d&') no-repeat center center;
       background-size: cover;
       display: flex;
@@ -69,12 +69,12 @@
     }
     footer { background-color: #222; padding: 15px; margin-top: 20px; text-align: center; }
     @keyframes slideIn {
-      from { transform: translateX(-150%); }
+      from { transform: translateX(-200%); }
       to { transform: translateX(0); }
     }
     @keyframes slideOut {
       from { transform: translateX(0); }
-      to { transform: translateX(-150%); }
+      to { transform: translateX(-200%); }
     }
     .page-enter { animation: slideIn 0.5s forwards; }
     .page-exit { animation: slideOut 0.5s forwards; }
@@ -129,7 +129,7 @@
         content.classList.add('page-exit');
         setTimeout(() => {
           window.location.href = targetUrl;
-        }, 500);
+        }, 1000);
       });
     });
   </script>
