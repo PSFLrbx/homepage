@@ -67,6 +67,31 @@
       transform: translateX(0);
       animation: slideIn 0.5s forwards;
     }
+    /* Message header styled like Discord chat */
+    .message-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .profile-pic {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+      object-fit: cover;
+    }
+    .message-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .message-info .name {
+      font-weight: bold;
+      color: #fff;
+    }
+    .message-info .date {
+      font-size: 0.9em;
+      color: #aaa;
+    }
     .content h2 {
       font-size: 1.6em;
       margin-bottom: 15px;
@@ -77,10 +102,7 @@
       margin: 25px 0 10px;
       color: #fff;
     }
-    .content p {
-      margin-bottom: 15px;
-      line-height: 1.5em;
-    }
+    .content p { margin-bottom: 15px; line-height: 1.5em; }
     .rule-list, .command-list {
       list-style: none;
       padding-left: 20px;
@@ -139,6 +161,13 @@
   </header>
   <section class="background">
     <div class="content page-enter">
+      <div class="message-header">
+        <img class="profile-pic" src="https://via.placeholder.com/50" alt="Profile Picture">
+        <div class="message-info">
+          <span class="name">PlayerName</span>
+          <span class="date">May 1, 2026</span>
+        </div>
+      </div>
       <h2>In-Game Rules (Posted on Discord)</h2>
       <h3>Game Settings</h3>
       <ul class="rule-list">
@@ -149,7 +178,7 @@
         <li>Play Clock: 25</li>
         <li>Quarter Length: 4 Minutes</li>
         <li>Replays: ON</li>
-        <li>Time of Day & Weather: Per schedule</li>
+        <li>Time of Day &amp; Weather: Per schedule</li>
         <li>Diving: ON</li>
         <li>Hit Stick: ON</li>
         <li>Mercy Rule: OFF</li>
@@ -158,15 +187,13 @@
         <li>Pass Break Ups: OFF</li>
       </ul>
       <p><strong>2 QB Runs Per Drive</strong></p>
-
       <h3>Challenges</h3>
       <p>If the auto-ref system fails or an official deems a call incorrect, a challenge may be requested by a Head Coach or Assistant. Challenges apply to:</p>
       <ul class="rule-list">
-        <li>Determining receiver inbounds status</li>
-        <li>Addressing questionable lag sacks</li>
-        <li>Verifying excessive blocking</li>
+        <li>Receiver inbounds status</li>
+        <li>Questionable lag sacks</li>
+        <li>Excessive blocking</li>
       </ul>
-
       <h3>Penalty Guide</h3>
       <ul class="rule-list">
         <li>01 - Delay of Game</li>
@@ -180,7 +207,6 @@
         <li>09 - False Start</li>
         <li>10 - AFK Rule</li>
       </ul>
-
       <h3>Penalties</h3>
       <div class="penalty-box">
         <h4>Delay of Game</h4>
@@ -207,12 +233,12 @@
         <p>5yd penalty and loss of down if an offensive lineman crosses the line on a pass play.</p>
       </div>
       <div class="penalty-box">
-        <h4>Illegal Trucking &amp; Hit Stick</h4>
-        <p>10yd penalty and replayed down if an illegal weight is used. (Truck: 185–255 lbs; Hit Stick: 165+ lbs)</p>
+        <h4>Trucking &amp; Hit Stick</h4>
+        <p>10yd penalty and replayed down.</p>
       </div>
       <div class="penalty-box">
         <h4>Holding</h4>
-        <p>5yd penalty and replayed down if blocking exceeds 5 yards from the line of scrimmage before the snap.</p>
+        <p>5yd penalty and replayed down if blocking exceeds 5 yards from the line before the snap.</p>
       </div>
       <div class="penalty-box">
         <h4>Block in the Back</h4>
@@ -228,7 +254,6 @@
         <h4>AFK Rule</h4>
         <p>A team incurs a false start penalty if a player is idle for over 3 minutes.</p>
       </div>
-
       <h3>Commands (Refs)</h3>
       <ul class="command-list">
         <li>:Clock "0:00"</li>
@@ -274,9 +299,7 @@
         const content = document.querySelector('.content');
         content.classList.remove('page-enter');
         content.classList.add('page-exit');
-        setTimeout(() => {
-          window.location.href = targetUrl;
-        }, 1200);
+        setTimeout(() => { window.location.href = targetUrl; }, 1200);
       });
     });
   </script>
