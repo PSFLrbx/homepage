@@ -10,8 +10,8 @@
   <meta property="og:image" content="logo.png" />
   <meta property="og:url" content="https://psflrbx.github.io/homepage" />
   <meta name="twitter:card" content="summary_large_image" />
-
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+
   <style>
     html {
       scroll-behavior: smooth;
@@ -46,54 +46,57 @@
       font-size: 2.5em;
       margin: 0;
     }
-    /* Empty nav for layout (no hyperlinks) */
+    /* No navigation buttons */
     nav { }
 
     /* 
-      Top Background Section 
-      - Extended so the entire logo is visible
-      - Using background-size: contain and a taller min-height 
+      Main background container:
+      - Taller so the entire image fits
+      - background-size: contain to show full image
+      - background-position: top so no blank area above
     */
     .background {
       position: relative;
-      min-height: 120vh; /* Increase height so entire image is visible */
-      background: url('logo.png') no-repeat center top;
+      height: 120vh;
+      background: url('logo.png') no-repeat top center;
       background-size: contain;
       background-color: #000; /* fallback behind the image */
       will-change: background-position;
     }
-    /* 
-      Add a translucent overlay if desired 
-      (adjust or remove if not needed)
-    */
+    /* Semi-transparent overlay if needed */
     .background::after {
       content: "";
       position: absolute;
       top: 0; left: 0;
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
       background-color: rgba(0,0,0,0.3);
       z-index: 0;
     }
-    /* 
-      Content block in front of the background 
-      - Placed near the bottom to show the entire logo 
+    /*
+      Content block near the bottom of the container 
+      to avoid covering the top portion of the image
     */
     .background .content {
-      position: relative;
+      position: absolute; 
+      bottom: 40px; /* adjust as needed */
+      left: 50%;
+      transform: translateX(-50%);
       z-index: 1;
-      font-size: 2em;
-      padding: 20px;
-      margin-top: 50vh; /* push content down to show full image first */
       text-align: center;
       animation: slideIn 0.5s forwards;
     }
+    .background .content h2 {
+      font-size: 2em;
+      margin-bottom: 0.5em;
+    }
     @keyframes slideIn {
-      from { transform: translateX(-200%); opacity: 0; }
-      to   { transform: translateX(0); opacity: 1; }
+      from { transform: translate(-50%, 30px) scale(0.95); opacity: 0; }
+      to   { transform: translate(-50%, 0) scale(1); opacity: 1; }
     }
     @keyframes slideOut {
-      from { transform: translateX(0); opacity: 1; }
-      to   { transform: translateX(-200%); opacity: 0; }
+      from { transform: translate(-50%,0); opacity: 1; }
+      to   { transform: translate(-50%,30px); opacity: 0; }
     }
     .page-enter {
       animation: slideIn 0.5s forwards;
@@ -127,34 +130,26 @@
       font-size: 2em;
       margin-bottom: 0.5rem;
     }
-    /* 
-      Card structure using pseudo-element 
-      to ensure the background extends behind the border
-    */
     .card {
       position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
       width: 15em;
       height: 20em;
-      padding: 1em;
-      color: #fff;
-      text-decoration: none;
-      overflow: hidden;
       border-radius: 1em;
       border: 5px solid #ccc;
       box-shadow: 0 0 5em -1em black;
+      text-decoration: none;
+      color: #fff;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1em;
+      background-color: rgba(0,0,0,0.5);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      background-color: rgba(0,0,0,0.5); /* fallback if image fails */
-    }
-    .card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 10px rgba(255,255,255,0.2);
     }
     /* 
-      The actual image goes behind the border 
-      so it isn't clipped by the border 
+      Use pseudo-element for the background image 
+      so it's not clipped by the border 
     */
     .card::before {
       content: "";
@@ -172,6 +167,10 @@
     .card:hover::before {
       filter: brightness(0.8);
     }
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+    }
     .card h3 {
       margin: 0;
       font-size: 1.5em;
@@ -187,7 +186,7 @@
       z-index: 1;
     }
 
-    /* Footer Section */
+    /* Footer */
     .footer {
       background-color: #222;
       padding: 50px 0;
@@ -272,7 +271,6 @@
       from { transform: rotate(0deg); }
       to   { transform: rotate(360deg); }
     }
-
     @media (max-width: 600px) {
       .footer-container {
         flex-direction: column;
@@ -292,11 +290,11 @@
       </div>
       <h1>PSFL</h1>
     </div>
-    <!-- Navigation bar remains, no clickable buttons -->
+    <!-- Navigation remains, but no clickable buttons -->
     <nav></nav>
   </header>
 
-  <!-- Top Background Section -->
+  <!-- Top Background Section with full image visible -->
   <section class="background">
     <div class="content page-enter">
       <h2>Ready to unleash your passion and define the game?</h2>
@@ -307,38 +305,34 @@
     </div>
   </section>
 
-  <!-- Portfolio Section (moved further down with extra padding-top if needed) -->
-  <section class="portfolio" style="padding-top: 200px;">
+  <!-- Portfolio Section -->
+  <section class="portfolio">
     <h2>Explore Our League</h2>
     <div class="card-grid">
       <div class="card-grid-space">
         <div class="num">01</div>
-        <a class="card" href="https://psflrbx.github.io/stats" 
-           style="--bg-img: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('stats.png');">
+        <a class="card" href="https://psflrbx.github.io/stats" style="--bg-img: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('stats.png');">
           <h3>Stats</h3>
           <p>View detailed performance data.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">02</div>
-        <a class="card" href="https://psflrbx.github.io/standings" 
-           style="--bg-img: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('standings.png');">
+        <a class="card" href="https://psflrbx.github.io/standings" style="--bg-img: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('standings.png');">
           <h3>Standings</h3>
           <p>Check current team rankings.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">03</div>
-        <a class="card" href="rulebook.html" 
-           style="--bg-img: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('rulebook.png');">
+        <a class="card" href="rulebook.html" style="--bg-img: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('rulebook.png');">
           <h3>Rulebook</h3>
           <p>Understand the official rules.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">04</div>
-        <a class="card" href="credits.html" 
-           style="--bg-img: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('credits.png');">
+        <a class="card" href="credits.html" style="--bg-img: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('credits.png');">
           <h3>Credits</h3>
           <p>Meet the team behind PSFL.</p>
         </a>
@@ -346,7 +340,7 @@
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- Footer Section -->
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-col">
@@ -377,7 +371,7 @@
   </footer>
 
   <script>
-    // Parallax for top background
+    // Parallax Effect for top background
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
