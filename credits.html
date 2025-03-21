@@ -1,26 +1,49 @@
-<!-- credits.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PSFL Credits</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'IBM Plex Sans', sans-serif; background-color: #111; color: white; }
+    html {
+      scroll-behavior: smooth;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background-color: #111;
+      color: white;
+      line-height: 1.6;
+    }
     header {
-      position: relative;
       padding: 20px;
       background-color: #222;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .branding { display: flex; align-items: center; gap: 10px; }
-    .logo img { width: 60px; }
-    header h1 { font-size: 2.5em; margin: 0; }
-    nav ul { list-style: none; display: flex; gap: 15px; }
+    .branding {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo img {
+      width: 60px;
+    }
+    header h1 {
+      font-size: 2.5em;
+      margin: 0;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+    }
     nav ul li a {
       display: inline-block;
       text-decoration: none;
@@ -28,7 +51,6 @@
       padding: 10px 15px;
       background: #444;
       border-radius: 5px;
-      transform: translateY(0);
       transition: transform 0.7s ease-out;
     }
     nav ul li a:hover {
@@ -43,7 +65,7 @@
     .background {
       position: relative;
       min-height: 150vh;
-      background: url('https://cdn.discordapp.com/attachments/1336163903763255307/1351072676608872458/64C8236B-929C-4AE7-A011-A1408D0B9DC0.png?ex=67d90bfb&is=67d7ba7b&hm=4c69a21a53e05f6df967e54a05f7733a51f9d392100f5bc6c0bf4caf306ed82d&') no-repeat center center;
+      background: url('logo.png') no-repeat center center;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -51,40 +73,123 @@
       padding-top: 100px;
       will-change: background-position;
     }
+    /* Black overlay with 30% opacity */
     .background::after {
       content: "";
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
       background-color: rgba(0, 0, 0, 0.3);
       z-index: 0;
     }
-    .background .content {
+    .content {
       position: relative;
       z-index: 1;
-      font-size: 1.8em;
-      padding: 20px;
+      width: 80%;
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(34,34,34,0.8);
+      padding: 30px;
+      border-radius: 8px;
       text-align: center;
-      transform: translateX(0);
+      animation: slideIn 0.5s forwards;
     }
-    footer { background-color: #222; padding: 15px; margin-top: 20px; text-align: center; }
     @keyframes slideIn {
       from { transform: translateX(-200%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+      to   { transform: translateX(0); opacity: 1; }
     }
     @keyframes slideOut {
       from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(-200%); opacity: 0; }
+      to   { transform: translateX(-200%); opacity: 0; }
     }
     .page-enter { animation: slideIn 0.5s forwards; }
     .page-exit { animation: slideOut 0.8s forwards; }
+
+    /* Footer Styles */
+    .footer {
+      background-color: #222;
+      padding: 50px 0;
+    }
+    .footer-container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+    }
+    .footer-col h4 {
+      margin-bottom: 15px;
+      font-size: 1.2em;
+      color: #fff;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col ul li a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .footer-col ul li a:hover { color: orange; }
+    .social-icons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .icon {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      background: #444;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.2em;
+      transition: background 0.3s ease;
+      overflow: hidden;
+    }
+    .icon:hover { background: #666; }
+    .icon .tooltip {
+      position: absolute;
+      bottom: -30px;
+      background: #222;
+      color: #fff;
+      font-size: 0.75em;
+      padding: 5px 8px;
+      border-radius: 4px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    .icon:hover .tooltip {
+      opacity: 1;
+      bottom: -40px;
+    }
+    .icon-discord {
+      background: url('discord.png') no-repeat center center;
+      background-size: cover;
+      transition: transform 0.3s ease;
+    }
+    .icon-discord:hover {
+      transform: rotate(360deg);
+    }
+    @media (max-width: 600px) {
+      .footer-container { flex-direction: column; text-align: center; }
+      .glossary { display: none; }
+    }
   </style>
 </head>
 <body>
   <header>
     <div class="branding">
       <div class="logo">
-        <img src="https://cdn.discordapp.com/attachments/1336163903763255307/1351072676608872458/64C8236B-929C-4AE7-A011-A1408D0B9DC0.png?ex=67d90bfb&is=67d7ba7b&hm=4c69a21a53e05f6df967e54a05f7733a51f9d392100f5bc6c0bf4caf306ed82d&" alt="Logo" />
+        <img src="logo.png" alt="Logo" />
       </div>
       <h1>PSFL</h1>
     </div>
@@ -97,16 +202,170 @@
       </ul>
     </nav>
   </header>
+
+  <!-- Glossary Sidebar -->
+  <div class="glossary">
+    <ul>
+      <li><a href="#game-settings">Game Settings</a></li>
+      <li><a href="#challenges">Challenges</a></li>
+      <li><a href="#penalty-guide">Penalty Guide</a></li>
+      <li><a href="#penalties">Penalties</a></li>
+      <li><a href="#commands">Commands</a></li>
+    </ul>
+  </div>
+
   <section class="background">
     <div class="content page-enter">
-      <p>PSFL Owner: psyklu | @ps9lu</p>
-      <p>PSFL Website Designer: 495BC | @siyazof</p>
+      <div class="message-header">
+        <img class="profile-pic" src="ps9lu.png" alt="Profile Picture">
+        <div class="message-info">
+          <span class="name">ps9lu</span>
+          <span class="date">March 17, 2025</span>
+        </div>
+      </div>
+      <h2>In-Game Rules (Posted on Discord)</h2>
+      <h3 id="game-settings">Game Settings</h3>
+      <ul class="rule-list">
+        <li>Public Listing: OFF</li>
+        <li>Max Players: 25</li>
+        <li>Fumble Chances: 1</li>
+        <li>Mercy Rule: 40</li>
+        <li>Play Clock: 25</li>
+        <li>Quarter Length: 4 Minutes</li>
+        <li>Replays: ON</li>
+        <li>Time of Day &amp; Weather: Per schedule</li>
+        <li>Diving: ON</li>
+        <li>Hit Stick: ON</li>
+        <li>Mercy Rule: OFF</li>
+        <li>Sprinting: ON</li>
+        <li>Truck: ON</li>
+        <li>Pass Break Ups: OFF</li>
+      </ul>
+      <p><strong>2 QB Runs Per Drive</strong></p>
+
+      <h3 id="challenges">Challenges</h3>
+      <p>If the auto-ref system fails or a call is disputed, a challenge may be requested by a Head Coach or Assistant. Challenges apply to:</p>
+      <ul class="rule-list">
+        <li>Receiver inbounds status</li>
+        <li>Questionable lag sacks</li>
+        <li>Excessive blocking</li>
+      </ul>
+
+      <h3 id="penalty-guide">Penalty Guide</h3>
+      <ul class="rule-list">
+        <li>01 - Delay of Game</li>
+        <li>02 - Too Many Men</li>
+        <li>03 - Ineligible Receiver</li>
+        <li>04 - Lag Sack</li>
+        <li>05 - Grounding</li>
+        <li>06 - OL Rollout</li>
+        <li>07 - Illegal Formation</li>
+        <li>08 - Uneven Teams</li>
+        <li>09 - False Start</li>
+        <li>10 - AFK Rule</li>
+      </ul>
+
+      <h3 id="penalties">Penalties</h3>
+      <div class="penalty-box">
+        <h4>Delay of Game</h4>
+        <p>5yd penalty and loss of down when the play clock expires without a snap.</p>
+      </div>
+      <div class="penalty-box">
+        <h4>Too Many Men</h4>
+        <p>5yd penalty if the team exceeds the player limit on the field.</p>
+      </div>
+      <div class="penalty-box">
+        <h4>Ineligible Receiver</h4>
+        <p>Results in an incomplete pass and a replayed down if a receiver steps out of bounds.</p>
+      </div>
+      <div class="penalty-box">
+        <h4>Lag Sack</h4>
+        <p>5yd penalty for the defense and an automatic first down for the offense when a lag sack occurs.</p>
+      </div>
+      <div class="penalty-box">
+        <h4>Intentional Grounding</h4>
+        <p>15yd penalty and loss of down for an invalid pass attempt.</p>
+      </div>
+      <div class="penalty-box">
+        <h4>OL Rollout</h4>
+        <p>5yd penalty and loss of down if an offensive lineman crosses the scrimmage line on a pass play.</p>
+      </div>
+      <div class="penalty-box">
+        <h4>Trucking &amp; Hit Stick</h4>
+        <p>10yd penalty and replayed down.</p>
+      </div>
+      <div class="penalty-box">
+        <h4>Holding</h4>
+        <p>5yd penalty and replayed down if blocking exceeds 5 yards before the snap.</p>
+      </div>
+      <div class="penalty-box">
+        <h4>Block in the Back</h4>
+        <p>10yd penalty and replayed down for initiating a block from behind.</p>
+      </div>
+      <p>Defensive blitz limits:</p>
+      <ul class="rule-list">
+        <li>8v8: Up to 4 players</li>
+        <li>7v7: Up to 3 players</li>
+        <li>6v6: Up to 2 players</li>
+      </ul>
+      <div class="penalty-box">
+        <h4>AFK Rule</h4>
+        <p>A false start penalty is incurred if a player is idle for over 3 minutes.</p>
+      </div>
+
+      <h3 id="commands">Commands (Refs)</h3>
+      <ul class="command-list">
+        <li>:Clock "0:00"</li>
+        <li>:startclock</li>
+        <li>:pclock "00"</li>
+        <li>:Pauseclock</li>
+        <li>:Pausepclock</li>
+        <li>:line "-0" / :line "0"</li>
+        <li>:scrimmage "-0" / :scrimmage "0"</li>
+        <li>:flag</li>
+        <li>:challenge</li>
+        <li>:newplay</li>
+        <li>:turnover</li>
+        <li>:down "0"</li>
+        <li>:team "user" (away/home/spec/ref)</li>
+        <li>:serverlock / :unserverlock</li>
+        <li>:changestate "play" / "kickoff" / "punt" / "field goal"</li>
+        <li>:padmin "user"</li>
+      </ul>
     </div>
   </section>
-  <footer>
-    <p>&copy; 2025 PSFL Website. All rights reserved.</p>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4>Quicklinks</h4>
+        <ul>
+          <li><a href="https://psflrbx.github.io/homepage">PSFL Home</a></li>
+          <li><a href="https://psflrbx.github.io/stats">Stats</a></li>
+          <li><a href="https://psflrbx.github.io/rulebook">Rulebook</a></li>
+          <li><a href="https://psflrbx.github.io/credits">Credits</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Discord</h4>
+        <div class="social-icons">
+          <a href="https://discord.gg/psfl" class="icon icon-discord">
+            <span class="tooltip">discord.gg/psfl</span>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Credits</h4>
+        <ul>
+          <li>@ps9lu (psyklu)</li>
+          <li>@siyazof (495BC)</li>
+        </ul>
+      </div>
+    </div>
   </footer>
+
   <script>
+    // Parallax Effect
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
@@ -119,6 +378,7 @@
     });
     updateParallax();
 
+    // Tween-out on navigation click before navigating
     const navLinks = document.querySelectorAll('nav ul li a');
     navLinks.forEach(link => {
       link.addEventListener('click', function(e) {
