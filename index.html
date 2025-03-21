@@ -12,9 +12,12 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
     * {
-      margin: 0; 
-      padding: 0; 
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
     body {
@@ -42,12 +45,10 @@
       font-size: 2.5em;
       margin: 0;
     }
-    /* Navigation bar with NO buttons */
-    nav {
-      /* Empty nav for layout consistency */
-    }
-
-    /* Top background section */
+    /* Navigation bar remains for layout, but no hyperlink buttons */
+    nav { }
+    
+    /* Top Background Section */
     .background {
       position: relative;
       min-height: 50vh;
@@ -62,11 +63,10 @@
     .background::after {
       content: "";
       position: absolute;
-      top: 0; 
+      top: 0;
       left: 0;
-      width: 100%; 
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.3);
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.3);
       z-index: 0;
     }
     .background .content {
@@ -75,7 +75,6 @@
       font-size: 2em;
       padding: 20px;
       text-align: center;
-      transform: translateX(0);
       animation: slideIn 0.5s forwards;
     }
     @keyframes slideIn {
@@ -87,11 +86,11 @@
       to   { transform: translateX(-200%); opacity: 0; }
     }
     .page-enter { animation: slideIn 0.5s forwards; }
-    .page-exit  { animation: slideOut 0.8s forwards; }
-
-    /* Portfolio (Blog Card Grid) Section */
+    .page-exit { animation: slideOut 0.8s forwards; }
+    
+    /* Portfolio Section */
     .portfolio {
-      background-color: #000; /* pure black background */
+      background-color: #000;
       padding: 60px 20px;
       text-align: center;
     }
@@ -101,52 +100,59 @@
     }
     .card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 20px;
       max-width: 1200px;
       margin: 0 auto;
     }
+    .card-grid-space {
+      position: relative;
+      padding: 1rem;
+    }
+    .card-grid-space .num {
+      font-size: 2em;
+      margin-bottom: 0.5rem;
+    }
     .card {
       position: relative;
-      background: #222;
-      border-radius: 8px;
-      overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), var(--bg-img);
+      height: 20em;
+      width: 15em;
+      border-radius: 1em;
+      padding: 1em;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 200px;
-      color: #fff;
+      align-items: flex-start;
+      justify-content: flex-end;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 0 5em -1em black;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: white;
+      overflow: hidden;
+      border: 5px solid #ccc;
     }
     .card:hover {
       transform: scale(1.05);
       box-shadow: 0 0 10px rgba(255,255,255,0.2);
     }
-    .card-img {
-      position: absolute;
-      top: 0; 
-      left: 0;
-      width: 100%; 
-      height: 100%;
-      background-position: center;
-      background-size: cover;
-      opacity: 0.3;
-      z-index: 0;
-    }
     .card h3 {
+      margin: 0;
+      font-size: 1.5em;
+      line-height: 1.2em;
       position: relative;
       z-index: 1;
-      font-size: 1.4em;
-      margin-bottom: 10px;
     }
     .card p {
+      font-size: 0.9em;
+      font-family: 'IBM Plex Sans', sans-serif;
+      margin-top: 0.5em;
+      line-height: 1.5em;
       position: relative;
       z-index: 1;
-      font-size: 0.9em;
-      margin-bottom: 0;
     }
-
+    
     /* Footer */
     .footer {
       background-color: #222;
@@ -219,27 +225,21 @@
       opacity: 1;
       bottom: -40px;
     }
-    /* Single spin on hover (no indefinite overlay) */
     .icon-discord {
       background: url('discord.png') no-repeat center center;
       background-size: cover;
+      transition: transform 0.3s ease;
     }
     .icon-discord:hover {
-      animation: spinOnce 0.6s linear 1; /* spin once */
+      animation: spinOnce 0.6s linear 1;
     }
     @keyframes spinOnce {
-      0%   { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
-
     @media (max-width: 600px) {
-      .footer-container {
-        flex-direction: column;
-        text-align: center;
-      }
-      .card-grid {
-        grid-template-columns: 1fr; /* single column on small screens */
-      }
+      .footer-container { flex-direction: column; text-align: center; }
+      .card-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -251,7 +251,7 @@
       </div>
       <h1>PSFL</h1>
     </div>
-    <!-- Navigation bar with no buttons -->
+    <!-- Navigation remains without buttons -->
     <nav></nav>
   </header>
 
@@ -266,53 +266,66 @@
     </div>
   </section>
 
-  <!-- Portfolio (Blog Card Grid) Section -->
+  <!-- Portfolio Section -->
   <section class="portfolio">
     <h2>Explore Our League</h2>
     <div class="card-grid">
-      <!-- Card 1 -->
-      <div class="card">
-        <div class="card-img" style="background-image: url('stats.png');"></div>
-        <h3>Stats</h3>
-        <p>Track your performance and compare with other players.</p>
+      <div class="card-grid-space">
+        <div class="num">01</div>
+        <a class="card" href="https://psflrbx.github.io/stats" style="--bg-img: url('stats.png'); background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), var(--bg-img);">
+          <div>
+            <h3>Stats</h3>
+            <p>View detailed performance data.</p>
+          </div>
+        </a>
       </div>
-      <!-- Card 2 -->
-      <div class="card">
-        <div class="card-img" style="background-image: url('standings.png');"></div>
-        <h3>Standings</h3>
-        <p>See where your team ranks in the current season.</p>
+      <div class="card-grid-space">
+        <div class="num">02</div>
+        <a class="card" href="https://psflrbx.github.io/standings" style="--bg-img: url('standings.png'); background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), var(--bg-img);">
+          <div>
+            <h3>Standings</h3>
+            <p>Check current team rankings.</p>
+          </div>
+        </a>
       </div>
-      <!-- Card 3 -->
-      <div class="card">
-        <div class="card-img" style="background-image: url('rulebook.png');"></div>
-        <h3>Rulebook</h3>
-        <p>Learn the ins and outs of official gameplay rules.</p>
+      <div class="card-grid-space">
+        <div class="num">03</div>
+        <a class="card" href="rulebook.html" style="--bg-img: url('rulebook.png'); background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), var(--bg-img);">
+          <div>
+            <h3>Rulebook</h3>
+            <p>Understand the official rules.</p>
+          </div>
+        </a>
       </div>
-      <!-- Card 4 -->
-      <div class="card">
-        <div class="card-img" style="background-image: url('credits.png');"></div>
-        <h3>Credits</h3>
-        <p>Meet the people behind PSFL's success.</p>
+      <div class="card-grid-space">
+        <div class="num">04</div>
+        <a class="card" href="credits.html" style="--bg-img: url('credits.png'); background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), var(--bg-img);">
+          <div>
+            <h3>Credits</h3>
+            <p>Meet the team behind PSFL.</p>
+          </div>
+        </a>
       </div>
     </div>
   </section>
 
+  <!-- Footer -->
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-col">
         <h4>Quicklinks</h4>
         <ul>
-          <li><a>PSFL Home</a></li>
-          <li><a>Stats</a></li>
-          <li><a>Rulebook</a></li>
-          <li><a>Credits</a></li>
+          <li><a href="https://psflrbx.github.io/homepage">PSFL Home</a></li>
+          <li><a href="https://psflrbx.github.io/stats">Stats</a></li>
+          <li><a href="rulebook.html">Rulebook</a></li>
+          <li><a href="credits.html">Credits</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Discord</h4>
         <div class="social-icons">
           <a href="https://discord.gg/psfl" class="icon icon-discord">
-            <span class="tooltip">Discord</span>
+            <span class="tooltip">discord.gg/psfl</span>
           </a>
         </div>
       </div>
@@ -327,7 +340,7 @@
   </footer>
 
   <script>
-    // Parallax Effect
+    // Parallax Effect for Top Section (if any scrolling effect desired)
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
