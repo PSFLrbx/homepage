@@ -59,23 +59,32 @@
     .background {
       position: relative;
       min-height: 150vh;
-      background: url('logo.png') no-repeat center center;
-      background-size: cover;
+      background-color: black;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
       padding-top: 100px;
-      will-change: background-position;
     }
-    /* Black overlay with 30% opacity */
-    .background::after {
-      content: "";
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.3);
-      z-index: 0;
+    /* Glossary Sidebar positioned between left edge and center content */
+    .glossary {
+      position: fixed;
+      top: 150px;
+      left: 0;
+      background: rgba(34, 34, 34, 0.8);
+      padding: 10px 15px;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      z-index: 2;
     }
+    .glossary ul { list-style: none; }
+    .glossary ul li { margin-bottom: 10px; }
+    .glossary ul li a {
+      text-decoration: none;
+      color: #ccc;
+      font-size: 0.9em;
+      transition: color 0.3s ease;
+    }
+    .glossary ul li a:hover { color: orange; }
     .content {
       position: relative;
       z-index: 1;
@@ -119,29 +128,7 @@
     .message-info .name { font-weight: bold; color: #fff; }
     .message-info .date { font-size: 0.9em; color: #aaa; }
 
-    /* Glossary Sidebar */
-    .glossary {
-      position: fixed;
-      top: 150px;
-      left: 0;
-      background: rgba(34, 34, 34, 0.8);
-      padding: 10px 15px;
-      border-top-right-radius: 8px;
-      border-bottom-right-radius: 8px;
-      z-index: 2;
-    }
-    .glossary ul { list-style: none; }
-    .glossary ul li { margin-bottom: 10px; }
-    .glossary ul li a {
-      text-decoration: none;
-      color: #ccc;
-      font-size: 0.9em;
-      transition: color 0.3s ease;
-    }
-    .glossary ul li a:hover { color: orange; }
-    h3[id] { margin-top: 40px; }
-
-    /* Footer Container */
+    /* Footer Container - Responsive Footer */
     .footer {
       background-color: #222;
       padding: 50px 0;
@@ -168,7 +155,6 @@
       transition: color 0.3s ease;
     }
     .footer-col ul li a:hover { color: orange; }
-    /* Social Icons */
     .social-icons {
       display: flex;
       align-items: center;
@@ -400,7 +386,7 @@
   </footer>
 
   <script>
-    // Parallax Effect
+    // Parallax Effect (background is solid black so this effect is minimal)
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
