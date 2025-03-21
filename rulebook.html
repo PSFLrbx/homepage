@@ -6,9 +6,7 @@
   <title>PSFL Rulebook</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { 
       font-family: 'IBM Plex Sans', sans-serif; 
@@ -22,22 +20,17 @@
       align-items: center;
       justify-content: space-between;
     }
-    .branding { 
-      display: flex; 
-      align-items: center; 
-      gap: 10px; 
+    .branding {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .logo img { 
-      width: 60px; 
-    }
-    header h1 { 
-      font-size: 2.5em; 
-      margin: 0; 
-    }
-    nav ul { 
-      list-style: none; 
-      display: flex; 
-      gap: 15px; 
+    .logo img { width: 60px; }
+    header h1 { font-size: 2.5em; margin: 0; }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
     }
     nav ul li a {
       display: inline-block;
@@ -46,7 +39,6 @@
       padding: 10px 15px;
       background: #444;
       border-radius: 5px;
-      transform: translateY(0);
       transition: transform 0.7s ease-out;
     }
     nav ul li a:hover {
@@ -61,86 +53,62 @@
     .background {
       position: relative;
       min-height: 150vh;
-      background: url('') no-repeat center center;
-      background-size: cover;
+      background-color: gray;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
       padding-top: 100px;
-      will-change: background-position;
     }
-    /* Black overlay with 30% opacity */
-    .background::after {
-      content: "";
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.3);
-      z-index: 0;
-    }
-    .content {
+    .background .content {
       position: relative;
       z-index: 1;
       width: 80%;
       max-width: 900px;
       margin: 0 auto;
-      color: #ddd;
       padding: 20px;
+      text-align: center;
       transform: translateX(0);
       animation: slideIn 0.5s forwards;
     }
     @keyframes slideIn {
       from { transform: translateX(-200%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+      to   { transform: translateX(0); opacity: 1; }
     }
     @keyframes slideOut {
       from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(-200%); opacity: 0; }
+      to   { transform: translateX(-200%); opacity: 0; }
     }
     .page-enter { animation: slideIn 0.5s forwards; }
     .page-exit  { animation: slideOut 0.8s forwards; }
-
-    /* Glossary Sidebar */
-    .glossary {
-      position: fixed;
-      top: 150px;
-      left: 0;
-      background: rgba(34, 34, 34, 0.8);
-      padding: 10px 15px;
-      border-top-right-radius: 8px;
-      border-bottom-right-radius: 8px;
-      z-index: 2;
+    /* Message Header - Profile Picture & Info */
+    .message-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
     }
-    .glossary ul {
-      list-style: none;
+    .profile-pic {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+      object-fit: cover;
     }
-    .glossary ul li {
-      margin-bottom: 10px;
+    .message-info {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
     }
-    .glossary ul li a {
-      text-decoration: none;
-      color: #ccc;
-      font-size: 0.9em;
-      transition: color 0.3s ease;
-    }
-    .glossary ul li a:hover {
-      color: orange;
-    }
-
-    /* Section Headings with IDs for Glossary Navigation */
-    h3[id] {
-      margin-top: 40px;
-    }
-
-    /* Footer Container */
-    .footer {
+    .message-info .name { font-weight: bold; color: #fff; }
+    .message-info .date { font-size: 0.9em; color: #aaa; }
+    footer {
       background-color: #222;
       padding: 50px 0;
+      text-align: center;
     }
     .footer-container {
       width: 90%;
       max-width: 1000px;
-      margin: 0 auto;
+      margin: auto;
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
@@ -162,10 +130,7 @@
       text-decoration: none;
       transition: color 0.3s ease;
     }
-    .footer-col ul li a:hover {
-      color: orange;
-    }
-    /* Social Icons */
+    .footer-col ul li a:hover { color: orange; }
     .social-icons {
       display: flex;
       align-items: center;
@@ -203,7 +168,6 @@
       opacity: 1;
       bottom: -40px;
     }
-    /* Discord icon with 360° spin on hover */
     .icon-discord {
       background: url('discord.png') no-repeat center center;
       background-size: cover;
@@ -213,11 +177,7 @@
       transform: rotate(360deg);
     }
     @media (max-width: 600px) {
-      .footer-container {
-        flex-direction: column;
-        text-align: center;
-      }
-      .glossary { display: none; }
+      .footer-container { flex-direction: column; text-align: center; }
     }
   </style>
 </head>
@@ -239,21 +199,11 @@
     </nav>
   </header>
 
-  <!-- Glossary Sidebar -->
-  <div class="glossary">
-    <ul>
-      <li><a href="#game-settings">Game Settings</a></li>
-      <li><a href="#challenges">Challenges</a></li>
-      <li><a href="#penalty-guide">Penalty Guide</a></li>
-      <li><a href="#penalties">Penalties</a></li>
-      <li><a href="#commands">Commands</a></li>
-    </ul>
-  </div>
+  <!-- Glossary Sidebar removed per instruction -->
 
   <section class="background">
     <div class="content page-enter">
       <div class="message-header">
-        <!-- Use ps9lu.png as the profile picture -->
         <img class="profile-pic" src="ps9lu.png" alt="Profile Picture">
         <div class="message-info">
           <span class="name">ps9lu</span>
@@ -402,7 +352,7 @@
   </footer>
 
   <script>
-    // Parallax Effect
+    // Parallax Effect (though with a solid gray background it will have minimal effect)
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
@@ -424,9 +374,7 @@
         const content = document.querySelector('.background .content');
         content.classList.remove('page-enter');
         content.classList.add('page-exit');
-        setTimeout(() => {
-          window.location.href = targetUrl;
-        }, 1200);
+        setTimeout(() => { window.location.href = targetUrl; }, 1200);
       });
     });
   </script>
