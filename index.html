@@ -12,8 +12,17 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'IBM Plex Sans', sans-serif; background-color: #111; color: white; }
+    * {
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background-color: #111;
+      color: white;
+      line-height: 1.6;
+    }
     header {
       padding: 20px;
       background-color: #222;
@@ -21,33 +30,28 @@
       align-items: center;
       justify-content: space-between;
     }
-    .branding { display: flex; align-items: center; gap: 10px; }
-    .logo img { width: 60px; }
-    header h1 { font-size: 2.5em; margin: 0; }
-    nav ul { list-style: none; display: flex; gap: 15px; }
-    nav ul li a {
-      display: inline-block;
-      text-decoration: none;
-      color: white;
-      padding: 10px 15px;
-      background: #444;
-      border-radius: 5px;
-      transform: translateY(0);
-      transition: transform 0.7s ease-out;
+    .branding {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    nav ul li a:hover {
-      animation: oscillate 6s infinite ease-in-out;
-      box-shadow: 0 0 15px 5px orange;
+    .logo img {
+      width: 60px;
     }
-    @keyframes oscillate {
-      0%   { transform: translateY(-3px); }
-      50%  { transform: translateY(3px); }
-      100% { transform: translateY(-3px); }
+    header h1 {
+      font-size: 2.5em;
+      margin: 0;
     }
+    /* Navigation bar with NO buttons */
+    nav {
+      /* Empty nav for layout consistency */
+    }
+
+    /* Top background section */
     .background {
       position: relative;
-      min-height: 150vh;
-      background: url('background.png') no-repeat center center;
+      min-height: 50vh;
+      background: url('logo.png') no-repeat center center;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -55,13 +59,12 @@
       padding-top: 100px;
       will-change: background-position;
     }
-    /* Black overlay with 30% opacity */
     .background::after {
       content: "";
       position: absolute;
-      top: 0;
+      top: 0; 
       left: 0;
-      width: 100%;
+      width: 100%; 
       height: 100%;
       background-color: rgba(0, 0, 0, 0.3);
       z-index: 0;
@@ -77,16 +80,74 @@
     }
     @keyframes slideIn {
       from { transform: translateX(-200%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+      to   { transform: translateX(0); opacity: 1; }
     }
     @keyframes slideOut {
       from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(-200%); opacity: 0; }
+      to   { transform: translateX(-200%); opacity: 0; }
     }
     .page-enter { animation: slideIn 0.5s forwards; }
-    .page-exit { animation: slideOut 0.8s forwards; }
+    .page-exit  { animation: slideOut 0.8s forwards; }
 
-    /* Footer Styles */
+    /* Portfolio (Blog Card Grid) Section */
+    .portfolio {
+      background-color: #000; /* pure black background */
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .portfolio h2 {
+      font-size: 2em;
+      margin-bottom: 30px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .card {
+      position: relative;
+      background: #222;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
+      color: #fff;
+    }
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+    }
+    .card-img {
+      position: absolute;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
+      background-position: center;
+      background-size: cover;
+      opacity: 0.3;
+      z-index: 0;
+    }
+    .card h3 {
+      position: relative;
+      z-index: 1;
+      font-size: 1.4em;
+      margin-bottom: 10px;
+    }
+    .card p {
+      position: relative;
+      z-index: 1;
+      font-size: 0.9em;
+      margin-bottom: 0;
+    }
+
+    /* Footer */
     .footer {
       background-color: #222;
       padding: 50px 0;
@@ -119,7 +180,6 @@
     .footer-col ul li a:hover {
       color: orange;
     }
-    /* Social Icons */
     .social-icons {
       display: flex;
       align-items: center;
@@ -140,7 +200,9 @@
       transition: background 0.3s ease;
       overflow: hidden;
     }
-    .icon:hover { background: #666; }
+    .icon:hover {
+      background: #666;
+    }
     .icon .tooltip {
       position: absolute;
       bottom: -30px;
@@ -157,21 +219,26 @@
       opacity: 1;
       bottom: -40px;
     }
-    /* Discord icon with rotating effect */
+    /* Single spin on hover (no indefinite overlay) */
     .icon-discord {
       background: url('discord.png') no-repeat center center;
       background-size: cover;
-      animation: spinBlur 0.3s linear infinite;
     }
-    @keyframes spinBlur {
-      0%   { transform: rotate(0deg); filter: blur(0); }
-      50%  { transform: rotate(180deg); filter: blur(2px); }
-      100% { transform: rotate(360deg); filter: blur(0); }
+    .icon-discord:hover {
+      animation: spinOnce 0.6s linear 1; /* spin once */
     }
+    @keyframes spinOnce {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
     @media (max-width: 600px) {
       .footer-container {
         flex-direction: column;
         text-align: center;
+      }
+      .card-grid {
+        grid-template-columns: 1fr; /* single column on small screens */
       }
     }
   </style>
@@ -184,16 +251,11 @@
       </div>
       <h1>PSFL</h1>
     </div>
-    <nav>
-      <ul>
-        <li><a href="https://psflrbx.github.io/homepage">Home</a></li>
-        <li><a href="https://psflrbx.github.io/stats">Stats</a></li>
-        <li><a href="rulebook.html">Rulebook</a></li>
-        <li><a href="credits.html">Credits</a></li>
-      </ul>
-    </nav>
+    <!-- Navigation bar with no buttons -->
+    <nav></nav>
   </header>
 
+  <!-- Top background section -->
   <section class="background">
     <div class="content page-enter">
       <h2>Ready to unleash your passion and define the game?</h2>
@@ -204,18 +266,48 @@
     </div>
   </section>
 
+  <!-- Portfolio (Blog Card Grid) Section -->
+  <section class="portfolio">
+    <h2>Explore Our League</h2>
+    <div class="card-grid">
+      <!-- Card 1 -->
+      <div class="card">
+        <div class="card-img" style="background-image: url('stats.png');"></div>
+        <h3>Stats</h3>
+        <p>Track your performance and compare with other players.</p>
+      </div>
+      <!-- Card 2 -->
+      <div class="card">
+        <div class="card-img" style="background-image: url('standings.png');"></div>
+        <h3>Standings</h3>
+        <p>See where your team ranks in the current season.</p>
+      </div>
+      <!-- Card 3 -->
+      <div class="card">
+        <div class="card-img" style="background-image: url('rulebook.png');"></div>
+        <h3>Rulebook</h3>
+        <p>Learn the ins and outs of official gameplay rules.</p>
+      </div>
+      <!-- Card 4 -->
+      <div class="card">
+        <div class="card-img" style="background-image: url('credits.png');"></div>
+        <h3>Credits</h3>
+        <p>Meet the people behind PSFL's success.</p>
+      </div>
+    </div>
+  </section>
+
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-col">
         <h4>Quicklinks</h4>
         <ul>
-          <li><a href="https://psflrbx.github.io/homepage">PSFL Home</a></li>
-          <li><a href="https://psflrbx.github.io/stats">Stats</a></li>
-          <li><a href="https://psflrbx.github.io/rulebook">Rulebook</a></li>
-          <li><a href="https://psflrbx.github.io/credits">Credits</a></li>
+          <li><a>PSFL Home</a></li>
+          <li><a>Stats</a></li>
+          <li><a>Rulebook</a></li>
+          <li><a>Credits</a></li>
         </ul>
       </div>
-
       <div class="footer-col">
         <h4>Discord</h4>
         <div class="social-icons">
@@ -224,7 +316,6 @@
           </a>
         </div>
       </div>
-
       <div class="footer-col">
         <h4>Credits</h4>
         <ul>
@@ -248,21 +339,6 @@
       targetY = -(window.pageYOffset * parallaxSpeed);
     });
     updateParallax();
-
-    // Tween-out on navigation click before navigating
-    const navLinks = document.querySelectorAll('nav ul li a');
-    navLinks.forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetUrl = this.href;
-        const content = document.querySelector('.background .content');
-        content.classList.remove('page-enter');
-        content.classList.add('page-exit');
-        setTimeout(() => {
-          window.location.href = targetUrl;
-        }, 1000);
-      });
-    });
   </script>
 </body>
 </html>
