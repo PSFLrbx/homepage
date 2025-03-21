@@ -46,57 +46,50 @@
       font-size: 2.5em;
       margin: 0;
     }
-    /* No navigation buttons */
     nav { }
 
-    /* 
-      Main background container:
-      - Taller so the entire image fits
-      - background-size: contain to show full image
-      - background-position: top so no blank area above
-    */
+    /* Background container for the entire logo */
     .background {
       position: relative;
-      height: 120vh;
+      height: 120vh; /* ensure entire logo can fit */
       background: url('logo.png') no-repeat top center;
       background-size: contain;
-      background-color: #000; /* fallback behind the image */
+      background-color: #000; 
       will-change: background-position;
     }
-    /* Semi-transparent overlay if needed */
     .background::after {
       content: "";
       position: absolute;
-      top: 0; left: 0;
+      top: 0; 
+      left: 0;
       width: 100%;
       height: 100%;
       background-color: rgba(0,0,0,0.3);
       z-index: 0;
     }
-    /*
-      Content block near the bottom of the container 
-      to avoid covering the top portion of the image
-    */
+    /* Center the slogan text in the container */
     .background .content {
-      position: absolute; 
-      bottom: 40px; /* adjust as needed */
+      position: absolute;
+      top: 50%; 
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate(-50%, -50%);
       z-index: 1;
       text-align: center;
       animation: slideIn 0.5s forwards;
+      width: 80%; /* optional: to control text wrapping */
+      max-width: 600px; /* optional limit */
     }
     .background .content h2 {
       font-size: 2em;
       margin-bottom: 0.5em;
     }
     @keyframes slideIn {
-      from { transform: translate(-50%, 30px) scale(0.95); opacity: 0; }
-      to   { transform: translate(-50%, 0) scale(1); opacity: 1; }
+      from { transform: translate(-50%, -40%) scale(0.95); opacity: 0; }
+      to   { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
     }
     @keyframes slideOut {
-      from { transform: translate(-50%,0); opacity: 1; }
-      to   { transform: translate(-50%,30px); opacity: 0; }
+      from { transform: translate(-50%, -50%); opacity: 1; }
+      to   { transform: translate(-50%, -40%); opacity: 0; }
     }
     .page-enter {
       animation: slideIn 0.5s forwards;
@@ -148,8 +141,8 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     /* 
-      Use pseudo-element for the background image 
-      so it's not clipped by the border 
+      Show the background at all times, but 
+      scale it down by default. Enlarge on hover.
     */
     .card::before {
       content: "";
@@ -162,10 +155,12 @@
       background-size: cover;
       background-position: center;
       z-index: -1;
-      transition: inherit;
+      transition: transform 0.3s ease;
+      transform: scale(0.9);
+      transform-origin: center center;
     }
     .card:hover::before {
-      filter: brightness(0.8);
+      transform: scale(1.0);
     }
     .card:hover {
       transform: scale(1.05);
@@ -186,7 +181,7 @@
       z-index: 1;
     }
 
-    /* Footer */
+    /* Footer Section */
     .footer {
       background-color: #222;
       padding: 50px 0;
@@ -271,6 +266,7 @@
       from { transform: rotate(0deg); }
       to   { transform: rotate(360deg); }
     }
+
     @media (max-width: 600px) {
       .footer-container {
         flex-direction: column;
@@ -290,11 +286,11 @@
       </div>
       <h1>PSFL</h1>
     </div>
-    <!-- Navigation remains, but no clickable buttons -->
+    <!-- Navigation bar with no clickable buttons -->
     <nav></nav>
   </header>
 
-  <!-- Top Background Section with full image visible -->
+  <!-- Extended Background Section to show entire logo -->
   <section class="background">
     <div class="content page-enter">
       <h2>Ready to unleash your passion and define the game?</h2>
@@ -311,28 +307,33 @@
     <div class="card-grid">
       <div class="card-grid-space">
         <div class="num">01</div>
-        <a class="card" href="https://psflrbx.github.io/stats" style="--bg-img: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('background.png');">
+        <!-- background minimized, enlarged on hover -->
+        <a class="card" href="https://psflrbx.github.io/stats" 
+           style="--bg-img: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('stats.png');">
           <h3>Stats</h3>
           <p>View detailed performance data.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">02</div>
-        <a class="card" href="https://psflrbx.github.io/standings" style="--bg-img: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('standings.png');">
+        <a class="card" href="https://psflrbx.github.io/standings" 
+           style="--bg-img: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('standings.png');">
           <h3>Standings</h3>
           <p>Check current team rankings.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">03</div>
-        <a class="card" href="rulebook.html" style="--bg-img: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('rulebook.png');">
+        <a class="card" href="rulebook.html" 
+           style="--bg-img: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('rulebook.png');">
           <h3>Rulebook</h3>
           <p>Understand the official rules.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">04</div>
-        <a class="card" href="credits.html" style="--bg-img: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('credits.png');">
+        <a class="card" href="credits.html" 
+           style="--bg-img: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('credits.png');">
           <h3>Credits</h3>
           <p>Meet the team behind PSFL.</p>
         </a>
@@ -371,7 +372,7 @@
   </footer>
 
   <script>
-    // Parallax Effect for top background
+    // Parallax for top background
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
