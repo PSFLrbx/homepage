@@ -20,17 +20,22 @@
       align-items: center;
       justify-content: space-between;
     }
-    .branding {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .branding { 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
     }
-    .logo img { width: 60px; }
-    header h1 { font-size: 2.5em; margin: 0; }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 15px;
+    .logo img { 
+      width: 60px; 
+    }
+    header h1 { 
+      font-size: 2.5em; 
+      margin: 0; 
+    }
+    nav ul { 
+      list-style: none; 
+      display: flex; 
+      gap: 15px; 
     }
     nav ul li a {
       display: inline-block;
@@ -39,6 +44,7 @@
       padding: 10px 15px;
       background: #444;
       border-radius: 5px;
+      transform: translateY(0);
       transition: transform 0.7s ease-out;
     }
     nav ul li a:hover {
@@ -53,42 +59,54 @@
     .background {
       position: relative;
       min-height: 150vh;
-      background-color: gray;
+      background: url('logo.png') no-repeat center center;
+      background-size: cover;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       padding-top: 100px;
+      will-change: background-position;
     }
-    .background .content {
+    /* Black overlay with 30% opacity */
+    .background::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+      z-index: 0;
+    }
+    .content {
       position: relative;
       z-index: 1;
       width: 80%;
       max-width: 900px;
       margin: 0 auto;
+      color: #ddd;
       padding: 20px;
-      text-align: center;
       transform: translateX(0);
       animation: slideIn 0.5s forwards;
     }
     @keyframes slideIn {
       from { transform: translateX(-200%); opacity: 0; }
-      to   { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(0); opacity: 1; }
     }
     @keyframes slideOut {
       from { transform: translateX(0); opacity: 1; }
-      to   { transform: translateX(-200%); opacity: 0; }
+      to { transform: translateX(-200%); opacity: 0; }
     }
     .page-enter { animation: slideIn 0.5s forwards; }
-    .page-exit  { animation: slideOut 0.8s forwards; }
-    /* Message Header - Profile Picture & Info */
+    .page-exit { animation: slideOut 0.8s forwards; }
+
+    /* Message Header */
     .message-header {
       display: flex;
       align-items: center;
       margin-bottom: 20px;
     }
     .profile-pic {
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       margin-right: 10px;
       object-fit: cover;
@@ -100,15 +118,38 @@
     }
     .message-info .name { font-weight: bold; color: #fff; }
     .message-info .date { font-size: 0.9em; color: #aaa; }
-    footer {
+
+    /* Glossary Sidebar */
+    .glossary {
+      position: fixed;
+      top: 150px;
+      left: 0;
+      background: rgba(34, 34, 34, 0.8);
+      padding: 10px 15px;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      z-index: 2;
+    }
+    .glossary ul { list-style: none; }
+    .glossary ul li { margin-bottom: 10px; }
+    .glossary ul li a {
+      text-decoration: none;
+      color: #ccc;
+      font-size: 0.9em;
+      transition: color 0.3s ease;
+    }
+    .glossary ul li a:hover { color: orange; }
+    h3[id] { margin-top: 40px; }
+
+    /* Footer Container */
+    .footer {
       background-color: #222;
       padding: 50px 0;
-      text-align: center;
     }
     .footer-container {
       width: 90%;
       max-width: 1000px;
-      margin: auto;
+      margin: 0 auto;
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
@@ -119,18 +160,15 @@
       font-size: 1.2em;
       color: #fff;
     }
-    .footer-col ul {
-      list-style: none;
-    }
-    .footer-col ul li {
-      margin-bottom: 8px;
-    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 8px; }
     .footer-col ul li a {
       color: #ccc;
       text-decoration: none;
       transition: color 0.3s ease;
     }
     .footer-col ul li a:hover { color: orange; }
+    /* Social Icons */
     .social-icons {
       display: flex;
       align-items: center;
@@ -178,6 +216,7 @@
     }
     @media (max-width: 600px) {
       .footer-container { flex-direction: column; text-align: center; }
+      .glossary { display: none; }
     }
   </style>
 </head>
@@ -199,7 +238,16 @@
     </nav>
   </header>
 
-  <!-- Glossary Sidebar removed per instruction -->
+  <!-- Glossary Sidebar -->
+  <div class="glossary">
+    <ul>
+      <li><a href="#game-settings">Game Settings</a></li>
+      <li><a href="#challenges">Challenges</a></li>
+      <li><a href="#penalty-guide">Penalty Guide</a></li>
+      <li><a href="#penalties">Penalties</a></li>
+      <li><a href="#commands">Commands</a></li>
+    </ul>
+  </div>
 
   <section class="background">
     <div class="content page-enter">
@@ -352,7 +400,7 @@
   </footer>
 
   <script>
-    // Parallax Effect (though with a solid gray background it will have minimal effect)
+    // Parallax Effect
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
