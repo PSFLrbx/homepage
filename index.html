@@ -10,7 +10,9 @@
   <meta property="og:image" content="logo.png" />
   <meta property="og:url" content="https://psflrbx.github.io/homepage" />
   <meta name="twitter:card" content="summary_large_image" />
+
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+
   <style>
     * {
       margin: 0;
@@ -144,6 +146,7 @@
     .footer-col ul li a:hover {
       color: orange;
     }
+
     /* Social Icons */
     .social-icons {
       display: flex;
@@ -184,7 +187,18 @@
       opacity: 1;
       bottom: -40px;
     }
-    /* Responsive adjustments */
+
+    /* Rotating Discord Logo */
+    .icon-discord {
+      background: url('discord.png') no-repeat center center / cover;
+      animation: spinBlur 0.5s linear infinite;
+    }
+    @keyframes spinBlur {
+      0%   { transform: rotate(0deg);   filter: blur(0); }
+      50%  { transform: rotate(180deg); filter: blur(2px); }
+      100% { transform: rotate(360deg); filter: blur(0); }
+    }
+
     @media (max-width: 600px) {
       .footer-container {
         flex-direction: column;
@@ -237,8 +251,7 @@
       <div class="footer-col">
         <h4>Discord</h4>
         <div class="social-icons">
-          <a href="https://discord.com/psfl" class="icon">
-            D
+          <a href="https://discord.gg/psfl" class="icon icon-discord">
             <span class="tooltip">Discord</span>
           </a>
         </div>
