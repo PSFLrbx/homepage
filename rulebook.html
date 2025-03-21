@@ -6,8 +6,15 @@
   <title>PSFL Rulebook</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'IBM Plex Sans', sans-serif; background-color: #111; color: white; }
+    body { 
+      font-family: 'IBM Plex Sans', sans-serif; 
+      background-color: #111; 
+      color: white; 
+    }
     header {
       padding: 20px;
       background-color: #222;
@@ -15,10 +22,23 @@
       align-items: center;
       justify-content: space-between;
     }
-    .branding { display: flex; align-items: center; gap: 10px; }
-    .logo img { width: 60px; }
-    header h1 { font-size: 2.5em; margin: 0; }
-    nav ul { list-style: none; display: flex; gap: 15px; }
+    .branding { 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+    }
+    .logo img { 
+      width: 60px; 
+    }
+    header h1 { 
+      font-size: 2.5em; 
+      margin: 0; 
+    }
+    nav ul { 
+      list-style: none; 
+      display: flex; 
+      gap: 15px; 
+    }
     nav ul li a {
       display: inline-block;
       text-decoration: none;
@@ -26,6 +46,7 @@
       padding: 10px 15px;
       background: #444;
       border-radius: 5px;
+      transform: translateY(0);
       transition: transform 0.7s ease-out;
     }
     nav ul li a:hover {
@@ -40,7 +61,7 @@
     .background {
       position: relative;
       min-height: 150vh;
-      background: url('') no-repeat center center;
+      background: url('logo.png') no-repeat center center;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -48,6 +69,7 @@
       padding-top: 100px;
       will-change: background-position;
     }
+    /* Black overlay with 30% opacity */
     .background::after {
       content: "";
       position: absolute;
@@ -67,69 +89,6 @@
       transform: translateX(0);
       animation: slideIn 0.5s forwards;
     }
-    /* Message header styled like Discord chat */
-    .message-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .profile-pic {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      margin-right: 10px;
-      object-fit: cover;
-    }
-    .message-info {
-      display: flex;
-      flex-direction: column;
-    }
-    .message-info .name {
-      font-weight: bold;
-      color: #fff;
-    }
-    .message-info .date {
-      font-size: 0.9em;
-      color: #aaa;
-    }
-    .content h2 {
-      font-size: 1.6em;
-      margin-bottom: 15px;
-      color: #fff;
-    }
-    .content h3 {
-      font-size: 1.3em;
-      margin: 25px 0 10px;
-      color: #fff;
-    }
-    .content p { margin-bottom: 15px; line-height: 1.5em; }
-    .rule-list, .command-list {
-      list-style: none;
-      padding-left: 20px;
-    }
-    .rule-list li, .command-list li {
-      margin-bottom: 6px;
-      position: relative;
-    }
-    .rule-list li::before,
-    .command-list li::before {
-      content: "•";
-      color: orange;
-      position: absolute;
-      left: -20px;
-    }
-    .penalty-box {
-      background: #2a2a2a;
-      border-radius: 5px;
-      padding: 15px;
-      margin-bottom: 20px;
-    }
-    footer {
-      background-color: #222;
-      padding: 15px;
-      margin-top: 20px;
-      text-align: center;
-    }
     @keyframes slideIn {
       from { transform: translateX(-200%); opacity: 0; }
       to { transform: translateX(0); opacity: 1; }
@@ -140,13 +99,133 @@
     }
     .page-enter { animation: slideIn 0.5s forwards; }
     .page-exit  { animation: slideOut 0.8s forwards; }
+
+    /* Glossary Sidebar */
+    .glossary {
+      position: fixed;
+      top: 150px;
+      left: 0;
+      background: rgba(34, 34, 34, 0.8);
+      padding: 10px 15px;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      z-index: 2;
+    }
+    .glossary ul {
+      list-style: none;
+    }
+    .glossary ul li {
+      margin-bottom: 10px;
+    }
+    .glossary ul li a {
+      text-decoration: none;
+      color: #ccc;
+      font-size: 0.9em;
+      transition: color 0.3s ease;
+    }
+    .glossary ul li a:hover {
+      color: orange;
+    }
+
+    /* Section Headings with IDs for Glossary Navigation */
+    h3[id] {
+      margin-top: 40px;
+    }
+
+    /* Footer Container */
+    .footer {
+      background-color: #222;
+      padding: 50px 0;
+    }
+    .footer-container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+    }
+    .footer-col h4 {
+      margin-bottom: 15px;
+      font-size: 1.2em;
+      color: #fff;
+    }
+    .footer-col ul {
+      list-style: none;
+    }
+    .footer-col ul li {
+      margin-bottom: 8px;
+    }
+    .footer-col ul li a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .footer-col ul li a:hover {
+      color: orange;
+    }
+    /* Social Icons */
+    .social-icons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .icon {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      background: #444;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.2em;
+      transition: background 0.3s ease;
+      overflow: hidden;
+    }
+    .icon:hover { background: #666; }
+    .icon .tooltip {
+      position: absolute;
+      bottom: -30px;
+      background: #222;
+      color: #fff;
+      font-size: 0.75em;
+      padding: 5px 8px;
+      border-radius: 4px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    .icon:hover .tooltip {
+      opacity: 1;
+      bottom: -40px;
+    }
+    /* Discord icon with 360° spin on hover */
+    .icon-discord {
+      background: url('discord.png') no-repeat center center;
+      background-size: cover;
+      transition: transform 0.3s ease;
+    }
+    .icon-discord:hover {
+      transform: rotate(360deg);
+    }
+    @media (max-width: 600px) {
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+      }
+      .glossary { display: none; }
+    }
   </style>
 </head>
 <body>
   <header>
     <div class="branding">
       <div class="logo">
-        <img src="https://media.discordapp.net/attachments/1336163903763255307/1351072676608872458/64C8236B-929C-4AE7-A011-A1408D0B9DC0.png?ex=67d90bfb&is=67d7ba7b&hm=4c69a21a53e05f6df967e54a05f7733a51f9d392100f5bc6c0bf4caf306ed82d&=&format=webp&quality=lossless&width=1280&height=1280" alt="Logo" />
+        <img src="logo.png" alt="Logo" />
       </div>
       <h1>PSFL</h1>
     </div>
@@ -159,17 +238,30 @@
       </ul>
     </nav>
   </header>
+
+  <!-- Glossary Sidebar -->
+  <div class="glossary">
+    <ul>
+      <li><a href="#game-settings">Game Settings</a></li>
+      <li><a href="#challenges">Challenges</a></li>
+      <li><a href="#penalty-guide">Penalty Guide</a></li>
+      <li><a href="#penalties">Penalties</a></li>
+      <li><a href="#commands">Commands</a></li>
+    </ul>
+  </div>
+
   <section class="background">
     <div class="content page-enter">
       <div class="message-header">
-        <img class="profile-pic" src="https://cdn.discordapp.com/attachments/1336163903763255307/1351335798380957696/F48E44EE-324E-4875-9CC9-DB1A5760608C.png?ex=67da0108&is=67d8af88&hm=cd097a3491f8ba3cee90e231fb549a6d0c380af73a33e17f79a237fca8cbdcbe&" alt="Profile Picture">
+        <!-- Use ps9lu.png as the profile picture -->
+        <img class="profile-pic" src="ps9lu.png" alt="Profile Picture">
         <div class="message-info">
           <span class="name">ps9lu</span>
           <span class="date">March 17, 2025</span>
         </div>
       </div>
       <h2>In-Game Rules (Posted on Discord)</h2>
-      <h3>Game Settings</h3>
+      <h3 id="game-settings">Game Settings</h3>
       <ul class="rule-list">
         <li>Public Listing: OFF</li>
         <li>Max Players: 25</li>
@@ -187,14 +279,16 @@
         <li>Pass Break Ups: OFF</li>
       </ul>
       <p><strong>2 QB Runs Per Drive</strong></p>
-      <h3>Challenges</h3>
-      <p>If the auto-ref system fails or an official deems a call incorrect, a challenge may be requested by a Head Coach or Assistant. Challenges apply to:</p>
+
+      <h3 id="challenges">Challenges</h3>
+      <p>If the auto-ref system fails or a call is disputed, a challenge may be requested by a Head Coach or Assistant. Challenges apply to:</p>
       <ul class="rule-list">
         <li>Receiver inbounds status</li>
         <li>Questionable lag sacks</li>
         <li>Excessive blocking</li>
       </ul>
-      <h3>Penalty Guide</h3>
+
+      <h3 id="penalty-guide">Penalty Guide</h3>
       <ul class="rule-list">
         <li>01 - Delay of Game</li>
         <li>02 - Too Many Men</li>
@@ -207,14 +301,15 @@
         <li>09 - False Start</li>
         <li>10 - AFK Rule</li>
       </ul>
-      <h3>Penalties</h3>
+
+      <h3 id="penalties">Penalties</h3>
       <div class="penalty-box">
         <h4>Delay of Game</h4>
         <p>5yd penalty and loss of down when the play clock expires without a snap.</p>
       </div>
       <div class="penalty-box">
         <h4>Too Many Men</h4>
-        <p>5yd penalty if a team exceeds the player limit on the field.</p>
+        <p>5yd penalty if the team exceeds the player limit on the field.</p>
       </div>
       <div class="penalty-box">
         <h4>Ineligible Receiver</h4>
@@ -226,11 +321,11 @@
       </div>
       <div class="penalty-box">
         <h4>Intentional Grounding</h4>
-        <p>15yd penalty and loss of down for an invalid passing attempt.</p>
+        <p>15yd penalty and loss of down for an invalid pass attempt.</p>
       </div>
       <div class="penalty-box">
         <h4>OL Rollout</h4>
-        <p>5yd penalty and loss of down if an offensive lineman crosses the line on a pass play.</p>
+        <p>5yd penalty and loss of down if an offensive lineman crosses the scrimmage line on a pass play.</p>
       </div>
       <div class="penalty-box">
         <h4>Trucking &amp; Hit Stick</h4>
@@ -238,7 +333,7 @@
       </div>
       <div class="penalty-box">
         <h4>Holding</h4>
-        <p>5yd penalty and replayed down if blocking exceeds 5 yards from the line before the snap.</p>
+        <p>5yd penalty and replayed down if blocking exceeds 5 yards before the snap.</p>
       </div>
       <div class="penalty-box">
         <h4>Block in the Back</h4>
@@ -252,9 +347,10 @@
       </ul>
       <div class="penalty-box">
         <h4>AFK Rule</h4>
-        <p>A team incurs a false start penalty if a player is idle for over 3 minutes.</p>
+        <p>A false start penalty is incurred if a player is idle for over 3 minutes.</p>
       </div>
-      <h3>Commands (Refs)</h3>
+
+      <h3 id="commands">Commands (Refs)</h3>
       <ul class="command-list">
         <li>:Clock "0:00"</li>
         <li>:startclock</li>
@@ -275,10 +371,38 @@
       </ul>
     </div>
   </section>
-  <footer>
-    <p>&copy; 2025 PSFL Website. All rights reserved.</p>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4>Quicklinks</h4>
+        <ul>
+          <li><a href="https://psflrbx.github.io/homepage">PSFL Home</a></li>
+          <li><a href="https://psflrbx.github.io/stats">Stats</a></li>
+          <li><a href="https://psflrbx.github.io/rulebook">Rulebook</a></li>
+          <li><a href="https://psflrbx.github.io/credits">Credits</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Discord</h4>
+        <div class="social-icons">
+          <a href="https://discord.gg/psfl" class="icon icon-discord">
+            <span class="tooltip">discord.gg/psfl</span>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Credits</h4>
+        <ul>
+          <li>@ps9lu (psyklu)</li>
+          <li>@siyazof (495BC)</li>
+        </ul>
+      </div>
+    </div>
   </footer>
+
   <script>
+    // Parallax Effect
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
@@ -291,15 +415,18 @@
     });
     updateParallax();
 
+    // Tween-out on navigation click before navigating
     const navLinks = document.querySelectorAll('nav ul li a');
     navLinks.forEach(link => {
       link.addEventListener('click', function(e) {
         e.preventDefault();
         const targetUrl = this.href;
-        const content = document.querySelector('.content');
+        const content = document.querySelector('.background .content');
         content.classList.remove('page-enter');
         content.classList.add('page-exit');
-        setTimeout(() => { window.location.href = targetUrl; }, 1200);
+        setTimeout(() => {
+          window.location.href = targetUrl;
+        }, 1200);
       });
     });
   </script>
