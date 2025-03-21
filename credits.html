@@ -6,17 +6,11 @@
   <title>PSFL Credits</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
-    html {
-      scroll-behavior: smooth;
-    }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'IBM Plex Sans', sans-serif;
-      background-color: #111;
+    html { scroll-behavior: smooth; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'IBM Plex Sans', sans-serif; 
+      background-color: #111; 
       color: white;
       line-height: 1.6;
     }
@@ -27,22 +21,22 @@
       align-items: center;
       justify-content: space-between;
     }
-    .branding {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .branding { 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
     }
-    .logo img {
-      width: 60px;
+    .logo img { 
+      width: 60px; 
     }
-    header h1 {
-      font-size: 2.5em;
-      margin: 0;
+    header h1 { 
+      font-size: 2.5em; 
+      margin: 0; 
     }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 15px;
+    nav ul { 
+      list-style: none; 
+      display: flex; 
+      gap: 15px; 
     }
     nav ul li a {
       display: inline-block;
@@ -77,10 +71,8 @@
     .background::after {
       content: "";
       position: absolute;
-      top: 0; 
-      left: 0;
-      width: 100%; 
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background-color: rgba(0, 0, 0, 0.3);
       z-index: 0;
     }
@@ -90,32 +82,54 @@
       width: 80%;
       max-width: 900px;
       margin: 0 auto;
-      background: rgba(34,34,34,0.8);
+      background: rgba(34, 34, 34, 0.8);
       padding: 30px;
       border-radius: 8px;
-      text-align: center;
+      text-align: left;
       animation: slideIn 0.5s forwards;
     }
     @keyframes slideIn {
       from { transform: translateX(-200%); opacity: 0; }
-      to   { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(0); opacity: 1; }
     }
     @keyframes slideOut {
       from { transform: translateX(0); opacity: 1; }
-      to   { transform: translateX(-200%); opacity: 0; }
+      to { transform: translateX(-200%); opacity: 0; }
     }
     .page-enter { animation: slideIn 0.5s forwards; }
-    .page-exit { animation: slideOut 0.8s forwards; }
+    .page-exit  { animation: slideOut 0.8s forwards; }
 
-    /* Footer Styles */
+    /* Message Header */
+    .message-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .profile-pic {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+      object-fit: cover;
+    }
+    .message-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .message-info .name { font-weight: bold; color: #fff; }
+    .message-info .date { font-size: 0.9em; color: #aaa; }
+    
+    /* Footer Styles (Responsive) */
     .footer {
       background-color: #222;
       padding: 50px 0;
+      text-align: center;
     }
     .footer-container {
       width: 90%;
       max-width: 1000px;
-      margin: 0 auto;
+      margin: auto;
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
@@ -223,115 +237,9 @@
           <span class="date">March 17, 2025</span>
         </div>
       </div>
-      <h2>In-Game Rules (Posted on Discord)</h2>
-      <h3 id="game-settings">Game Settings</h3>
-      <ul class="rule-list">
-        <li>Public Listing: OFF</li>
-        <li>Max Players: 25</li>
-        <li>Fumble Chances: 1</li>
-        <li>Mercy Rule: 40</li>
-        <li>Play Clock: 25</li>
-        <li>Quarter Length: 4 Minutes</li>
-        <li>Replays: ON</li>
-        <li>Time of Day &amp; Weather: Per schedule</li>
-        <li>Diving: ON</li>
-        <li>Hit Stick: ON</li>
-        <li>Mercy Rule: OFF</li>
-        <li>Sprinting: ON</li>
-        <li>Truck: ON</li>
-        <li>Pass Break Ups: OFF</li>
-      </ul>
-      <p><strong>2 QB Runs Per Drive</strong></p>
-
-      <h3 id="challenges">Challenges</h3>
-      <p>If the auto-ref system fails or a call is disputed, a challenge may be requested by a Head Coach or Assistant. Challenges apply to:</p>
-      <ul class="rule-list">
-        <li>Receiver inbounds status</li>
-        <li>Questionable lag sacks</li>
-        <li>Excessive blocking</li>
-      </ul>
-
-      <h3 id="penalty-guide">Penalty Guide</h3>
-      <ul class="rule-list">
-        <li>01 - Delay of Game</li>
-        <li>02 - Too Many Men</li>
-        <li>03 - Ineligible Receiver</li>
-        <li>04 - Lag Sack</li>
-        <li>05 - Grounding</li>
-        <li>06 - OL Rollout</li>
-        <li>07 - Illegal Formation</li>
-        <li>08 - Uneven Teams</li>
-        <li>09 - False Start</li>
-        <li>10 - AFK Rule</li>
-      </ul>
-
-      <h3 id="penalties">Penalties</h3>
-      <div class="penalty-box">
-        <h4>Delay of Game</h4>
-        <p>5yd penalty and loss of down when the play clock expires without a snap.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Too Many Men</h4>
-        <p>5yd penalty if the team exceeds the player limit on the field.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Ineligible Receiver</h4>
-        <p>Results in an incomplete pass and a replayed down if a receiver steps out of bounds.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Lag Sack</h4>
-        <p>5yd penalty for the defense and an automatic first down for the offense when a lag sack occurs.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Intentional Grounding</h4>
-        <p>15yd penalty and loss of down for an invalid pass attempt.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>OL Rollout</h4>
-        <p>5yd penalty and loss of down if an offensive lineman crosses the scrimmage line on a pass play.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Trucking &amp; Hit Stick</h4>
-        <p>10yd penalty and replayed down.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Holding</h4>
-        <p>5yd penalty and replayed down if blocking exceeds 5 yards before the snap.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Block in the Back</h4>
-        <p>10yd penalty and replayed down for initiating a block from behind.</p>
-      </div>
-      <p>Defensive blitz limits:</p>
-      <ul class="rule-list">
-        <li>8v8: Up to 4 players</li>
-        <li>7v7: Up to 3 players</li>
-        <li>6v6: Up to 2 players</li>
-      </ul>
-      <div class="penalty-box">
-        <h4>AFK Rule</h4>
-        <p>A false start penalty is incurred if a player is idle for over 3 minutes.</p>
-      </div>
-
-      <h3 id="commands">Commands (Refs)</h3>
-      <ul class="command-list">
-        <li>:Clock "0:00"</li>
-        <li>:startclock</li>
-        <li>:pclock "00"</li>
-        <li>:Pauseclock</li>
-        <li>:Pausepclock</li>
-        <li>:line "-0" / :line "0"</li>
-        <li>:scrimmage "-0" / :scrimmage "0"</li>
-        <li>:flag</li>
-        <li>:challenge</li>
-        <li>:newplay</li>
-        <li>:turnover</li>
-        <li>:down "0"</li>
-        <li>:team "user" (away/home/spec/ref)</li>
-        <li>:serverlock / :unserverlock</li>
-        <li>:changestate "play" / "kickoff" / "punt" / "field goal"</li>
-        <li>:padmin "user"</li>
-      </ul>
+      <h2>Credits</h2>
+      <p>PSFL Owner: psyklu | @ps9lu</p>
+      <p>PSFL Website Designer: 495BC | @siyazof</p>
     </div>
   </section>
 
@@ -342,8 +250,8 @@
         <ul>
           <li><a href="https://psflrbx.github.io/homepage">PSFL Home</a></li>
           <li><a href="https://psflrbx.github.io/stats">Stats</a></li>
-          <li><a href="https://psflrbx.github.io/rulebook">Rulebook</a></li>
-          <li><a href="https://psflrbx.github.io/credits">Credits</a></li>
+          <li><a href="rulebook.html">Rulebook</a></li>
+          <li><a href="credits.html">Credits</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -387,9 +295,7 @@
         const content = document.querySelector('.background .content');
         content.classList.remove('page-enter');
         content.classList.add('page-exit');
-        setTimeout(() => {
-          window.location.href = targetUrl;
-        }, 1200);
+        setTimeout(() => { window.location.href = targetUrl; }, 1200);
       });
     });
   </script>
