@@ -12,8 +12,16 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'IBM Plex Sans', sans-serif; background-color: #111; color: white; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background-color: #111;
+      color: white;
+    }
     header {
       padding: 20px;
       background-color: #222;
@@ -21,10 +29,23 @@
       align-items: center;
       justify-content: space-between;
     }
-    .branding { display: flex; align-items: center; gap: 10px; }
-    .logo img { width: 60px; }
-    header h1 { font-size: 2.5em; margin: 0; }
-    nav ul { list-style: none; display: flex; gap: 15px; }
+    .branding {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo img {
+      width: 60px;
+    }
+    header h1 {
+      font-size: 2.5em;
+      margin: 0;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+    }
     nav ul li a {
       display: inline-block;
       text-decoration: none;
@@ -40,10 +61,11 @@
       box-shadow: 0 0 15px 5px orange;
     }
     @keyframes oscillate {
-      0% { transform: translateY(-3px); }
-      50% { transform: translateY(3px); }
+      0%   { transform: translateY(-3px); }
+      50%  { transform: translateY(3px); }
       100% { transform: translateY(-3px); }
     }
+
     .background {
       position: relative;
       min-height: 150vh;
@@ -55,7 +77,6 @@
       padding-top: 100px;
       will-change: background-position;
     }
-    /* Black overlay with 30% opacity */
     .background::after {
       content: "";
       position: absolute;
@@ -77,44 +98,97 @@
     }
     @keyframes slideIn {
       from { transform: translateX(-200%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+      to   { transform: translateX(0); opacity: 1; }
     }
     @keyframes slideOut {
       from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(-200%); opacity: 0; }
+      to   { transform: translateX(-200%); opacity: 0; }
     }
-    .page-enter { animation: slideIn 0.5s forwards; }
-    .page-exit { animation: slideOut 0.8s forwards; }
-    /* Responsive Footer (based on pure CSS responsive footer concept) */
+    .page-enter {
+      animation: slideIn 0.5s forwards;
+    }
+    .page-exit {
+      animation: slideOut 0.8s forwards;
+    }
+
+    /* Footer Container */
     .footer {
       background-color: #222;
-      padding: 20px 0;
+      padding: 50px 0;
     }
-    .footer .container {
+    .footer-container {
       width: 90%;
       max-width: 1000px;
-      margin: auto;
+      margin: 0 auto;
       display: flex;
       flex-wrap: wrap;
+      gap: 20px;
       justify-content: space-between;
-      align-items: center;
+    }
+    .footer-col h4 {
+      margin-bottom: 15px;
+      font-size: 1.2em;
       color: #fff;
     }
-    .footer .container > div {
-      margin: 10px 0;
+    .footer-col ul {
+      list-style: none;
     }
-    .footer a {
-      color: orange;
+    .footer-col ul li {
+      margin-bottom: 8px;
+    }
+    .footer-col ul li a {
+      color: #ccc;
       text-decoration: none;
-      margin-left: 15px;
+      transition: color 0.3s ease;
     }
+    .footer-col ul li a:hover {
+      color: orange;
+    }
+    /* Social Icons */
+    .social-icons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .icon {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      background: #444;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.2em;
+      transition: background 0.3s ease;
+      overflow: hidden;
+    }
+    .icon:hover {
+      background: #666;
+    }
+    .icon .tooltip {
+      position: absolute;
+      bottom: -30px;
+      background: #222;
+      color: #fff;
+      font-size: 0.75em;
+      padding: 5px 8px;
+      border-radius: 4px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    .icon:hover .tooltip {
+      opacity: 1;
+      bottom: -40px;
+    }
+    /* Responsive adjustments */
     @media (max-width: 600px) {
-      .footer .container {
+      .footer-container {
         flex-direction: column;
         text-align: center;
-      }
-      .footer a {
-        margin: 5px 0;
       }
     }
   </style>
@@ -136,25 +210,50 @@
       </ul>
     </nav>
   </header>
+
   <section class="background">
     <div class="content page-enter">
       <h2>Ready to unleash your passion and define the game?</h2>
       <p>
-        Start your ro-football career today at <a href="https://discord.gg/psfl" style="color:orange; text-decoration:none;">discord.gg/psfl</a>
+        Start your ro-football career today at
+        <a href="https://discord.gg/psfl" style="color:orange; text-decoration:none;">discord.gg/psfl</a>
       </p>
     </div>
   </section>
+
   <footer class="footer">
-    <div class="container">
-      <div class="footer-left">
-        <p>&copy; 2025 PSFL Website. All rights reserved.</p>
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4>Quicklinks</h4>
+        <ul>
+          <li><a href="https://github.com/PSFLrbx/homepage">GitHub Homepage</a></li>
+          <li><a href="https://psflrbx.github.io/homepage">PSFL Home</a></li>
+          <li><a href="https://psflrbx.github.io/stats">Stats</a></li>
+          <li><a href="https://psflrbx.github.io/rulebook">Rulebook</a></li>
+          <li><a href="https://psflrbx.github.io/credits">Credits</a></li>
+        </ul>
       </div>
-      <div class="footer-right">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
+
+      <div class="footer-col">
+        <h4>Discord</h4>
+        <div class="social-icons">
+          <a href="https://discord.com/psfl" class="icon">
+            D
+            <span class="tooltip">Discord</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Credits</h4>
+        <ul>
+          <li>@ps9lu (psyklu)</li>
+          <li>@siyazof (495BC)</li>
+        </ul>
       </div>
     </div>
   </footer>
+
   <script>
     // Parallax Effect
     let targetY = 0, currentY = 0;
