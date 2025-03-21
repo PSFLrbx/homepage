@@ -10,20 +10,10 @@
   <meta property="og:image" content="logo.png" />
   <meta property="og:url" content="https://psflrbx.github.io/homepage" />
   <meta name="twitter:card" content="summary_large_image" />
-
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
-
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'IBM Plex Sans', sans-serif;
-      background-color: #111;
-      color: white;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'IBM Plex Sans', sans-serif; background-color: #111; color: white; }
     header {
       padding: 20px;
       background-color: #222;
@@ -31,23 +21,10 @@
       align-items: center;
       justify-content: space-between;
     }
-    .branding {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .logo img {
-      width: 60px;
-    }
-    header h1 {
-      font-size: 2.5em;
-      margin: 0;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 15px;
-    }
+    .branding { display: flex; align-items: center; gap: 10px; }
+    .logo img { width: 60px; }
+    header h1 { font-size: 2.5em; margin: 0; }
+    nav ul { list-style: none; display: flex; gap: 15px; }
     nav ul li a {
       display: inline-block;
       text-decoration: none;
@@ -67,7 +44,6 @@
       50%  { transform: translateY(3px); }
       100% { transform: translateY(-3px); }
     }
-
     .background {
       position: relative;
       min-height: 150vh;
@@ -79,6 +55,7 @@
       padding-top: 100px;
       will-change: background-position;
     }
+    /* Black overlay with 30% opacity */
     .background::after {
       content: "";
       position: absolute;
@@ -100,20 +77,16 @@
     }
     @keyframes slideIn {
       from { transform: translateX(-200%); opacity: 0; }
-      to   { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(0); opacity: 1; }
     }
     @keyframes slideOut {
       from { transform: translateX(0); opacity: 1; }
-      to   { transform: translateX(-200%); opacity: 0; }
+      to { transform: translateX(-200%); opacity: 0; }
     }
-    .page-enter {
-      animation: slideIn 0.5s forwards;
-    }
-    .page-exit {
-      animation: slideOut 0.8s forwards;
-    }
+    .page-enter { animation: slideIn 0.5s forwards; }
+    .page-exit { animation: slideOut 0.8s forwards; }
 
-    /* Footer Container */
+    /* Footer Styles */
     .footer {
       background-color: #222;
       padding: 50px 0;
@@ -146,7 +119,6 @@
     .footer-col ul li a:hover {
       color: orange;
     }
-
     /* Social Icons */
     .social-icons {
       display: flex;
@@ -168,9 +140,7 @@
       transition: background 0.3s ease;
       overflow: hidden;
     }
-    .icon:hover {
-      background: #666;
-    }
+    .icon:hover { background: #666; }
     .icon .tooltip {
       position: absolute;
       bottom: -30px;
@@ -187,18 +157,17 @@
       opacity: 1;
       bottom: -40px;
     }
-
-    /* Rotating Discord Logo */
+    /* Discord icon with rotating effect */
     .icon-discord {
-      background: url('discord.png') no-repeat center center / cover;
-      animation: spinBlur 0.5s linear infinite;
+      background: url('discord.png') no-repeat center center;
+      background-size: cover;
+      animation: spinBlur 0.3s linear infinite;
     }
     @keyframes spinBlur {
-      0%   { transform: rotate(0deg);   filter: blur(0); }
+      0%   { transform: rotate(0deg); filter: blur(0); }
       50%  { transform: rotate(180deg); filter: blur(2px); }
       100% { transform: rotate(360deg); filter: blur(0); }
     }
-
     @media (max-width: 600px) {
       .footer-container {
         flex-direction: column;
@@ -229,7 +198,7 @@
     <div class="content page-enter">
       <h2>Ready to unleash your passion and define the game?</h2>
       <p>
-        Start your ro-football career today at
+        Start your ro-football career today at 
         <a href="https://discord.gg/psfl" style="color:orange; text-decoration:none;">discord.gg/psfl</a>
       </p>
     </div>
@@ -240,7 +209,6 @@
       <div class="footer-col">
         <h4>Quicklinks</h4>
         <ul>
-          <li><a href="https://github.com/PSFLrbx/homepage">GitHub Homepage</a></li>
           <li><a href="https://psflrbx.github.io/homepage">PSFL Home</a></li>
           <li><a href="https://psflrbx.github.io/stats">Stats</a></li>
           <li><a href="https://psflrbx.github.io/rulebook">Rulebook</a></li>
