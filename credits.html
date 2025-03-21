@@ -6,11 +6,17 @@
   <title>PSFL Credits</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
-    html { scroll-behavior: smooth; }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { 
-      font-family: 'IBM Plex Sans', sans-serif; 
-      background-color: #111; 
+    html {
+      scroll-behavior: smooth;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background-color: #111;
       color: white;
       line-height: 1.6;
     }
@@ -21,22 +27,22 @@
       align-items: center;
       justify-content: space-between;
     }
-    .branding { 
-      display: flex; 
-      align-items: center; 
-      gap: 10px; 
+    .branding {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .logo img { 
-      width: 60px; 
+    .logo img {
+      width: 60px;
     }
-    header h1 { 
-      font-size: 2.5em; 
-      margin: 0; 
+    header h1 {
+      font-size: 2.5em;
+      margin: 0;
     }
-    nav ul { 
-      list-style: none; 
-      display: flex; 
-      gap: 15px; 
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
     }
     nav ul li a {
       display: inline-block;
@@ -67,12 +73,13 @@
       padding-top: 100px;
       will-change: background-position;
     }
-    /* Black overlay with 30% opacity */
     .background::after {
       content: "";
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
       background-color: rgba(0, 0, 0, 0.3);
       z-index: 0;
     }
@@ -90,16 +97,15 @@
     }
     @keyframes slideIn {
       from { transform: translateX(-200%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+      to   { transform: translateX(0); opacity: 1; }
     }
     @keyframes slideOut {
       from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(-200%); opacity: 0; }
+      to   { transform: translateX(-200%); opacity: 0; }
     }
     .page-enter { animation: slideIn 0.5s forwards; }
     .page-exit  { animation: slideOut 0.8s forwards; }
 
-    /* Message Header */
     .message-header {
       display: flex;
       align-items: center;
@@ -119,8 +125,7 @@
     }
     .message-info .name { font-weight: bold; color: #fff; }
     .message-info .date { font-size: 0.9em; color: #aaa; }
-    
-    /* Footer Styles (Responsive) */
+
     .footer {
       background-color: #222;
       padding: 50px 0;
@@ -147,7 +152,9 @@
       text-decoration: none;
       transition: color 0.3s ease;
     }
-    .footer-col ul li a:hover { color: orange; }
+    .footer-col ul li a:hover {
+      color: orange;
+    }
     .social-icons {
       display: flex;
       align-items: center;
@@ -194,8 +201,10 @@
       transform: rotate(360deg);
     }
     @media (max-width: 600px) {
-      .footer-container { flex-direction: column; text-align: center; }
-      .glossary { display: none; }
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -216,17 +225,6 @@
       </ul>
     </nav>
   </header>
-
-  <!-- Glossary Sidebar -->
-  <div class="glossary">
-    <ul>
-      <li><a href="#game-settings">Game Settings</a></li>
-      <li><a href="#challenges">Challenges</a></li>
-      <li><a href="#penalty-guide">Penalty Guide</a></li>
-      <li><a href="#penalties">Penalties</a></li>
-      <li><a href="#commands">Commands</a></li>
-    </ul>
-  </div>
 
   <section class="background">
     <div class="content page-enter">
@@ -250,8 +248,8 @@
         <ul>
           <li><a href="https://psflrbx.github.io/homepage">PSFL Home</a></li>
           <li><a href="https://psflrbx.github.io/stats">Stats</a></li>
-          <li><a href="rulebook.html">Rulebook</a></li>
-          <li><a href="credits.html">Credits</a></li>
+          <li><a href="https://psflrbx.github.io/rulebook">Rulebook</a></li>
+          <li><a href="https://psflrbx.github.io/credits">Credits</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -295,7 +293,9 @@
         const content = document.querySelector('.background .content');
         content.classList.remove('page-enter');
         content.classList.add('page-exit');
-        setTimeout(() => { window.location.href = targetUrl; }, 1200);
+        setTimeout(() => {
+          window.location.href = targetUrl;
+        }, 1200);
       });
     });
   </script>
