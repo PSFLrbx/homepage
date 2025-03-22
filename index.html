@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PSFL Homepage</title>
+  <!-- Open Graph Meta Tags for Discord and social embeds -->
   <meta property="og:title" content="PSFL" />
   <meta property="og:description" content="Ready to unleash your passion and define the game? Start your ro-football career today at discord.gg/psfl" />
   <meta property="og:image" content="logo.png" />
   <meta property="og:url" content="https://psflrbx.github.io/homepage" />
   <meta name="twitter:card" content="summary_large_image" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
-
   <style>
     html {
       scroll-behavior: smooth;
@@ -26,7 +26,7 @@
       color: white;
       line-height: 1.6;
     }
-
+    /* Header */
     header {
       padding: 20px;
       background-color: #222;
@@ -46,10 +46,13 @@
       font-size: 2.5em;
       margin: 0;
     }
+    nav { } /* Navigation empty – no buttons */
 
+    /* Top Background Section */
     .background {
       position: relative;
       height: 120vh;
+      /* Use logo.png as background; image fully visible from top to bottom */
       background: url('logo.png') no-repeat top center;
       background-size: contain;
       background-color: #000;
@@ -58,12 +61,14 @@
     .background::after {
       content: "";
       position: absolute;
-      top: 0; left: 0;
-      width: 100%;
+      top: 0; 
+      left: 0;
+      width: 100%; 
       height: 100%;
       background-color: rgba(0,0,0,0.3);
       z-index: 0;
     }
+    /* Centered slogan text */
     .background .content {
       position: absolute;
       top: 50%;
@@ -81,11 +86,18 @@
     }
     @keyframes slideIn {
       from { transform: translate(-50%, -40%) scale(0.95); opacity: 0; }
-      to   { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
+      to   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
+    @keyframes slideOut {
+      from { transform: translate(-50%, -50%); opacity: 1; }
+      to   { transform: translate(-50%, -40%); opacity: 0; }
+    }
+    .page-enter { animation: slideIn 0.5s forwards; }
+    .page-exit  { animation: slideOut 0.8s forwards; }
 
+    /* Portfolio Section */
     .portfolio {
-      background-color: #151515;
+      background-color: #131313; /* a dark grey distinct from header */
       padding: 100px 20px 60px;
       text-align: center;
     }
@@ -123,7 +135,9 @@
       justify-content: flex-end;
       padding: 1em;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      /* Background always visible */
     }
+    /* Card background always visible – default zoom-out then enlarge on hover */
     .card::before {
       content: "";
       position: absolute;
@@ -132,11 +146,10 @@
       background-size: cover;
       z-index: -1;
       transition: transform 0.3s ease;
-      transform: scale(0.92);
-      transform-origin: center;
+      transform: scale(0.95);
     }
     .card:hover::before {
-      transform: scale(1);
+      transform: scale(1.05);
     }
     .card:hover {
       transform: scale(1.05);
@@ -156,6 +169,7 @@
       z-index: 1;
     }
 
+    /* Footer */
     .footer {
       background-color: #222;
       padding: 50px 0;
@@ -189,7 +203,6 @@
     .footer-col ul li a:hover {
       color: orange;
     }
-
     .social-icons {
       display: flex;
       align-items: center;
@@ -213,24 +226,25 @@
     .icon:hover {
       background: #666;
     }
-    .icon .tooltip {
+    .tooltip {
       position: absolute;
-      bottom: -40px;
+      bottom: -35px;
       background: #222;
       color: #fff;
       font-size: 0.75em;
-      padding: 5px 8px;
+      padding: 6px 10px;
       border-radius: 4px;
-      opacity: 1;
-      transition: all 0.3s ease;
+      opacity: 1; /* Always visible */
+      transition: opacity 0.3s ease;
       pointer-events: none;
     }
+    /* Discord icon: no spin and no overlay removal issue */
     .icon-discord {
       background: url('discord.png') no-repeat center center;
       background-size: cover;
       transition: none;
     }
-
+    
     @media (max-width: 600px) {
       .footer-container {
         flex-direction: column;
@@ -250,8 +264,10 @@
       </div>
       <h1>PSFL</h1>
     </div>
+    <nav></nav>
   </header>
 
+  <!-- Top Background Section -->
   <section class="background">
     <div class="content page-enter">
       <h2>Ready to unleash your passion and define the game?</h2>
@@ -262,33 +278,34 @@
     </div>
   </section>
 
-  <section class="portfolio">
+  <!-- Portfolio Section -->
+  <section class="portfolio" style="padding-top: 200px;">
     <h2>Explore Our League</h2>
     <div class="card-grid">
       <div class="card-grid-space">
         <div class="num">01</div>
-        <a class="card" href="https://psflrbx.github.io/stats">
+        <a class="card" href="https://psflrbx.github.io/stats" style="--bg-img: url('background.png');">
           <h3>Stats</h3>
           <p>View detailed performance data.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">02</div>
-        <a class="card" href="https://psflrbx.github.io/standings">
+        <a class="card" href="https://psflrbx.github.io/standings" style="--bg-img: url('background.png');">
           <h3>Standings</h3>
           <p>Check current team rankings.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">03</div>
-        <a class="card" href="rulebook.html">
+        <a class="card" href="rulebook.html" style="--bg-img: url('background.png');">
           <h3>Rulebook</h3>
           <p>Understand the official rules.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">04</div>
-        <a class="card" href="credits.html">
+        <a class="card" href="credits.html" style="--bg-img: url('background.png');">
           <h3>Credits</h3>
           <p>Meet the team behind PSFL.</p>
         </a>
@@ -296,6 +313,7 @@
     </div>
   </section>
 
+  <!-- Footer Section -->
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-col">
@@ -326,7 +344,7 @@
   </footer>
 
   <script>
-    // Parallax for logo.png
+    // Parallax Effect for the top background section
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
