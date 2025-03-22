@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PSFL Homepage</title>
-  <!-- Open Graph Meta Tags for Discord and social embeds -->
   <meta property="og:title" content="PSFL" />
   <meta property="og:description" content="Ready to unleash your passion and define the game? Start your ro-football career today at discord.gg/psfl" />
   <meta property="og:image" content="logo.png" />
@@ -28,7 +27,6 @@
       line-height: 1.6;
     }
 
-    /* Header */
     header {
       padding: 20px;
       background-color: #222;
@@ -48,16 +46,13 @@
       font-size: 2.5em;
       margin: 0;
     }
-    nav { }
 
-    /* Main background container for full logo */
     .background {
       position: relative;
       height: 120vh;
       background: url('logo.png') no-repeat top center;
       background-size: contain;
-      background-color: #000; 
-      will-change: background-position;
+      background-color: #000;
     }
     .background::after {
       content: "";
@@ -70,44 +65,37 @@
     }
     .background .content {
       position: absolute;
-      top: 50%; 
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 1;
       text-align: center;
       animation: slideIn 0.5s forwards;
       width: 80%;
-      max-width: 600px;
+      max-width: 700px;
     }
     .background .content h2 {
-      font-size: 2em;
+      font-size: 2.4em;
       margin-bottom: 0.5em;
     }
     @keyframes slideIn {
       from { transform: translate(-50%, -40%) scale(0.95); opacity: 0; }
       to   { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
     }
-    @keyframes slideOut {
-      from { transform: translate(-50%, -50%); opacity: 1; }
-      to   { transform: translate(-50%, -40%); opacity: 0; }
-    }
-    .page-enter { animation: slideIn 0.5s forwards; }
-    .page-exit  { animation: slideOut 0.8s forwards; }
 
-    /* Portfolio Section - darker than #222 but not pure black */
     .portfolio {
-      background-color: #1a1a1a; 
+      background-color: #131313;
       padding: 100px 20px 60px;
       text-align: center;
     }
     .portfolio h2 {
-      font-size: 2em;
-      margin-bottom: 30px;
+      font-size: 2.2em;
+      margin-bottom: 40px;
     }
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
+      gap: 30px;
       max-width: 1200px;
       margin: 0 auto;
     }
@@ -133,35 +121,29 @@
       flex-direction: column;
       justify-content: flex-end;
       padding: 1em;
-      background-color: rgba(0,0,0,0.5);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .card::before {
       content: "";
       position: absolute;
-      top: -5px; 
-      left: -5px;
-      right: -5px; 
-      bottom: -5px;
-      background-image: var(--bg-img);
+      top: -5px; left: -5px; right: -5px; bottom: -5px;
+      background: var(--bg-img) no-repeat center center;
       background-size: cover;
-      background-position: center;
       z-index: -1;
       transition: transform 0.3s ease;
-      transform: scale(0.9);
-      transform-origin: center center;
+      transform: scale(0.92);
+      transform-origin: center;
     }
     .card:hover::before {
-      transform: scale(1.0);
+      transform: scale(1);
     }
     .card:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
     }
     .card h3 {
       margin: 0;
       font-size: 1.5em;
-      line-height: 1.2em;
       position: relative;
       z-index: 1;
     }
@@ -173,7 +155,6 @@
       z-index: 1;
     }
 
-    /* Footer */
     .footer {
       background-color: #222;
       padding: 50px 0;
@@ -208,14 +189,12 @@
       color: orange;
     }
 
-    /* Social Icons */
     .social-icons {
       display: flex;
       align-items: center;
       gap: 10px;
     }
     .icon {
-      position: relative;
       width: 40px;
       height: 40px;
       background: #444;
@@ -227,9 +206,7 @@
       color: #fff;
       font-size: 1.2em;
       transition: background 0.3s ease;
-      /* remove overflow to prevent any circle overlay effect */
-      overflow: visible; 
-      border: none; /* removing any focus ring or border if present */
+      border: none;
     }
     .icon:hover {
       background: #666;
@@ -282,10 +259,8 @@
       </div>
       <h1>PSFL</h1>
     </div>
-    <nav></nav>
   </header>
 
-  <!-- Extended Background Section to show entire logo -->
   <section class="background">
     <div class="content page-enter">
       <h2>Ready to unleash your passion and define the game?</h2>
@@ -296,38 +271,33 @@
     </div>
   </section>
 
-  <!-- Portfolio Section with darker background -->
   <section class="portfolio">
     <h2>Explore Our League</h2>
     <div class="card-grid">
       <div class="card-grid-space">
         <div class="num">01</div>
-        <a class="card" href="https://psflrbx.github.io/stats" 
-           style="--bg-img: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('stats.png');">
+        <a class="card" href="https://psflrbx.github.io/stats" style="--bg-img: url('background.png');">
           <h3>Stats</h3>
           <p>View detailed performance data.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">02</div>
-        <a class="card" href="https://psflrbx.github.io/standings" 
-           style="--bg-img: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('standings.png');">
+        <a class="card" href="https://psflrbx.github.io/standings" style="--bg-img: url('background.png');">
           <h3>Standings</h3>
           <p>Check current team rankings.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">03</div>
-        <a class="card" href="rulebook.html" 
-           style="--bg-img: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('rulebook.png');">
+        <a class="card" href="rulebook.html" style="--bg-img: url('background.png');">
           <h3>Rulebook</h3>
           <p>Understand the official rules.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">04</div>
-        <a class="card" href="credits.html" 
-           style="--bg-img: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('credits.png');">
+        <a class="card" href="credits.html" style="--bg-img: url('background.png');">
           <h3>Credits</h3>
           <p>Meet the team behind PSFL.</p>
         </a>
@@ -335,7 +305,6 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-col">
@@ -364,20 +333,5 @@
       </div>
     </div>
   </footer>
-
-  <script>
-    // Parallax for top background
-    let targetY = 0, currentY = 0;
-    const parallaxSpeed = 0.3;
-    function updateParallax() {
-      currentY += (targetY - currentY) * 0.1;
-      document.querySelector('.background').style.backgroundPositionY = currentY + "px";
-      requestAnimationFrame(updateParallax);
-    }
-    window.addEventListener('scroll', function() {
-      targetY = -(window.pageYOffset * parallaxSpeed);
-    });
-    updateParallax();
-  </script>
 </body>
 </html>
