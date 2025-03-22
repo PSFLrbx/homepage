@@ -106,8 +106,10 @@
       padding: 0 10px;
       white-space: nowrap;
     }
+    /* Make the first (Rank) column narrower */
     .heading-cell.rank-cell, .player-rank {
-      width: auto;
+      width: 50px; /* adjust as needed */
+      min-width: 50px;
     }
     .player-rank {
       font-weight: bold;
@@ -136,6 +138,32 @@
     }
     .slide-out-left {
       animation: slideOutLeft 0.5s ease forwards;
+    }
+
+    /* RANK 1, 2, 3 - "Animated Fire" Border Classes */
+    .top1 {
+      border: 2px solid gold;
+      animation: goldGlow 1.5s infinite alternate;
+    }
+    @keyframes goldGlow {
+      0%   { box-shadow: 0 0 6px gold; }
+      100% { box-shadow: 0 0 20px gold; }
+    }
+    .top2 {
+      border: 2px solid silver;
+      animation: silverGlow 1.5s infinite alternate;
+    }
+    @keyframes silverGlow {
+      0%   { box-shadow: 0 0 6px silver; }
+      100% { box-shadow: 0 0 20px silver; }
+    }
+    .top3 {
+      border: 2px solid #cd7f32; /* Bronze color */
+      animation: bronzeGlow 1.5s infinite alternate;
+    }
+    @keyframes bronzeGlow {
+      0%   { box-shadow: 0 0 6px #cd7f32; }
+      100% { box-shadow: 0 0 20px #cd7f32; }
     }
   </style>
 </head>
@@ -167,8 +195,19 @@
         .then(response => response.text())
         .then(csvText => {
           const results = Papa.parse(csvText, { header: true, skipEmptyLines: true });
-          const data = results.data;
-          const fields = results.meta.fields;
+          let data = results.data;
+          let fields = results.meta.fields;
+          
+          // 1) Remove the last column from the CSV
+          fields.pop(); // removes the final column name from 'fields'
+          // Also remove that column from each row object
+          data = data.map(row => {
+            // we take the last field name and delete it from each row
+            const lastField = results.meta.fields[results.meta.fields.length - 1];
+            delete row[lastField];
+            return row;
+          });
+
           buildTable(fields, data, containerId);
         })
         .catch(err => console.error("Error fetching CSV:", err));
@@ -181,7 +220,9 @@
       // We'll do 1 extra column for "Rank"
       const colCount = fields.length + 1;
       // Make each column the same fraction
-      const gridTemplate = `repeat(${colCount}, 1fr)`;
+      // except the first is 50px (for rank).
+      // We'll define a custom template for the first column, then repeat the rest
+      const gridTemplate = `50px repeat(${fields.length}, 1fr)`;
 
       // Heading row
       const headingRow = document.createElement("div");
@@ -214,21 +255,23 @@
         const rankDiv = document.createElement("div");
         rankDiv.classList.add("player-rank");
         rankDiv.textContent = index + 1;
+
+        // 2) Add gold/silver/bronze glow for top 3
+        if (index === 0) {
+          rankDiv.classList.add("top1");
+        } else if (index === 1) {
+          rankDiv.classList.add("top2");
+        } else if (index === 2) {
+          rankDiv.classList.add("top3");
+        }
+
         rowDiv.appendChild(rankDiv);
 
-        // For each CSV column
+        // For each CSV column in the updated 'fields'
         fields.forEach(f => {
           const cellDiv = document.createElement("div");
           cellDiv.classList.add("player-cell");
-          const cellText = row[f] || "";
-
-          // Lower font size for long names if it's the "Usernames" column
-          // (or any column you want to check, e.g. "Name")
-          if (f.toLowerCase() === "usernames" && cellText.length > 10) {
-            cellDiv.style.fontSize = "0.85em";
-          }
-
-          cellDiv.textContent = cellText;
+          cellDiv.textContent = row[f] || "";
           rowDiv.appendChild(cellDiv);
         });
 
