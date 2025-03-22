@@ -96,26 +96,27 @@
     /* Portfolio Section */
     .portfolio {
       background-color: #131313;
-      padding: 100px 20px 60px;
+      /* Extra padding to keep the cards from colliding with other elements */
+      padding: 100px 20px 80px;
       text-align: center;
     }
-    .portfolio h2 {
-      font-size: 2.2em;
-      margin-bottom: 40px;
-    }
+
+    /* Using flex for a single horizontal row */
     .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      /* Increase gap for more spacing */
-      gap: 40px;
-      max-width: 1200px;
-      margin: 0 auto;
-      /* Center the grid horizontally */
+      display: flex;
       justify-content: center;
+      align-items: flex-start;
+      /* Increase gap to space out cards horizontally */
+      gap: 40px;
+      /* Center the row within the section */
+      margin: 0 auto;
+      max-width: 1200px;
+      /* Some padding around the row so cards aren't crammed */
+      padding: 0 20px;
     }
+
     .card-grid-space {
       position: relative;
-      padding: 1rem;
     }
     .card-grid-space .num {
       font-size: 2em;
@@ -125,7 +126,7 @@
     /* Updated card approach: gradient overlay + background image */
     .card {
       position: relative;
-      /* Increased dimensions: wider and taller */
+      /* Make the cards taller & wider */
       width: 18em;
       height: 28em;
       border-radius: 1em;
@@ -267,8 +268,9 @@
         flex-direction: column;
         text-align: center;
       }
+      /* On very small screens, we let them stack if needed */
       .card-grid {
-        grid-template-columns: 1fr;
+        flex-wrap: wrap;
       }
     }
   </style>
@@ -296,12 +298,11 @@
   </section>
 
   <!-- Portfolio Section -->
-  <section class="portfolio" style="padding-top: 200px;">
-    <h2>Explore Our League</h2>
+  <section class="portfolio">
+    <!-- Removed the "Explore Our League" heading -->
     <div class="card-grid">
       <div class="card-grid-space">
         <div class="num">01</div>
-        <!-- Provide the background via a custom property -->
         <a class="card" href="https://psflrbx.github.io/stats" style="--bg-img: url('background.png');">
           <h3>Stats</h3>
           <p>View detailed performance data.</p>
