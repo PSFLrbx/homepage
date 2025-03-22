@@ -73,7 +73,7 @@
     }
     .main-title h1 { font-size: 2rem; color: #fff; }
 
-    /* STAT PAGE TABLE STYLES */
+    /* Stats Table Container */
     .list-container {
       display: flex;
       flex-direction: column;
@@ -107,7 +107,6 @@
       white-space: nowrap;
     }
     .heading-cell.rank-cell, .player-rank {
-      /* You can keep or remove the fixed width if you prefer all columns equal */
       width: auto;
     }
     .player-rank {
@@ -163,51 +162,39 @@
       fetchAndBuildList(CSV_LINK, "stats-container");
     });
 
-    /**
-     * fetchAndBuildList:
-     * - Fetches the CSV from csvLink
-     * - Parses it with PapaParse
-     * - Calls buildTable with the fields and data.
-     */
     function fetchAndBuildList(csvLink, containerId) {
       fetch(csvLink)
         .then(response => response.text())
         .then(csvText => {
           const results = Papa.parse(csvText, { header: true, skipEmptyLines: true });
-          const data = results.data;           // Array of row objects
-          const fields = results.meta.fields;  // Array of CSV column names
+          const data = results.data;
+          const fields = results.meta.fields;
           buildTable(fields, data, containerId);
         })
         .catch(err => console.error("Error fetching CSV:", err));
     }
 
-    /**
-     * buildTable:
-     * - Builds a grid-based table with a heading row and one row per CSV record.
-     * - Every column from the CSV is shown in order, with a "Rank" column first.
-     * - Columns are sized equally, and everything is center-aligned.
-     */
     function buildTable(fields, data, containerId) {
       const container = document.getElementById(containerId);
-      container.innerHTML = ""; // Clear existing content
-      
-      // We'll do 1 extra column for the "Rank" column.
+      container.innerHTML = "";
+
+      // We'll do 1 extra column for "Rank"
       const colCount = fields.length + 1;
-      // Make each column the same fraction for a more uniform look:
+      // Make each column the same fraction
       const gridTemplate = `repeat(${colCount}, 1fr)`;
-      
-      // Build heading row
+
+      // Heading row
       const headingRow = document.createElement("div");
       headingRow.classList.add("heading-row", "slide-in-down");
       headingRow.style.gridTemplateColumns = gridTemplate;
-      
-      // Rank header cell
+
+      // Rank heading
       const rankHeading = document.createElement("div");
       rankHeading.classList.add("heading-cell", "rank-cell");
       rankHeading.textContent = "Rank";
       headingRow.appendChild(rankHeading);
-      
-      // Header cells for each CSV field (in order)
+
+      // Column headings
       fields.forEach(f => {
         const cell = document.createElement("div");
         cell.classList.add("heading-cell");
@@ -215,28 +202,36 @@
         headingRow.appendChild(cell);
       });
       container.appendChild(headingRow);
-      
-      // Build data rows
+
+      // Data rows
       data.forEach((row, index) => {
         const rowDiv = document.createElement("div");
         rowDiv.classList.add("player-row", "slide-in-right");
         rowDiv.style.gridTemplateColumns = gridTemplate;
-        // Optional: set an animation delay based on row index
         rowDiv.style.animationDelay = ((index + 1) * 0.05) + "s";
-        
+
         // Rank cell
         const rankDiv = document.createElement("div");
         rankDiv.classList.add("player-rank");
         rankDiv.textContent = index + 1;
         rowDiv.appendChild(rankDiv);
-        
-        // Create a cell for each CSV column in order
+
+        // For each CSV column
         fields.forEach(f => {
           const cellDiv = document.createElement("div");
           cellDiv.classList.add("player-cell");
-          cellDiv.textContent = row[f] || "";
+          const cellText = row[f] || "";
+
+          // Lower font size for long names if it's the "Usernames" column
+          // (or any column you want to check, e.g. "Name")
+          if (f.toLowerCase() === "usernames" && cellText.length > 10) {
+            cellDiv.style.fontSize = "0.85em";
+          }
+
+          cellDiv.textContent = cellText;
           rowDiv.appendChild(cellDiv);
         });
+
         container.appendChild(rowDiv);
       });
     }
