@@ -27,6 +27,8 @@
       color: white;
       line-height: 1.6;
     }
+
+    /* Header */
     header {
       padding: 20px;
       background-color: #222;
@@ -48,10 +50,10 @@
     }
     nav { }
 
-    /* Background container for the entire logo */
+    /* Main background container for full logo */
     .background {
       position: relative;
-      height: 120vh; /* ensure entire logo can fit */
+      height: 120vh;
       background: url('logo.png') no-repeat top center;
       background-size: contain;
       background-color: #000; 
@@ -60,14 +62,12 @@
     .background::after {
       content: "";
       position: absolute;
-      top: 0; 
-      left: 0;
+      top: 0; left: 0;
       width: 100%;
       height: 100%;
       background-color: rgba(0,0,0,0.3);
       z-index: 0;
     }
-    /* Center the slogan text in the container */
     .background .content {
       position: absolute;
       top: 50%; 
@@ -76,8 +76,8 @@
       z-index: 1;
       text-align: center;
       animation: slideIn 0.5s forwards;
-      width: 80%; /* optional: to control text wrapping */
-      max-width: 600px; /* optional limit */
+      width: 80%;
+      max-width: 600px;
     }
     .background .content h2 {
       font-size: 2em;
@@ -91,16 +91,12 @@
       from { transform: translate(-50%, -50%); opacity: 1; }
       to   { transform: translate(-50%, -40%); opacity: 0; }
     }
-    .page-enter {
-      animation: slideIn 0.5s forwards;
-    }
-    .page-exit {
-      animation: slideOut 0.8s forwards;
-    }
+    .page-enter { animation: slideIn 0.5s forwards; }
+    .page-exit  { animation: slideOut 0.8s forwards; }
 
-    /* Portfolio Section */
+    /* Portfolio Section - darker than #222 but not pure black */
     .portfolio {
-      background-color: #222; 
+      background-color: #1a1a1a; 
       padding: 100px 20px 60px;
       text-align: center;
     }
@@ -140,10 +136,6 @@
       background-color: rgba(0,0,0,0.5);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    /* 
-      Show the background at all times, but 
-      scale it down by default. Enlarge on hover.
-    */
     .card::before {
       content: "";
       position: absolute;
@@ -181,7 +173,7 @@
       z-index: 1;
     }
 
-    /* Footer Section */
+    /* Footer */
     .footer {
       background-color: #222;
       padding: 50px 0;
@@ -215,6 +207,8 @@
     .footer-col ul li a:hover {
       color: orange;
     }
+
+    /* Social Icons */
     .social-icons {
       display: flex;
       align-items: center;
@@ -233,7 +227,9 @@
       color: #fff;
       font-size: 1.2em;
       transition: background 0.3s ease;
-      overflow: hidden;
+      /* remove overflow to prevent any circle overlay effect */
+      overflow: visible; 
+      border: none; /* removing any focus ring or border if present */
     }
     .icon:hover {
       background: #666;
@@ -286,7 +282,6 @@
       </div>
       <h1>PSFL</h1>
     </div>
-    <!-- Navigation bar with no clickable buttons -->
     <nav></nav>
   </header>
 
@@ -301,15 +296,14 @@
     </div>
   </section>
 
-  <!-- Portfolio Section -->
+  <!-- Portfolio Section with darker background -->
   <section class="portfolio">
     <h2>Explore Our League</h2>
     <div class="card-grid">
       <div class="card-grid-space">
         <div class="num">01</div>
-        <!-- background minimized, enlarged on hover -->
         <a class="card" href="https://psflrbx.github.io/stats" 
-           style="--bg-img: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('background.png');">
+           style="--bg-img: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('stats.png');">
           <h3>Stats</h3>
           <p>View detailed performance data.</p>
         </a>
@@ -341,7 +335,7 @@
     </div>
   </section>
 
-  <!-- Footer Section -->
+  <!-- Footer -->
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-col">
