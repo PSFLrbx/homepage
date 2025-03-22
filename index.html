@@ -106,9 +106,12 @@
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 30px;
+      /* Increase gap for more spacing */
+      gap: 40px;
       max-width: 1200px;
       margin: 0 auto;
+      /* Center the grid horizontally */
+      justify-content: center;
     }
     .card-grid-space {
       position: relative;
@@ -119,11 +122,12 @@
       margin-bottom: 0.5rem;
     }
 
-    /* Updated card approach: gradient + actual background in one go */
+    /* Updated card approach: gradient overlay + background image */
     .card {
       position: relative;
-      width: 15em;
-      height: 20em;
+      /* Increased dimensions: wider and taller */
+      width: 18em;
+      height: 28em;
       border-radius: 1em;
       border: 5px solid #ccc;
       box-shadow: 0 0 5em -1em black;
@@ -135,21 +139,17 @@
       justify-content: flex-end;
       padding: 1em;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-      /* 1) Combine a semi-transparent gradient + your custom property for the image */
-      /*    so the image is ALWAYS visible under the gradient. */
+      /* Two-layer background: gradient overlay plus image (from --bg-img) */
       background-image:
         linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
         var(--bg-img, url('background.png'));
       background-size: cover;
       background-position: center;
     }
-
     .card:hover {
       transform: scale(1.05);
       box-shadow: 0 0 15px rgba(255,255,255,0.2);
     }
-
     .card h3 {
       margin: 0;
       font-size: 1.5em;
@@ -222,7 +222,7 @@
     .icon:hover {
       background: #666;
     }
-    /* Tooltip chat bubble for Discord button */
+    /* Tooltip for Discord button */
     .tooltip {
       position: absolute;
       bottom: 50px;
@@ -251,7 +251,7 @@
     .icon:hover .tooltip {
       opacity: 1;
     }
-    /* Discord icon: keep the discord.png visible with no weird overlay */
+    /* Discord icon styling */
     .icon-discord {
       background: url('discord.png') no-repeat center center;
       background-size: cover;
