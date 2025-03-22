@@ -46,13 +46,12 @@
       font-size: 2.5em;
       margin: 0;
     }
-    nav { } /* Navigation empty – no buttons */
+    nav { } /* Navigation left empty */
 
     /* Top Background Section */
     .background {
       position: relative;
       height: 120vh;
-      /* Use logo.png as background; image fully visible from top to bottom */
       background: url('logo.png') no-repeat top center;
       background-size: contain;
       background-color: #000;
@@ -68,10 +67,9 @@
       background-color: rgba(0,0,0,0.3);
       z-index: 0;
     }
-    /* Centered slogan text */
     .background .content {
       position: absolute;
-      top: 50%;
+      top: 50%; 
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 1;
@@ -97,7 +95,7 @@
 
     /* Portfolio Section */
     .portfolio {
-      background-color: #131313; /* a dark grey distinct from header */
+      background-color: #131313;
       padding: 100px 20px 60px;
       text-align: center;
     }
@@ -135,9 +133,8 @@
       justify-content: flex-end;
       padding: 1em;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      /* Background always visible */
     }
-    /* Card background always visible – default zoom-out then enlarge on hover */
+    /* Card background always visible, with default zoom-out then enlarge on hover */
     .card::before {
       content: "";
       position: absolute;
@@ -169,7 +166,7 @@
       z-index: 1;
     }
 
-    /* Footer */
+    /* Footer Section */
     .footer {
       background-color: #222;
       padding: 50px 0;
@@ -226,25 +223,41 @@
     .icon:hover {
       background: #666;
     }
+    /* Tooltip chat bubble for Discord button */
     .tooltip {
       position: absolute;
-      bottom: -35px;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
       background: #222;
       color: #fff;
       font-size: 0.75em;
       padding: 6px 10px;
       border-radius: 4px;
-      opacity: 1; /* Always visible */
-      transition: opacity 0.3s ease;
+      opacity: 0;
       pointer-events: none;
+      transition: opacity 0.3s ease;
     }
-    /* Discord icon: no spin and no overlay removal issue */
+    .tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: #222 transparent transparent transparent;
+    }
+    .icon:hover .tooltip {
+      opacity: 1;
+    }
+    /* Discord icon: no rotation, always show image */
     .icon-discord {
       background: url('discord.png') no-repeat center center;
       background-size: cover;
       transition: none;
     }
-    
+
     @media (max-width: 600px) {
       .footer-container {
         flex-direction: column;
@@ -344,7 +357,7 @@
   </footer>
 
   <script>
-    // Parallax Effect for the top background section
+    // Parallax Effect for top background section
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
