@@ -2,186 +2,144 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PSFL Standings</title>
-  <!-- Similar font choice as index.html -->
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+  <title>Player Stats Page</title>
+  <!-- Papaparse for CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <style>
-    /* Basic resets */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    html {
-      scroll-behavior: smooth;
-    }
     body {
-      background-color: #333; /* Gray background */
-      color: #fff;
       font-family: 'IBM Plex Sans', sans-serif;
-      line-height: 1.6;
-    }
-
-    /* Header / Nav (similar style) */
-    header {
-      background-color: #222;
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .branding {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .branding .logo {
-      width: 60px;
-    }
-    header h1 {
-      font-size: 2.5em;
-      margin: 0;
-    }
-    nav {
-      /* You can add nav links here if desired */
-    }
-
-    /* Main content area */
-    .content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px 20px; /* some padding so it’s not flush with edges */
-      text-align: center;
-    }
-
-    /* Table styling */
-    .table-container {
-      margin: 0 auto;
-      overflow-x: auto; /* allow horizontal scroll if table is too wide */
-      width: 100%;
-      max-width: 1000px; /* limit the table’s max width */
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: #444;
+      background: #111;
       color: #fff;
+      margin: 0; 
+      padding: 20px;
+    }
+    /* Basic container styling */
+    .stats-container {
+      background: rgba(34,34,34,0.85);
+      padding: 1rem;
+      border-radius: 4px;
+      max-width: 90%;
       margin: 0 auto;
     }
-    th, td {
-      border: 1px solid #555;
-      padding: 12px;
+    h1 {
       text-align: center;
+      margin-bottom: 1rem;
     }
-    th {
-      background-color: #666; 
+    .heading-row, .player-row {
+      display: grid;
+      grid-template-columns: 60px repeat(4, 1fr); /* Example: 1 rank col + 4 data cols */
+      gap: 5px;
+      align-items: center;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+    }
+    .heading-row {
+      background: rgba(0,0,0,0.7);
       font-weight: bold;
     }
-
-    /* Responsive adjustments */
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 1.8em;
-      }
-      th, td {
-        padding: 8px;
-      }
+    .player-row {
+      background: rgba(0,0,0,0.5);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .heading-cell, .player-cell {
+      padding: 0 10px;
+      text-align: left;
+    }
+    .heading-cell.rank-cell, .player-rank {
+      width: 60px;
+      text-align: center;
+    }
+    .player-rank {
+      font-weight: bold;
+      background: #000;
+      border-radius: 5px;
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="branding">
-      <!-- If you have a logo, place it here (optional) -->
-      <!-- <img class="logo" src="logo.png" alt="PSFL Logo" /> -->
-      <h1>PSFL Standings</h1>
-    </div>
-    <nav>
-      <!-- Add nav links if needed -->
-    </nav>
-  </header>
 
-  <div class="content">
-    <h2>Current Standings</h2>
-    <div class="table-container">
-      <table id="standingsTable">
-        <thead></thead>
-        <tbody></tbody>
-      </table>
-    </div>
+  <h1>QB Stats</h1>
+  <div class="stats-container" id="qb-container">
+    <!-- Rows get inserted here by JS -->
   </div>
 
   <script>
-    // Replace with your real Google Sheets CSV link
-    const CSV_URL = "https://docs.google.com/spreadsheets/d/e/.../pub?output=csv";
+    // 1) Define your CSV link
+    const CSV_QB_LINK = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?output=csv";
 
-    async function loadCSV() {
-      try {
-        const response = await fetch(CSV_URL);
-        const csvText = await response.text();
+    // 2) On DOM load, fetch the CSV and build the table
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchAndBuildList(CSV_QB_LINK, "qb-container");
+    });
 
-        // Split into lines
-        let lines = csvText.trim().split("\n");
-
-        // Convert each line to array of cells
-        let tableData = lines.map(line => line.split(","));
-
-        // Filter out empty rows
-        tableData = tableData.filter(row => row.some(cell => cell.trim() !== ""));
-
-        // Determine which columns have data (i.e. skip columns that are empty in every row)
-        const colCount = tableData[0].length;
-        const columnsToKeep = [];
-        for (let col = 0; col < colCount; col++) {
-          let hasData = false;
-          for (let row = 0; row < tableData.length; row++) {
-            if (tableData[row][col] && tableData[row][col].trim() !== "") {
-              hasData = true;
-              break;
-            }
-          }
-          if (hasData) {
-            columnsToKeep.push(col);
-          }
-        }
-
-        // Rebuild tableData to only include the columns we keep
-        tableData = tableData.map(row =>
-          columnsToKeep.map(colIndex => row[colIndex])
-        );
-
-        // The first row is typically headers
-        const headerRow = tableData.shift();
-
-        // Build thead
-        const thead = document.querySelector("#standingsTable thead");
-        const headerTr = document.createElement("tr");
-        headerRow.forEach(cell => {
-          const th = document.createElement("th");
-          th.textContent = cell.trim();
-          headerTr.appendChild(th);
-        });
-        thead.appendChild(headerTr);
-
-        // Build tbody
-        const tbody = document.querySelector("#standingsTable tbody");
-        tableData.forEach(row => {
-          const tr = document.createElement("tr");
-          row.forEach(cell => {
-            const td = document.createElement("td");
-            td.textContent = cell.trim();
-            tr.appendChild(td);
-          });
-          tbody.appendChild(tr);
-        });
-      } catch (error) {
-        console.error("Error loading CSV:", error);
-      }
+    /**
+     * fetchAndBuildList:
+     * - Fetches the CSV from 'csvLink'
+     * - Parses it with PapaParse
+     * - Dynamically builds a "table" using divs.
+     */
+    function fetchAndBuildList(csvLink, containerId) {
+      fetch(csvLink)
+        .then(response => response.text())
+        .then(csvText => {
+          const results = Papa.parse(csvText, { header: true, skipEmptyLines: true });
+          const data = results.data;
+          const fields = results.meta.fields; // e.g. ["Usernames", "PassYds", "TDs", ...]
+          buildTable(fields, data, containerId);
+        })
+        .catch(err => console.error("Error fetching CSV:", err));
     }
 
-    // Load CSV on page load
-    loadCSV();
+    /**
+     * buildTable:
+     * - Creates a heading row from 'fields'
+     * - Creates a row for each record in 'data'
+     */
+    function buildTable(fields, data, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = ""; // Clear out any existing content
+
+      // Make a heading row
+      const headingRow = document.createElement("div");
+      headingRow.classList.add("heading-row");
+      // Blank rank cell
+      const rankHeading = document.createElement("div");
+      rankHeading.classList.add("heading-cell", "rank-cell");
+      rankHeading.textContent = "Rank";
+      headingRow.appendChild(rankHeading);
+
+      // Field headings
+      fields.forEach(f => {
+        const cell = document.createElement("div");
+        cell.classList.add("heading-cell");
+        cell.textContent = f;
+        headingRow.appendChild(cell);
+      });
+      container.appendChild(headingRow);
+
+      // Data rows
+      data.forEach((row, i) => {
+        const rowDiv = document.createElement("div");
+        rowDiv.classList.add("player-row");
+
+        // Rank cell
+        const rankDiv = document.createElement("div");
+        rankDiv.classList.add("player-rank");
+        rankDiv.textContent = i + 1; // 1-based rank
+        rowDiv.appendChild(rankDiv);
+
+        // Data cells
+        fields.forEach(f => {
+          const cellDiv = document.createElement("div");
+          cellDiv.classList.add("player-cell");
+          cellDiv.textContent = row[f] || ""; // Show CSV value
+          rowDiv.appendChild(cellDiv);
+        });
+
+        container.appendChild(rowDiv);
+      });
+    }
   </script>
 </body>
 </html>
