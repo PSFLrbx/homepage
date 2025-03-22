@@ -33,8 +33,6 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      position: relative;
-      overflow: hidden;
     }
     .branding {
       display: flex;
@@ -43,9 +41,6 @@
     }
     .logo img {
       width: 60px;
-      /* Initial parallax transform */
-      transform: translateY(0);
-      transition: transform 0.3s ease;
     }
     header h1 {
       font-size: 2.5em;
@@ -139,7 +134,7 @@
       padding: 1em;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    /* Card background always visible, with default full size then enlarged on hover */
+    /* Card background always visible: default scale now 1 */
     .card::before {
       content: "";
       position: absolute;
@@ -224,15 +219,14 @@
       transition: background 0.3s ease;
       border: none;
       overflow: visible;
-      position: relative;
     }
     .icon:hover {
       background: #666;
     }
-    /* Tooltip for Discord button – now positioned above so it doesn’t cover the icon */
+    /* Tooltip chat bubble for Discord button */
     .tooltip {
       position: absolute;
-      top: -50px;
+      bottom: 50px;
       left: 50%;
       transform: translateX(-50%);
       background: #222;
@@ -243,12 +237,11 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.3s ease;
-      white-space: nowrap;
     }
     .tooltip::after {
       content: "";
       position: absolute;
-      bottom: -5px;
+      top: 100%;
       left: 50%;
       transform: translateX(-50%);
       border-width: 5px;
@@ -258,15 +251,15 @@
     .icon:hover .tooltip {
       opacity: 1;
     }
-    /* Discord icon: no rotation, always show image */
+    /* Discord icon: always show the discord.png without gray overlay */
     .icon-discord {
       background: url('discord.png') no-repeat center center;
       background-size: cover;
       transition: none;
-      transform: none;
     }
     .icon-discord:hover {
-      transform: none;
+      background: url('discord.png') no-repeat center center;
+      background-size: cover;
     }
 
     @media (max-width: 600px) {
@@ -308,28 +301,28 @@
     <div class="card-grid">
       <div class="card-grid-space">
         <div class="num">01</div>
-        <a class="card" href="https://psflrbx.github.io/stats">
+        <a class="card" href="https://psflrbx.github.io/stats" style="--bg-img: url('background.png');">
           <h3>Stats</h3>
           <p>View detailed performance data.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">02</div>
-        <a class="card" href="https://psflrbx.github.io/standings">
+        <a class="card" href="https://psflrbx.github.io/standings" style="--bg-img: url('background.png');">
           <h3>Standings</h3>
           <p>Check current team rankings.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">03</div>
-        <a class="card" href="rulebook.html">
+        <a class="card" href="rulebook.html" style="--bg-img: url('background.png');">
           <h3>Rulebook</h3>
           <p>Understand the official rules.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">04</div>
-        <a class="card" href="credits.html">
+        <a class="card" href="credits.html" style="--bg-img: url('background.png');">
           <h3>Credits</h3>
           <p>Meet the team behind PSFL.</p>
         </a>
@@ -368,7 +361,7 @@
   </footer>
 
   <script>
-    // Parallax effect for the top background section (already present)
+    // Parallax Effect for top background section
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
@@ -380,13 +373,6 @@
       targetY = -(window.pageYOffset * parallaxSpeed);
     });
     updateParallax();
-
-    // Added parallax effect for the logo image in header
-    window.addEventListener('scroll', function() {
-      const logo = document.querySelector('.logo img');
-      // Adjust the multiplier (0.2) for more or less parallax
-      logo.style.transform = 'translateY(' + (window.pageYOffset * 0.2) + 'px)';
-    });
   </script>
 </body>
 </html>
