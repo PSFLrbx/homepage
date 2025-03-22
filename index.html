@@ -53,6 +53,7 @@
       background: url('logo.png') no-repeat top center;
       background-size: contain;
       background-color: #000;
+      will-change: background-position;
     }
     .background::after {
       content: "";
@@ -84,7 +85,7 @@
     }
 
     .portfolio {
-      background-color: #131313;
+      background-color: #151515;
       padding: 100px 20px 60px;
       text-align: center;
     }
@@ -127,7 +128,7 @@
       content: "";
       position: absolute;
       top: -5px; left: -5px; right: -5px; bottom: -5px;
-      background: var(--bg-img) no-repeat center center;
+      background: url('background.png') no-repeat center center;
       background-size: cover;
       z-index: -1;
       transition: transform 0.3s ease;
@@ -207,37 +208,27 @@
       font-size: 1.2em;
       transition: background 0.3s ease;
       border: none;
+      overflow: visible;
     }
     .icon:hover {
       background: #666;
     }
     .icon .tooltip {
       position: absolute;
-      bottom: -30px;
+      bottom: -40px;
       background: #222;
       color: #fff;
       font-size: 0.75em;
       padding: 5px 8px;
       border-radius: 4px;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.3s ease;
-    }
-    .icon:hover .tooltip {
       opacity: 1;
-      bottom: -40px;
+      transition: all 0.3s ease;
+      pointer-events: none;
     }
     .icon-discord {
       background: url('discord.png') no-repeat center center;
       background-size: cover;
-      transition: transform 0.3s ease;
-    }
-    .icon-discord:hover {
-      animation: spinOnce 0.6s linear 1;
-    }
-    @keyframes spinOnce {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
+      transition: none;
     }
 
     @media (max-width: 600px) {
@@ -276,28 +267,28 @@
     <div class="card-grid">
       <div class="card-grid-space">
         <div class="num">01</div>
-        <a class="card" href="https://psflrbx.github.io/stats" style="--bg-img: url('background.png');">
+        <a class="card" href="https://psflrbx.github.io/stats">
           <h3>Stats</h3>
           <p>View detailed performance data.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">02</div>
-        <a class="card" href="https://psflrbx.github.io/standings" style="--bg-img: url('background.png');">
+        <a class="card" href="https://psflrbx.github.io/standings">
           <h3>Standings</h3>
           <p>Check current team rankings.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">03</div>
-        <a class="card" href="rulebook.html" style="--bg-img: url('background.png');">
+        <a class="card" href="rulebook.html">
           <h3>Rulebook</h3>
           <p>Understand the official rules.</p>
         </a>
       </div>
       <div class="card-grid-space">
         <div class="num">04</div>
-        <a class="card" href="credits.html" style="--bg-img: url('background.png');">
+        <a class="card" href="credits.html">
           <h3>Credits</h3>
           <p>Meet the team behind PSFL.</p>
         </a>
@@ -333,5 +324,20 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    // Parallax for logo.png
+    let targetY = 0, currentY = 0;
+    const parallaxSpeed = 0.3;
+    function updateParallax() {
+      currentY += (targetY - currentY) * 0.1;
+      document.querySelector('.background').style.backgroundPositionY = currentY + "px";
+      requestAnimationFrame(updateParallax);
+    }
+    window.addEventListener('scroll', function() {
+      targetY = -(window.pageYOffset * parallaxSpeed);
+    });
+    updateParallax();
+  </script>
 </body>
 </html>
