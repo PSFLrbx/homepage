@@ -31,6 +31,7 @@
     a:hover {
       color: #ffb84d;
     }
+
     /* Header */
     header {
       background-color: #222;
@@ -69,6 +70,7 @@
       background-color: #333;
       color: #fff;
     }
+
     /* Main Content */
     .main-content {
       padding: 40px 20px;
@@ -80,6 +82,7 @@
       font-size: 2em;
       margin-bottom: 20px;
     }
+
     /* Pagination Controls */
     .pagination {
       text-align: center;
@@ -110,6 +113,7 @@
     .pagination .dot.active {
       background-color: orange;
     }
+
     /* Table Wrapper */
     .table-wrapper {
       width: 85vw; /* 85% of viewport width */
@@ -150,20 +154,15 @@
       word-wrap: break-word;
     }
 
-    /* Rank Cell merges rank badge + TEAMS name with extra vertical space */
+    /* Rank Cell merges rank badge + TEAMS name horizontally */
     .rank-cell {
+      min-width: 100px; /* a bit wider to hold both badge + text */
+      min-height: 50px;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: start; /* place rank at top, team below */
-      gap: 8px;
-      min-height: 80px; /* extra vertical space */
+      align-items: center; /* center vertically in the cell */
+      justify-content: center; /* center horizontally in the cell */
+      gap: 6px; /* space between the box and text */
     }
-    .team-name {
-      font-size: 0.9em;
-      line-height: 1.2;
-    }
-
     .rank-badge {
       display: flex;
       align-items: center;
@@ -269,20 +268,17 @@
       background-size: cover;
     }
 
-    /* We'll fix column widths: 
+    /* Fix columns:
        - col #1 => 60px
        - col #2 => 200px
        - rest => 120px
     */
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
-      // col #1 => rank => 60px
-      colgroupHTML += `<col style="width:60px;" />`;
-      // col #2 => USERS => 200px
+      colgroupHTML += `<col style="width:60px;" />`;   // rank
       if (filteredHeaders.length > 0) {
-        colgroupHTML += `<col style="width:200px;" />`;
+        colgroupHTML += `<col style="width:200px;" />`; // users
       }
-      // the rest => 120px each
       for (let i = 1; i < filteredHeaders.length; i++) {
         colgroupHTML += `<col style="width:120px;" />`;
       }
@@ -316,8 +312,6 @@
   <!-- Main Content -->
   <div class="main-content">
     <h2>League Standings</h2>
-
-    <!-- Pagination Controls -->
     <div class="pagination">
       <button id="prevPage">&laquo;</button>
       <span class="dot" data-index="0"></span>
@@ -327,7 +321,6 @@
       <span class="dot" data-index="4"></span>
       <button id="nextPage">&raquo;</button>
     </div>
-
     <div class="table-wrapper">
       <table class="standings-table" id="standings-table">
         <!-- Table header and body inserted dynamically -->
@@ -364,7 +357,7 @@
   </footer>
 
   <script>
-    // CSV links for each page (QB, WR, TE, DB, DE)
+    // CSV links
     const csvUrls = [
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
@@ -411,15 +404,15 @@
       return `<span class="rank-badge">${rank}</span>`;
     }
 
-    // col #1 => 60px
-    // col #2 => 200px
-    // the rest => 120px
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
-      colgroupHTML += `<col style="width:60px;" />`;   // rank
+      // col #1 => rank => 60px
+      colgroupHTML += `<col style="width:60px;" />`;
+      // col #2 => USERS => 200px
       if (filteredHeaders.length > 0) {
-        colgroupHTML += `<col style="width:200px;" />`; // users
+        colgroupHTML += `<col style="width:200px;" />`;
       }
+      // rest => 120px
       for (let i = 1; i < filteredHeaders.length; i++) {
         colgroupHTML += `<col style="width:120px;" />`;
       }
@@ -427,16 +420,15 @@
       return colgroupHTML;
     }
 
-    // Build table
-    // We remove TEAMS from the displayed headers
-    // but we still retrieve the TEAMS data to show below the rank badge
+    // Build the table
+    // TEAMS data => placed horizontally next to the rank badge
     function buildTable(headers, rows) {
+      // remove "TEAMS" from displayed headers
       const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
       const colgroup = buildColGroup(filteredHeaders);
 
-      // Thead
       let html = `${colgroup}<thead><tr>`;
-      html += `<th>Rank</th>`; // rank col
+      html += `<th>RANK</th>`; // rank col
       filteredHeaders.forEach(h => {
         html += `<th>${h}</th>`;
       });
@@ -446,11 +438,11 @@
         const rankNum = idx + 1;
         const teamName = row["TEAMS"] || "";
         html += "<tr>";
-        // rank cell merges rank badge + team name, with extra vertical space
+        // rank cell merges rank badge + team name on the same line
         html += `
           <td class="rank-cell">
             ${buildRankBadge(rankNum)}
-            <div class="team-name">${teamName}</div>
+            <span>${teamName}</span>
           </td>
         `;
         // the rest
@@ -461,12 +453,11 @@
         html += "</tr>";
       });
 
-      html += "</tbody>";
+      html += "</tbody>`;
       tableEl.innerHTML = html;
       fixFontScaling();
     }
 
-    // shrink big numbers
     function fixFontScaling() {
       const cells = tableEl.querySelectorAll("td");
       cells.forEach(cell => {
@@ -505,10 +496,10 @@
       });
     });
 
-    // auto-update
+    // Auto-update
     setInterval(updateTable, 30000);
 
-    // initial
+    // Initial load
     updateActiveDot();
     updateTable();
   </script>
