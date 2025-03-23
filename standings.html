@@ -43,28 +43,9 @@
     .main-content h2 {
       font-size: 2em; margin-bottom: 20px; text-align: center;
     }
-    /* Standings Table */
-    .standings-table {
-      width: 100%; border-collapse: collapse;
-      margin: 0 auto 20px; max-width: 800px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      overflow: hidden; border-radius: 8px;
-    }
-    .standings-table thead { background-color: #222; }
-    .standings-table thead th {
-      padding: 15px; text-align: left; font-size: 1em;
-      text-transform: uppercase; letter-spacing: 1px;
-      border-bottom: 2px solid #444;
-    }
-    .standings-table tbody tr { transition: background 0.2s ease; }
-    .standings-table tbody tr:nth-child(even) { background-color: #1a1a1a; }
-    .standings-table tbody tr:hover { background-color: #333; }
-    .standings-table td {
-      padding: 15px; border-bottom: 1px solid #444; font-size: 0.95em;
-    }
-    /* Pagination Controls */
+    /* Pagination Controls - now above the table */
     .pagination {
-      text-align: center; margin: 20px 0;
+      text-align: center; margin-bottom: 20px;
     }
     .pagination button {
       background: none; border: none;
@@ -79,6 +60,33 @@
       transition: background-color 0.3s ease;
     }
     .pagination .dot.active { background-color: orange; }
+    /* Table Wrapper for fixed size */
+    .table-wrapper {
+      width: 800px;
+      height: 500px; /* adjust as needed */
+      margin: 0 auto;
+      overflow-y: auto;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      border-radius: 8px;
+      background-color: #111;
+    }
+    /* Standings Table */
+    .standings-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .standings-table thead { background-color: #222; }
+    .standings-table thead th {
+      padding: 15px; text-align: left; font-size: 1em;
+      text-transform: uppercase; letter-spacing: 1px;
+      border-bottom: 2px solid #444;
+    }
+    .standings-table tbody tr { transition: background 0.2s ease; }
+    .standings-table tbody tr:nth-child(even) { background-color: #1a1a1a; }
+    .standings-table tbody tr:hover { background-color: #333; }
+    .standings-table td {
+      padding: 15px; border-bottom: 1px solid #444; font-size: 0.95em;
+    }
     /* Footer */
     footer {
       background-color: #222; text-align: center; padding: 30px 0;
@@ -102,7 +110,10 @@
     .icon:hover { background: #666; }
     .icon-discord { background: url('discord.png') no-repeat center center; background-size: cover; }
     /* Responsive */
-    @media (max-width: 900px) { .main-content { padding: 20px; } }
+    @media (max-width: 900px) {
+      .main-content { padding: 20px; }
+      .table-wrapper { width: 100%; height: auto; }
+    }
   </style>
 </head>
 <body>
@@ -127,20 +138,23 @@
   <!-- Main Content -->
   <div class="main-content">
     <h2>League Standings</h2>
-    <table class="standings-table" id="standings-table">
-      <!-- Table header and body will be generated dynamically -->
-    </table>
 
-    <!-- Pagination Controls -->
+    <!-- Pagination Controls (now above the table) -->
     <div class="pagination">
       <button id="prevPage">&laquo;</button>
-      <!-- Pagination dots for QB, WR, TE, DB, DE -->
       <span class="dot" data-index="0"></span>
       <span class="dot" data-index="1"></span>
       <span class="dot" data-index="2"></span>
       <span class="dot" data-index="3"></span>
       <span class="dot" data-index="4"></span>
       <button id="nextPage">&raquo;</button>
+    </div>
+
+    <!-- Table Wrapper -->
+    <div class="table-wrapper">
+      <table class="standings-table" id="standings-table">
+        <!-- Table header and body will be generated dynamically -->
+      </table>
     </div>
   </div>
 
@@ -259,7 +273,7 @@
       await Promise.all(promises);
       console.log("Preloaded all CSV data.");
       updateTable();
-      // Also, store the raw CSV text from the first CSV for update checking
+      // Store raw CSV text from the first CSV for update checking
       await updateFirstCSVText();
     }
 
@@ -287,7 +301,6 @@
         const newCSVText = await response.text();
         if (newCSVText !== lastCSVText) {
           console.log("CSV updated! Refreshing all data...");
-          // Update localStorage for first CSV (and others if needed)
           await refreshAllCSVs();
           lastCSVText = newCSVText;
         }
@@ -299,8 +312,6 @@
     // Refresh CSV data in background and update cache/localStorage
     async function refreshAllCSVs() {
       const promises = csvUrls.map(async (url, index) => {
-        // Force fetch new data by not using cached version from localStorage,
-        // or update the storage after fetching.
         try {
           const response = await fetch(url);
           const csvText = await response.text();
