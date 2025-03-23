@@ -290,7 +290,7 @@
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTlOIuefJ8umKaeWiW1yZfIr02xKIJqLpc-oFV0RgMXWY1gpF-2Kz-BafD9cdEEMK7kZzO1V0pM-U-O/pub?gid=0&single=true&output=csv"
     ];
 
-    // Position names for display purposes (order: QB, WR, TE, DB, DE)
+    // Position names for display (order: QB, WR, TE, DB, DE)
     const positions = ["QB", "WR", "TE", "DB", "DE"];
     let currentIndex = 0;
     const dots = document.querySelectorAll(".pagination .dot");
@@ -350,8 +350,8 @@
 
     // Load data for the current CSV URL and update table
     async function updateTable() {
-      const { headers, data } = await loadCSV(csvUrls[currentIndex]) || { headers: [], data: [] };
-      buildTable(headers, data);
+      const csvData = await loadCSV(csvUrls[currentIndex]) || { headers: [], data: [] };
+      buildTable(csvData.headers, csvData.data);
       updateActiveDot();
     }
 
@@ -372,6 +372,9 @@
         updateTable();
       });
     });
+
+    // Initialize auto update every 30 seconds
+    setInterval(updateTable, 30000);
 
     // Initialize
     updateActiveDot();
