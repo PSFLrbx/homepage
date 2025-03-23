@@ -158,15 +158,17 @@
 
     /* Rank Badges */
     .rank-badge {
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 40px;
       height: 40px;
-      line-height: 40px;
-      text-align: center;
-      border: 2px solid #444;
-      border-radius: 6px;
+      font-family: 'IBM Plex Sans', sans-serif; /* ensure rank is in IBM Plex */
+      font-size: 1em;
       background: #222;
       box-shadow: inset 1px 1px 2px #000;
+      border: 2px solid #444;
+      border-radius: 6px;
     }
     /* 1st place: gold glow */
     .rank-1 {
@@ -348,7 +350,7 @@
   </footer>
 
   <script>
-    // CSV links for each page (QB, WR, TE, DB, DE):
+    // CSV links for QB, WR, TE, DB, DE
     const csvUrls = [
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
@@ -370,12 +372,12 @@
 
     // Always fetch fresh CSV (no localStorage caching)
     async function fetchCSV(url) {
-      const fullUrl = `${url}&t=${Date.now()}`; // cache-buster
+      const fullUrl = `${url}&t=${Date.now()}`;
       const response = await fetch(fullUrl);
       return response.text();
     }
 
-    // Parse CSV, ignoring last column
+    // Parse CSV, ignoring the last column
     function parseCSV(text) {
       const lines = text.trim().split("\n");
       if (lines.length < 2) return { headers: [], data: [] };
@@ -384,7 +386,9 @@
       const data = lines.slice(1).map(line => {
         const values = line.split(",").slice(0, header.length - 1).map(v => v.trim());
         const rowObj = {};
-        headers.forEach((h, i) => { rowObj[h] = values[i]; });
+        headers.forEach((h, i) => {
+          rowObj[h] = values[i];
+        });
         return rowObj;
       });
       return { headers, data };
