@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PSFL Rulebook</title>
+  <title>Standings | PSFL</title>
+  <meta property="og:title" content="PSFL Standings" />
+  <meta property="og:description" content="Check your team's standing in the PSFL ro-football league." />
+  <meta property="og:image" content="logo.png" />
+  <meta property="og:url" content="https://psflrbx.github.io/homepage/standings.html" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
-    html {
-      scroll-behavior: smooth;
-    }
+    /* Global Reset & Body */
     * {
       margin: 0;
       padding: 0;
@@ -17,12 +20,22 @@
     body {
       font-family: 'IBM Plex Sans', sans-serif;
       background-color: #111;
-      color: white;
-      line-height: 1.6em;
+      color: #fff;
+      line-height: 1.6;
     }
+    a {
+      color: orange;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #ffb84d;
+    }
+
+    /* Header */
     header {
-      padding: 20px;
       background-color: #222;
+      padding: 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -36,363 +49,248 @@
       width: 60px;
     }
     header h1 {
-      font-size: 2.5em;
+      font-size: 2em;
       margin: 0;
     }
     nav ul {
       list-style: none;
       display: flex;
-      gap: 15px;
+      gap: 20px;
     }
     nav ul li a {
-      display: inline-block;
-      text-decoration: none;
-      color: white;
-      padding: 10px 15px;
-      background: #444;
-      border-radius: 5px;
-      transform: translateY(0);
-      transition: transform 0.7s ease-out;
+      color: #ccc;
+      font-size: 1em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background 0.3s ease;
     }
     nav ul li a:hover {
-      animation: oscillate 6s infinite ease-in-out;
-      box-shadow: 0 0 15px 5px orange;
+      background-color: #333;
+      color: #fff;
     }
-    @keyframes oscillate {
-      0% { transform: translateY(-3px); }
-      50% { transform: translateY(3px); }
-      100% { transform: translateY(-3px); }
+
+    /* Main Content */
+    .main-content {
+      padding: 40px 20px;
+      background-color: #111;
+      min-height: 80vh;
+      text-align: center;
     }
-    .background {
-      position: relative;
-      min-height: 150vh;
-      background-color: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding-top: 100px;
-    }
-    .background::after {
-      content: "";
-      position: absolute;
-      top: 0; 
-      left: 0;
-      width: 100%; 
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.3);
-      z-index: 0;
-    }
-    .content {
-      position: relative;
-      z-index: 1;
-      width: 80%;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 30px;
-      text-align: left;
-      transform: translateX(0);
-      animation: slideIn 0.5s forwards;
-    }
-    @keyframes slideIn {
-      from { transform: translateX(-200%); opacity: 0; }
-      to   { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideOut {
-      from { transform: translateX(0); opacity: 1; }
-      to   { transform: translateX(-200%); opacity: 0; }
-    }
-    .page-enter { animation: slideIn 0.5s forwards; }
-    .page-exit { animation: slideOut 0.8s forwards; }
-    
-    /* Glossary Sidebar */
-    .glossary {
-      position: fixed;
-      top: 150px;
-      left: 0;
-      background: rgba(34, 34, 34, 0.8);
-      padding: 10px 15px;
-      border-top-right-radius: 8px;
-      border-bottom-right-radius: 8px;
-      z-index: 2;
-    }
-    .glossary ul { list-style: none; }
-    .glossary ul li { margin-bottom: 10px; }
-    .glossary ul li a {
-      text-decoration: none;
-      color: #ccc;
-      font-size: 0.9em;
-      transition: color 0.3s ease;
-    }
-    .glossary ul li a:hover { color: orange; }
-    h3[id] { margin-top: 40px; }
-    
-    /* Message Header */
-    .message-header {
-      display: flex;
-      align-items: center;
+    .main-content h2 {
+      font-size: 2em;
       margin-bottom: 20px;
     }
-    .profile-pic {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-      object-fit: cover;
+
+    /* Pagination Controls */
+    .pagination {
+      text-align: center;
+      margin-bottom: 20px;
     }
-    .message-info {
-      display: flex;
-      flex-direction: column;
-      text-align: left;
-    }
-    .message-info .name { font-weight: bold; color: #fff; }
-    .message-info .date { font-size: 0.9em; color: #aaa; }
-    
-    /* Footer */
-    .footer {
-      background-color: #222;
-      padding: 50px 0;
-    }
-    .footer-container {
-      width: 90%;
-      max-width: 1000px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: space-between;
-    }
-    .footer-col h4 {
-      margin-bottom: 15px;
-      font-size: 1.2em;
-      color: #fff;
-    }
-    .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: 8px; }
-    .footer-col ul li a {
-      color: #ccc;
-      text-decoration: none;
+    .pagination button {
+      background: none;
+      border: none;
+      color: orange;
+      font-size: 1.5em;
+      cursor: pointer;
+      margin: 0 10px;
       transition: color 0.3s ease;
     }
-    .footer-col ul li a:hover { color: orange; }
-    .social-icons {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .pagination button:hover {
+      color: #ffb84d;
     }
-    .icon {
-      position: relative;
-      width: 40px;
-      height: 40px;
-      background: #444;
+    .pagination .dot {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      background-color: #444;
       border-radius: 50%;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .pagination .dot.active {
+      background-color: orange;
+    }
+
+    /* Table Wrapper */
+    .table-wrapper {
+      width: 85vw; /* 85% of viewport width */
+      margin: 0 auto;
+      overflow-x: auto;
+      border-radius: 8px;
+      background-color: #111;
+    }
+
+    /* Standings Table */
+    .standings-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+    .standings-table thead {
+      background-color: #222;
+    }
+    .standings-table thead th {
+      padding: 15px;
+      font-size: 1em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 2px solid #444;
+    }
+    .standings-table tbody tr {
+      transition: background 0.2s ease;
+    }
+    .standings-table tbody tr:nth-child(even) {
+      background-color: #1a1a1a;
+    }
+    .standings-table tbody tr:hover {
+      background-color: #333;
+    }
+    .standings-table td {
+      padding: 15px;
+      border-bottom: 1px solid #444;
+      font-size: 0.95em;
+      word-wrap: break-word;
+    }
+
+    /* Rank Cell: Fixed minimum size; team name appears directly below the rank badge */
+    .rank-cell {
+      min-width: 80px;
+      min-height: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+    }
+    .rank-badge {
       display: flex;
       align-items: center;
       justify-content: center;
-      text-decoration: none;
-      color: #fff;
-      font-size: 1.2em;
-      transition: background 0.3s ease;
-      overflow: hidden;
-    }
-    .icon:hover { background: #666; }
-    .icon .tooltip {
-      position: absolute;
-      bottom: -30px;
+      width: 35px;
+      height: 35px;
       background: #222;
-      color: #fff;
-      font-size: 0.75em;
-      padding: 5px 8px;
-      border-radius: 4px;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.3s ease;
+      border: 2px solid #444;
+      border-radius: 6px;
+      box-shadow: inset 1px 1px 2px #000;
     }
-    .icon:hover .tooltip {
-      opacity: 1;
-      bottom: -40px;
+    .team-name {
+      font-size: 0.85em;
+      line-height: 1.2;
     }
-    .icon-discord {
-      background: url('discord.png') no-repeat center center;
-      background-size: cover;
-      transition: transform 0.3s ease;
+    /* Top 3 Rank Glow Effects */
+    .rank-1 {
+      border-color: gold;
+      animation: glowGold 2s infinite;
     }
-    .icon-discord:hover {
-      transform: rotate(360deg);
+    @keyframes glowGold {
+      0%   { box-shadow: 0 0 5px gold; }
+      50%  { box-shadow: 0 0 15px gold; }
+      100% { box-shadow: 0 0 5px gold; }
     }
-    
-    @media (max-width: 600px) {
-      .footer-container { flex-direction: column; text-align: center; }
-      .glossary { display: none; }
+    .rank-2 {
+      border-color: silver;
+      animation: glowSilver 2s infinite;
+    }
+    @keyframes glowSilver {
+      0%   { box-shadow: 0 0 5px silver; }
+      50%  { box-shadow: 0 0 15px silver; }
+      100% { box-shadow: 0 0 5px silver; }
+    }
+    .rank-3 {
+      border-color: #cd7f32;
+      animation: glowBronze 2s infinite;
+    }
+    @keyframes glowBronze {
+      0%   { box-shadow: 0 0 5px #cd7f32; }
+      50%  { box-shadow: 0 0 15px #cd7f32; }
+      100% { box-shadow: 0 0 5px #cd7f32; }
+    }
+
+    /* Font Scaling for Large Numeric Values */
+    .shrink {
+      font-size: 0.8em;
+    }
+
+    /* Dynamic Column Widths via colgroup:
+       - Column 1 (RANK): 60px
+       - Column 2 (USERS): 200px
+       - Remaining columns: 120px each
+    */
+    function buildColGroup(filteredHeaders) {
+      let colgroupHTML = "<colgroup>";
+      colgroupHTML += `<col style="width:60px;" />`;
+      if (filteredHeaders.length > 0) {
+        colgroupHTML += `<col style="width:200px;" />`;
+      }
+      for (let i = 1; i < filteredHeaders.length; i++) {
+        colgroupHTML += `<col style="width:120px;" />`;
+      }
+      colgroupHTML += "</colgroup>";
+      return colgroupHTML;
+    }
+
+    @media (max-width: 900px) {
+      .main-content { padding: 20px; }
+      .table-wrapper { width: 100%; }
     }
   </style>
 </head>
 <body>
+  <!-- Header -->
   <header>
     <div class="branding">
-      <div class="logo">
-        <img src="logo.png" alt="Logo" />
-      </div>
+      <div class="logo"><img src="logo.png" alt="PSFL Logo"></div>
       <h1>PSFL</h1>
     </div>
     <nav>
       <ul>
-        <li><a href="https://psflrbx.github.io/homepage">Home</a></li>
-        <li><a href="https://psflrbx.github.io/stats">Stats</a></li>
+        <li><a href="homepage.html">Home</a></li>
+        <li><a href="stats.html">Stats</a></li>
         <li><a href="rulebook.html">Rulebook</a></li>
         <li><a href="credits.html">Credits</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- Glossary Sidebar -->
-  <div class="glossary">
-    <ul>
-      <li><a href="#game-settings">Game Settings</a></li>
-      <li><a href="#challenges">Challenges</a></li>
-      <li><a href="#penalty-guide">Penalty Guide</a></li>
-      <li><a href="#penalties">Penalties</a></li>
-      <li><a href="#commands">Commands</a></li>
-    </ul>
+  <!-- Main Content -->
+  <div class="main-content">
+    <h2>League Standings</h2>
+    <div class="pagination">
+      <button id="prevPage">&laquo;</button>
+      <span class="dot" data-index="0"></span>
+      <span class="dot" data-index="1"></span>
+      <span class="dot" data-index="2"></span>
+      <span class="dot" data-index="3"></span>
+      <span class="dot" data-index="4"></span>
+      <button id="nextPage">&raquo;</button>
+    </div>
+    <div class="table-wrapper">
+      <table class="standings-table" id="standings-table">
+        <!-- Table header and body inserted dynamically -->
+      </table>
+    </div>
   </div>
 
-  <section class="background">
-    <div class="content page-enter">
-      <div class="message-header">
-        <img class="profile-pic" src="ps9lu.png" alt="Profile Picture">
-        <div class="message-info">
-          <span class="name">ps9lu</span>
-          <span class="date">March 17, 2025</span>
-        </div>
-      </div>
-      <h2>In-Game Rules (Posted on Discord)</h2>
-      <h3 id="game-settings">Game Settings</h3>
-      <ul class="rule-list">
-        <li>Public Listing: OFF</li>
-        <li>Max Players: 25</li>
-        <li>Fumble Chances: 1</li>
-        <li>Mercy Rule: 40</li>
-        <li>Play Clock: 25</li>
-        <li>Quarter Length: 4 Minutes</li>
-        <li>Replays: ON</li>
-        <li>Time of Day &amp; Weather: Per schedule</li>
-        <li>Diving: ON</li>
-        <li>Hit Stick: ON</li>
-        <li>Mercy Rule: OFF</li>
-        <li>Sprinting: ON</li>
-        <li>Truck: ON</li>
-        <li>Pass Break Ups: OFF</li>
-      </ul>
-      <p><strong>2 QB Runs Per Drive</strong></p>
-
-      <h3 id="challenges">Challenges</h3>
-      <p>If the auto-ref system fails or a call is disputed, a challenge may be requested by a Head Coach or Assistant. Challenges apply to:</p>
-      <ul class="rule-list">
-        <li>Receiver inbounds status</li>
-        <li>Questionable lag sacks</li>
-        <li>Excessive blocking</li>
-      </ul>
-
-      <h3 id="penalty-guide">Penalty Guide</h3>
-      <ul class="rule-list">
-        <li>01 - Delay of Game</li>
-        <li>02 - Too Many Men</li>
-        <li>03 - Ineligible Receiver</li>
-        <li>04 - Lag Sack</li>
-        <li>05 - Grounding</li>
-        <li>06 - OL Rollout</li>
-        <li>07 - Illegal Formation</li>
-        <li>08 - Uneven Teams</li>
-        <li>09 - False Start</li>
-        <li>10 - AFK Rule</li>
-      </ul>
-
-      <h3 id="penalties">Penalties</h3>
-      <div class="penalty-box">
-        <h4>Delay of Game</h4>
-        <p>5yd penalty and loss of down when the play clock expires without a snap.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Too Many Men</h4>
-        <p>5yd penalty if the team exceeds the player limit on the field.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Ineligible Receiver</h4>
-        <p>Results in an incomplete pass and a replayed down if a receiver steps out of bounds.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Lag Sack</h4>
-        <p>5yd penalty for the defense and an automatic first down for the offense when a lag sack occurs.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Intentional Grounding</h4>
-        <p>15yd penalty and loss of down for an invalid pass attempt.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>OL Rollout</h4>
-        <p>5yd penalty and loss of down if an offensive lineman crosses the scrimmage line on a pass play.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Trucking &amp; Hit Stick</h4>
-        <p>10yd penalty and replayed down.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Holding</h4>
-        <p>5yd penalty and replayed down if blocking exceeds 5 yards before the snap.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Block in the Back</h4>
-        <p>10yd penalty and replayed down for initiating a block from behind.</p>
-      </div>
-      <p>Defensive blitz limits:</p>
-      <ul class="rule-list">
-        <li>8v8: Up to 4 players</li>
-        <li>7v7: Up to 3 players</li>
-        <li>6v6: Up to 2 players</li>
-      </ul>
-      <div class="penalty-box">
-        <h4>AFK Rule</h4>
-        <p>A false start penalty is incurred if a player is idle for over 3 minutes.</p>
-      </div>
-
-      <h3 id="commands">Commands (Refs)</h3>
-      <ul class="command-list">
-        <li>:Clock "0:00"</li>
-        <li>:startclock</li>
-        <li>:pclock "00"</li>
-        <li>:Pauseclock</li>
-        <li>:Pausepclock</li>
-        <li>:line "-0" / :line "0"</li>
-        <li>:scrimmage "-0" / :scrimmage "0"</li>
-        <li>:flag</li>
-        <li>:challenge</li>
-        <li>:newplay</li>
-        <li>:turnover</li>
-        <li>:down "0"</li>
-        <li>:team "user" (away/home/spec/ref)</li>
-        <li>:serverlock / :unserverlock</li>
-        <li>:changestate "play" / "kickoff" / "punt" / "field goal"</li>
-        <li>:padmin "user"</li>
-      </ul>
-    </div>
-  </section>
-
-  <footer class="footer">
+  <!-- Footer (exactly as in rulebook.html) -->
+  <footer>
     <div class="footer-container">
       <div class="footer-col">
         <h4>Quicklinks</h4>
         <ul>
-          <li><a href="https://psflrbx.github.io/homepage">PSFL Home</a></li>
-          <li><a href="https://psflrbx.github.io/stats">Stats</a></li>
-          <li><a href="https://psflrbx.github.io/rulebook">Rulebook</a></li>
-          <li><a href="https://psflrbx.github.io/credits">Credits</a></li>
+          <li><a href="homepage.html">Home</a></li>
+          <li><a href="standings.html">Standings</a></li>
+          <li><a href="rulebook.html">Rulebook</a></li>
+          <li><a href="credits.html">Credits</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Discord</h4>
         <div class="social-icons">
-          <a href="https://discord.gg/psfl" class="icon icon-discord">
-            <span class="tooltip">discord.gg/psfl</span>
-          </a>
+          <a href="https://discord.gg/psfl" class="icon icon-discord"></a>
         </div>
       </div>
       <div class="footer-col">
@@ -406,31 +304,136 @@
   </footer>
 
   <script>
-    // Parallax Effect
-    let targetY = 0, currentY = 0;
-    const parallaxSpeed = 0.3;
-    function updateParallax() {
-      currentY += (targetY - currentY) * 0.1;
-      document.querySelector('.background').style.backgroundPositionY = currentY + "px";
-      requestAnimationFrame(updateParallax);
-    }
-    window.addEventListener('scroll', function() {
-      targetY = -(window.pageYOffset * parallaxSpeed);
-    });
-    updateParallax();
+    // CSV links for each page (QB, WR, TE, DB, DE)
+    const csvUrls = [
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTaCoNjF522XiQcmuG1FBHK6LbLY6pkDcQjxM6ESEaXJqflwndse0VqsXRbrpCWmBowu8TNW5k-AHki/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vRNfdMclgC6hSB6O_Gui7SsybfR2179fX57nkn9vpU24hptG-I7xybFpdIR5tv1hkNyvKLDA2OSsmut/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTlOIuefJ8umKaeWiW1yZfIr02xKIJqLpc-oFV0RgMXWY1gpF-2Kz-BafD9cdEEMK7kZzO1V0pM-U-O/pub?gid=0&single=true&output=csv"
+    ];
 
-    // Tween-out on navigation click before navigating
-    const navLinks = document.querySelectorAll('nav ul li a');
-    navLinks.forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetUrl = this.href;
-        const content = document.querySelector('.background .content');
-        content.classList.remove('page-enter');
-        content.classList.add('page-exit');
-        setTimeout(() => { window.location.href = targetUrl; }, 1200);
+    let currentIndex = 0;
+    const dots = document.querySelectorAll(".pagination .dot");
+    const tableEl = document.getElementById("standings-table");
+
+    function updateActiveDot() {
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle("active", idx === currentIndex);
+      });
+    }
+
+    async function fetchCSV(url) {
+      const fullUrl = `${url}&t=${Date.now()}`;
+      const response = await fetch(fullUrl);
+      return response.text();
+    }
+
+    function parseCSV(text) {
+      const lines = text.trim().split("\n");
+      if (lines.length < 2) return { headers: [], data: [] };
+      const header = lines[0].split(",");
+      const headers = header.slice(0, header.length - 1).map(h => h.trim());
+      const data = lines.slice(1).map(line => {
+        const values = line.split(",").slice(0, header.length - 1).map(v => v.trim());
+        const rowObj = {};
+        headers.forEach((h, i) => { rowObj[h] = values[i]; });
+        return rowObj;
+      });
+      return { headers, data };
+    }
+
+    function buildRankBadge(rank) {
+      if (rank === 1) return `<span class="rank-badge rank-1">1</span>`;
+      if (rank === 2) return `<span class="rank-badge rank-2">2</span>`;
+      if (rank === 3) return `<span class="rank-badge rank-3">3</span>`;
+      return `<span class="rank-badge">${rank}</span>`;
+    }
+
+    function buildColGroup(filteredHeaders) {
+      let colgroupHTML = "<colgroup>";
+      colgroupHTML += `<col style="width:60px;" />`;
+      if (filteredHeaders.length > 0) {
+        colgroupHTML += `<col style="width:200px;" />`;
+      }
+      for (let i = 1; i < filteredHeaders.length; i++) {
+        colgroupHTML += `<col style="width:120px;" />`;
+      }
+      colgroupHTML += "</colgroup>";
+      return colgroupHTML;
+    }
+
+    function buildTable(headers, rows) {
+      // Remove "TEAMS" from the displayed headers, but we still use its data
+      const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
+      const colgroup = buildColGroup(filteredHeaders);
+      let html = `${colgroup}<thead><tr>`;
+      html += `<th>RANK</th>`;
+      filteredHeaders.forEach(h => {
+        html += `<th>${h}</th>`;
+      });
+      html += "</tr></thead><tbody>";
+      rows.forEach((row, idx) => {
+        const rankNum = idx + 1;
+        // Try both "TEAMS" and "Team" for team name
+        const teamName = row["TEAMS"] || row["Team"] || "";
+        html += "<tr>";
+        // Rank cell: rank badge on top and team name immediately below (with a single <br>)
+        html += `<td class="rank-cell">
+                   ${buildRankBadge(rankNum)}<br>
+                   <span class="team-name">${teamName}</span>
+                 </td>`;
+        filteredHeaders.forEach(header => {
+          const val = row[header] || "";
+          html += `<td>${val}</td>`;
+        });
+        html += "</tr>";
+      });
+      html += "</tbody>";
+      tableEl.innerHTML = html;
+      fixFontScaling();
+    }
+
+    function fixFontScaling() {
+      const cells = tableEl.querySelectorAll("td");
+      cells.forEach(cell => {
+        const txt = cell.textContent.trim();
+        if (/^\d+$/.test(txt) && txt.length > 4) {
+          cell.classList.add("shrink");
+        }
+      });
+    }
+
+    async function updateTable() {
+      try {
+        const csvText = await fetchCSV(csvUrls[currentIndex]);
+        const { headers, data } = parseCSV(csvText);
+        buildTable(headers, data);
+        updateActiveDot();
+      } catch (error) {
+        console.error("Error updating table:", error);
+        tableEl.innerHTML = "<thead><tr><th>Error</th></tr></thead><tbody><tr><td>Failed to load data</td></tr></tbody>";
+      }
+    }
+
+    document.getElementById("prevPage").addEventListener("click", () => {
+      currentIndex = (currentIndex - 1 + csvUrls.length) % csvUrls.length;
+      updateTable();
+    });
+    document.getElementById("nextPage").addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % csvUrls.length;
+      updateTable();
+    });
+    dots.forEach((dot, idx) => {
+      dot.addEventListener("click", () => {
+        currentIndex = idx;
+        updateTable();
       });
     });
+
+    setInterval(updateTable, 30000);
+    updateActiveDot();
+    updateTable();
   </script>
 </body>
 </html>
