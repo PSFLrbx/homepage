@@ -14,7 +14,7 @@
   <meta name="twitter:description" content="View player's stats from scrims/games. Updates every few hours.">
   <meta name="twitter:image" content="https://495BC/495BC.github.io/preview-image.png">
   <meta name="twitter:url" content="https://495BC/495BC.github.io">
-  
+
   <meta charset="UTF-8">
   <title>Player Stats Page</title>
   <!-- IBM Plex Sans font -->
@@ -23,7 +23,11 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <style>
     /* Basic Reset & Body */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
       font-family: 'IBM Plex Sans', sans-serif;
       background: #111;
@@ -43,19 +47,21 @@
     }
     ::-webkit-scrollbar-thumb:hover { background-color: #aaa; }
     html { scrollbar-width: thin; scrollbar-color: #888 #222; }
-    
+
     /* Optional Background Container */
     #bg-container {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
       z-index: -1;
       background-size: cover;
       background-position: center;
       transition: transform 0.5s ease, opacity 0.5s ease;
       opacity: 1;
     }
-    
+
     /* MAIN TITLE */
     .main-title {
       background-color: #000;
@@ -63,8 +69,11 @@
       padding: 1rem;
       margin-bottom: 1rem;
     }
-    .main-title h1 { font-size: 2rem; color: #fff; }
-    
+    .main-title h1 {
+      font-size: 2rem;
+      color: #fff;
+    }
+
     /* Pagination / Tab Bar */
     .pagination {
       display: flex;
@@ -86,14 +95,17 @@
     .pagination button.active {
       background: #444;
     }
-    
+
     /* Table Containers: only one is visible at a time */
-    .table-container { 
-      display: none;
-      min-height: 500px; /* Keeps vertical gap consistent */
+    .table-container {
+      display: none;       /* Hide by default */
+      min-height: 600px;   /* Ensures consistent vertical spacing */
+      margin-bottom: 20px; /* A bit of space after the table */
     }
-    .table-container.active { display: block; }
-    
+    .table-container.active {
+      display: block; /* Show only the active container */
+    }
+
     /* List/Table Styles */
     .list-container {
       display: flex;
@@ -113,7 +125,10 @@
       visibility: hidden;
       text-align: center;
     }
-    .heading-row { background: rgba(0,0,0,0.7); font-weight: bold; }
+    .heading-row {
+      background: rgba(0,0,0,0.7);
+      font-weight: bold;
+    }
     .player-row {
       background: rgba(0,0,0,0.5);
       box-shadow: 0 2px 4px rgba(0,0,0,0.5);
@@ -134,25 +149,31 @@
       border-radius: 5px;
       padding: 0.3em;
     }
-    
+
     /* Animations for row entry */
     @keyframes slideInDown {
       0% { opacity: 0; transform: translateY(-50px); visibility: hidden; }
       100% { opacity: 1; transform: translateY(0); visibility: visible; }
     }
-    .slide-in-down { animation: slideInDown 0.5s ease forwards; }
+    .slide-in-down {
+      animation: slideInDown 0.5s ease forwards;
+    }
     @keyframes slideInRight {
       0% { opacity: 0; transform: translateX(100%); visibility: hidden; }
       100% { opacity: 1; transform: translateX(0); visibility: visible; }
     }
-    .slide-in-right { animation: slideInRight 0.5s ease forwards; }
+    .slide-in-right {
+      animation: slideInRight 0.5s ease forwards;
+    }
     @keyframes slideOutLeft {
       0% { opacity: 1; transform: translateX(0); }
       100% { opacity: 0; transform: translateX(-100%); }
     }
-    .slide-out-left { animation: slideOutLeft 0.5s ease forwards; }
-    
-    /* Glowing borders on rank cell for top 3 rows */
+    .slide-out-left {
+      animation: slideOutLeft 0.5s ease forwards;
+    }
+
+    /* Glowing border on rank cell for top 3 */
     .top1 {
       border: 2px solid gold !important;
       animation: goldGlow 1.5s infinite alternate;
@@ -181,11 +202,11 @@
 </head>
 <body>
   <div id="bg-container"></div>
-  
+
   <div class="main-title">
     <h1>Player Stats Page</h1>
   </div>
-  
+
   <!-- Pagination / Tab Bar -->
   <div class="pagination">
     <button id="tab1" class="active" onclick="switchTable('stats-container-1')">Sheet 1</button>
@@ -194,40 +215,43 @@
     <button id="tab4" onclick="switchTable('stats-container-4')">Sheet 4</button>
     <button id="tab5" onclick="switchTable('stats-container-5')">Sheet 5</button>
   </div>
-  
+
   <!-- Table Containers for Each CSV -->
   <div id="stats-container-1" class="table-container list-container"></div>
   <div id="stats-container-2" class="table-container list-container"></div>
   <div id="stats-container-3" class="table-container list-container"></div>
   <div id="stats-container-4" class="table-container list-container"></div>
   <div id="stats-container-5" class="table-container list-container"></div>
-  
+
   <script>
     // Define CSV links for 5 different sheets (replace with your actual CSV links)
     const CSV_LINKS = {
-      "stats-container-1": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?gid=1885141927&single=true&output=csv",
-      "stats-container-2": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?gid=1885141927&single=true&output=csv",
-      "stats-container-3": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?gid=1885141927&single=true&output=csv",
-      "stats-container-4": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?gid=1885141927&single=true&output=csv",
-      "stats-container-5": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?gid=1885141927&single=true&output=csv"  // Replace with your 5th CSV URL.
+      "stats-container-1": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?output=csv",
+      "stats-container-2": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpAk3lRX606aOmjB9zgpHaQzxlKc-stoJRD-1DW2UjkeDUIpgfvorq1qfedCsOEc9Zg_8Z6RxCJV9x/pub?output=csv",
+      "stats-container-3": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4EemaFNDP_y7-mnuKQdES6iAoNCAKpeWD0kbDsY_geFPbttzs0umb5Ja-Xg2fu8hpIE3uhP3fXdIO/pub?output=csv",
+      "stats-container-4": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuB1-17W9_4DvGrinp3ovMjspVwLlVm6sL44sQM1yZY-EttTSKCVfazjlnmaglwf_bN0Acq0XOmIw8/pub?output=csv",
+      "stats-container-5": "https://docs.google.com/spreadsheets/d/e/2PACX-1vExampleCSVLink/pub?output=csv"  // Replace with your 5th CSV URL
     };
 
-    // Function to switch between tables
+    // Switch the visible table
     function switchTable(containerId) {
+      // Hide all containers
       document.querySelectorAll('.table-container').forEach(el => el.classList.remove('active'));
+      // Deactivate all tab buttons
       document.querySelectorAll('.pagination button').forEach(btn => btn.classList.remove('active'));
+      // Show the chosen container
       document.getElementById(containerId).classList.add('active');
-      // Determine tab number from container ID (assumes "stats-container-N")
-      const tabNum = containerId.split('-').pop();
+      // Activate the corresponding tab
+      const tabNum = containerId.split('-').pop(); // e.g. "stats-container-2" -> "2"
       document.getElementById("tab" + tabNum).classList.add("active");
     }
 
-    // Load CSV for each container on DOM load
+    // On DOM load, fetch CSV for each container, then show the first container
     document.addEventListener('DOMContentLoaded', () => {
       for (const containerId in CSV_LINKS) {
         fetchAndBuildList(CSV_LINKS[containerId], containerId);
       }
-      // Show first table by default
+      // Show the first table container by default
       switchTable('stats-container-1');
     });
 
@@ -238,7 +262,7 @@
           const results = Papa.parse(csvText, { header: true, skipEmptyLines: true });
           let data = results.data;
           let fields = results.meta.fields;
-          // Remove the last column from the CSV
+          // Remove the last column
           fields.pop();
           data = data.map(row => {
             const lastField = results.meta.fields[results.meta.fields.length - 1];
@@ -254,17 +278,22 @@
       const container = document.getElementById(containerId);
       container.innerHTML = "";
       if (!data || data.length === 0) return;
+
+      // For rank column + CSV fields
       const gridTemplate = `50px repeat(${fields.length}, 1fr)`;
-      
+
       // Heading row
       const headingRow = document.createElement("div");
       headingRow.classList.add("heading-row", "slide-in-down");
       headingRow.style.gridTemplateColumns = gridTemplate;
-      
+
+      // Rank heading
       const rankHeading = document.createElement("div");
       rankHeading.classList.add("heading-cell", "rank-cell");
       rankHeading.textContent = "Rank";
       headingRow.appendChild(rankHeading);
+
+      // CSV column headings
       fields.forEach(f => {
         const cell = document.createElement("div");
         cell.classList.add("heading-cell");
@@ -272,30 +301,34 @@
         headingRow.appendChild(cell);
       });
       container.appendChild(headingRow);
-      
+
       // Data rows
       data.forEach((row, index) => {
         const rowDiv = document.createElement("div");
         rowDiv.classList.add("player-row", "slide-in-right");
         rowDiv.style.gridTemplateColumns = gridTemplate;
+        // Stagger the animation slightly
         rowDiv.style.animationDelay = ((index + 1) * 0.05) + "s";
-        
+
+        // Rank cell
         const rankDiv = document.createElement("div");
         rankDiv.classList.add("player-rank");
         rankDiv.textContent = index + 1;
-        // Apply glowing border on rank cell for top 3 only
+
+        // Glowing border for top 3
         if (index === 0) rankDiv.classList.add("top1");
         else if (index === 1) rankDiv.classList.add("top2");
         else if (index === 2) rankDiv.classList.add("top3");
+
         rowDiv.appendChild(rankDiv);
-        
+
         fields.forEach(f => {
           const cellDiv = document.createElement("div");
           cellDiv.classList.add("player-cell");
           cellDiv.textContent = row[f] || "";
           rowDiv.appendChild(cellDiv);
         });
-        
+
         container.appendChild(rowDiv);
       });
     }
