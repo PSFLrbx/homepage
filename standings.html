@@ -116,7 +116,7 @@
 
     /* Table Wrapper */
     .table-wrapper {
-      width: 95vw;
+      width: 80vw; /* now 80% of the viewport width */
       margin: 0 auto;
       overflow-x: auto;
       border-radius: 8px;
@@ -128,7 +128,7 @@
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed; /* ensures columns stretch evenly */
-      text-align: center;  /* center all columns & data */
+      text-align: center;
     }
     .standings-table thead {
       background-color: #222;
@@ -156,14 +156,22 @@
       word-wrap: break-word;
     }
 
-    /* Rank Badges */
+    /* Rank/Team merged column */
+    .rank-cell {
+      width: 70px; /* narrower rank column */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
     .rank-badge {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
-      font-family: 'IBM Plex Sans', sans-serif; /* ensure rank is in IBM Plex */
+      width: 50px;
+      height: 50px;
+      font-family: 'IBM Plex Sans', sans-serif;
       font-size: 1em;
       background: #222;
       box-shadow: inset 1px 1px 2px #000;
@@ -370,7 +378,7 @@
       });
     }
 
-    // Always fetch fresh CSV (no localStorage caching)
+    // Always fetch fresh CSV
     async function fetchCSV(url) {
       const fullUrl = `${url}&t=${Date.now()}`;
       const response = await fetch(fullUrl);
@@ -407,24 +415,38 @@
       }
     }
 
-    // Build the table with a Rank column
+    // Build the table
+    // We remove "TEAMS" from the header and display the TEAMS data in the rank cell
     function buildTable(headers, rows) {
+      // 1) Remove "TEAMS" from the headers array
+      const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
+
       let html = "<thead><tr>";
-      // Insert the rank column
-      html += "<th>Rank</th>";
-      // Then the original CSV headers
-      headers.forEach(header => {
-        html += `<th>${header}</th>`;
+      // Insert a single "Rank" heading
+      html += "<th style='width:70px;'>Rank</th>";
+      // For the rest of the columns
+      filteredHeaders.forEach(h => {
+        html += `<th>${h}</th>`;
       });
       html += "</tr></thead><tbody>";
 
       rows.forEach((row, idx) => {
         const rankNum = idx + 1;
+        // Extract the team name from the row (if it exists)
+        const teamName = row["TEAMS"] || "";
+
         html += "<tr>";
-        // rank cell
-        html += `<td>${buildRankBadge(rankNum)}</td>`;
+        // rank cell merges rank badge & team name
+        html += `
+          <td class="rank-cell">
+            ${buildRankBadge(rankNum)}
+            <div style="font-size:0.9em; margin-top:2px;">
+              ${teamName}
+            </div>
+          </td>
+        `;
         // the rest of the columns
-        headers.forEach(header => {
+        filteredHeaders.forEach(header => {
           const val = row[header] || "";
           html += `<td>${val}</td>`;
         });
