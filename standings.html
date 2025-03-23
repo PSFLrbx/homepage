@@ -21,7 +21,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap" rel="stylesheet">
   <!-- PapaParse for CSV parsing -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
-
+  
   <style>
     /* Basic Reset & Body */
     * {
@@ -46,20 +46,15 @@
       border-radius: 6px;
       border: 3px solid #222;
     }
-    ::-webkit-scrollbar-thumb:hover {
-      background-color: #aaa;
-    }
-    html {
-      scrollbar-width: thin;
-      scrollbar-color: #888 #222;
-    }
-
+    ::-webkit-scrollbar-thumb:hover { background-color: #aaa; }
+    html { scrollbar-width: thin; scrollbar-color: #888 #222; }
+    
     /* Optional Background Container */
     #bg-container {
       position: fixed;
-      top: 0; 
+      top: 0;
       left: 0;
-      width: 100%; 
+      width: 100%;
       height: 100%;
       z-index: -1;
       background-size: cover;
@@ -67,7 +62,7 @@
       transition: transform 0.5s ease, opacity 0.5s ease;
       opacity: 1;
     }
-
+    
     /* MAIN TITLE */
     .main-title {
       background-color: #000;
@@ -75,11 +70,8 @@
       padding: 1rem;
       margin-bottom: 1rem;
     }
-    .main-title h1 {
-      font-size: 2rem;
-      color: #fff;
-    }
-
+    .main-title h1 { font-size: 2rem; color: #fff; }
+    
     /* Pagination / Tab Bar */
     .pagination {
       display: flex;
@@ -101,32 +93,30 @@
     .pagination button.active {
       background: #444;
     }
-
+    
     /* Table Containers: only one is visible at a time */
     .table-container {
-      display: none;         
-      min-height: 800px;     /* Larger min-height for more vertical spacing */
-      margin-bottom: 40px;   /* More space below table */
+      display: none;  /* Hide all by default */
+      min-height: 800px;  /* Fixed min-height for consistent spacing */
+      margin-bottom: 40px; /* Extra spacing below table */
     }
     .table-container.active {
-      display: block;       
+      display: block;  /* Show only active container */
     }
-
+    
     /* Table Styles */
     table.stats-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 0 auto;  
-      /* 50% opacity background + stronger bevel effect */
-      background-color: rgba(0,0,0,0.5);
-      box-shadow: inset 4px 4px 8px #000, inset -4px -4px 8px #333;
+      margin: 0 auto;
+      background-color: rgba(0,0,0,0.5); /* 50% opacity */
+      box-shadow: inset 4px 4px 8px #000, inset -4px -4px 8px #333; /* Bevel effect */
       border-radius: 5px;
       overflow: hidden;
     }
     table.stats-table th,
     table.stats-table td {
-      /* Increased vertical padding for spacing */
-      padding: 30px 25px; 
+      padding: 30px 25px;  /* Increased vertical padding */
       text-align: center;
       border-bottom: 1px solid #444;
     }
@@ -134,16 +124,16 @@
       background-color: rgba(0,0,0,0.8);
       font-weight: bold;
     }
+    /* Rank Column: narrower with bevel */
     th.rank-col, td.rank-col {
-      width: 40px;  /* narrower so it doesn't fill up the row */
+      width: 40px;
       min-width: 40px;
       background-color: #000;
       color: #fff;
-      /* bevel effect on rank cells only */
       box-shadow: inset 2px 2px 4px #333, inset -2px -2px 4px #000;
       border-radius: 5px;
     }
-
+    
     /* Glowing border on rank cell for top 3 */
     .top1 {
       border: 2px solid gold !important;
@@ -173,11 +163,11 @@
 </head>
 <body>
   <div id="bg-container"></div>
-
+  
   <div class="main-title">
     <h1>Player Stats Page</h1>
   </div>
-
+  
   <!-- Pagination / Tab Bar -->
   <div class="pagination">
     <button id="tab1" class="active" onclick="switchTable('stats-container-1')">Sheet 1</button>
@@ -186,16 +176,16 @@
     <button id="tab4" onclick="switchTable('stats-container-4')">Sheet 4</button>
     <button id="tab5" onclick="switchTable('stats-container-5')">Sheet 5</button>
   </div>
-
+  
   <!-- Table Containers for Each CSV -->
   <div id="stats-container-1" class="table-container"></div>
   <div id="stats-container-2" class="table-container"></div>
   <div id="stats-container-3" class="table-container"></div>
   <div id="stats-container-4" class="table-container"></div>
   <div id="stats-container-5" class="table-container"></div>
-
+  
   <script>
-    // 5 CSV links - replace with your actual ones
+    // Define CSV links for 5 different sheets (replace with your actual CSV links)
     const CSV_LINKS = {
       "stats-container-1": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?output=csv",
       "stats-container-2": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpAk3lRX606aOmjB9zgpHaQzxlKc-stoJRD-1DW2UjkeDUIpgfvorq1qfedCsOEc9Zg_8Z6RxCJV9x/pub?output=csv",
@@ -204,16 +194,16 @@
       "stats-container-5": "https://docs.google.com/spreadsheets/d/e/2PACX-1vExampleCSVLink/pub?output=csv"
     };
 
-    // Show the chosen table container, hide others
+    // Show only the chosen table container, hide others
     function switchTable(containerId) {
       document.querySelectorAll('.table-container').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.pagination button').forEach(btn => btn.classList.remove('active'));
       document.getElementById(containerId).classList.add('active');
-      const tabNum = containerId.split('-').pop(); // e.g., "stats-container-2" -> "2"
+      const tabNum = containerId.split('-').pop();
       document.getElementById("tab" + tabNum).classList.add("active");
     }
 
-    // On load, fetch each CSV, remove last column, then show the first container
+    // On DOM load, fetch each CSV, remove last column, then show the first container
     document.addEventListener('DOMContentLoaded', () => {
       for (const containerId in CSV_LINKS) {
         fetchAndBuildTable(CSV_LINKS[containerId], containerId);
@@ -227,15 +217,12 @@
         .then(csvText => {
           const results = Papa.parse(csvText, { header: true, skipEmptyLines: true });
           let data = results.data;
-          let fields = results.meta.fields;
-          
-          // Remove the last column name from 'fields'
-          const removedField = fields.pop();
-          // Remove that property from each row
+          // Instead of modifying results.meta.fields in place, use a slice.
+          const allFields = results.meta.fields;
+          const fields = allFields.slice(0, allFields.length - 1);
           data.forEach(row => {
-            delete row[removedField];
+            delete row[allFields[allFields.length - 1]];
           });
-
           buildTable(fields, data, containerId);
         })
         .catch(err => console.error("Error fetching CSV:", err));
@@ -246,17 +233,17 @@
       const table = document.createElement('table');
       table.classList.add('stats-table');
       
-      // Build thead
+      // Build table head
       const thead = document.createElement('thead');
       const headRow = document.createElement('tr');
-
+      
       // "Rank" heading
       const rankTh = document.createElement('th');
       rankTh.classList.add('rank-col');
       rankTh.textContent = "Rank";
       headRow.appendChild(rankTh);
-
-      // CSV headings
+      
+      // CSV headings (from fields)
       fields.forEach(f => {
         const th = document.createElement('th');
         th.textContent = f;
@@ -264,7 +251,7 @@
       });
       thead.appendChild(headRow);
       
-      // Build tbody
+      // Build table body
       const tbody = document.createElement('tbody');
       data.forEach((row, i) => {
         const tr = document.createElement('tr');
@@ -273,24 +260,24 @@
         const rankTd = document.createElement('td');
         rankTd.classList.add('rank-col');
         rankTd.textContent = i + 1;
-        // Glowing for top 3
+        // Apply glowing border to top 3
         if (i === 0) rankTd.classList.add('top1');
         else if (i === 1) rankTd.classList.add('top2');
         else if (i === 2) rankTd.classList.add('top3');
         tr.appendChild(rankTd);
-
-        // Data cells
+        
+        // Data cells for each field
         fields.forEach(f => {
           const td = document.createElement('td');
-          td.textContent = row[f] || "";
+          td.textContent = row[f] !== undefined ? row[f] : "";
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
       });
-
+      
       table.appendChild(thead);
       table.appendChild(tbody);
-
+      
       // Insert table into container
       const container = document.getElementById(containerId);
       container.innerHTML = "";
