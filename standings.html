@@ -24,11 +24,7 @@
   
   <style>
     /* Basic Reset & Body */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'IBM Plex Sans', sans-serif;
       background: #111;
@@ -52,10 +48,8 @@
     /* Optional Background Container */
     #bg-container {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: -1;
       background-size: cover;
       background-position: center;
@@ -72,51 +66,81 @@
     }
     .main-title h1 { font-size: 2rem; color: #fff; }
     
-    /* Pagination / Tab Bar */
-    .pagination {
+    /* NAV BAR (unchanged) */
+    .nav-bar {
+      background-color: rgba(128,128,128,0.4);
+      padding: 1rem;
       display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-left: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .category-buttons { display: flex; gap: 1rem; }
+    .category-buttons a {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
       justify-content: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .pagination button {
-      padding: 0.5em 1em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: 0.5s;
+      letter-spacing: 4px;
+      font-weight: bold;
       font-size: 1rem;
-      background: #222;
-      color: #fff;
-      border: 2px solid #444;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.3s ease;
+      border: 2px solid;
+      border-color: var(--button-neon);
+      height: 60px;
+      aspect-ratio: 3 / 1;
     }
-    .pagination button:hover,
-    .pagination button.active {
-      background: #444;
+    .category-buttons a.qb { color: #8A2BE2; --button-neon: #8A2BE2; }
+    .category-buttons a.wr { color: #03e9f4; --button-neon: #03e9f4; }
+    .category-buttons a.db { color: #8B0000; --button-neon: #8B0000; }
+    .category-buttons a.de { color: #FFA500; --button-neon: #FFA500; }
+    .category-buttons a:hover {
+      background: var(--button-neon);
+      color: #fff;
+      box-shadow: 0 0 5px var(--button-neon),
+                  0 0 25px var(--button-neon),
+                  0 0 50px var(--button-neon),
+                  0 0 200px var(--button-neon);
+      -webkit-box-reflect: below 1px linear-gradient(transparent, #0005);
     }
     
-    /* Table Containers: only one is visible at a time */
-    .table-container {
-      display: none;  /* Hide all by default */
-      min-height: 800px;  /* Fixed min-height for consistent spacing */
-      margin-bottom: 40px; /* Extra spacing below table */
+    /* STAT PAGE SECTIONS (for nav) */
+    section {
+      display: none;
+      background-color: rgba(34,34,34,0.85);
+      margin: 1rem auto;
+      padding: 1rem;
+      border-radius: 4px;
+      max-width: 90%;
+      transform: translateX(-50px);
+      opacity: 0;
     }
-    .table-container.active {
-      display: block;  /* Show only active container */
+    section h2 { margin-bottom: 1rem; color: #fff; }
+    
+    /* Table container using table layout */
+    .list-container {
+      display: block;
     }
     
     /* Table Styles */
     table.stats-table {
-      width: 100%;
-      border-collapse: collapse;
+      width: 90%;
+      max-width: 800px; /* Constrain width to show bevel on rows */
       margin: 0 auto;
+      border-collapse: separate;
+      border-spacing: 10px; /* Separate rows */
       background-color: rgba(0,0,0,0.5); /* 50% opacity */
-      box-shadow: inset 4px 4px 8px #000, inset -4px -4px 8px #333; /* Bevel effect */
+      box-shadow: inset 4px 4px 8px #000, inset -4px -4px 8px #333;
       border-radius: 5px;
       overflow: hidden;
     }
     table.stats-table th,
     table.stats-table td {
-      padding: 30px 25px;  /* Increased vertical padding */
+      padding: 30px 25px;  /* Extra vertical padding */
       text-align: center;
       border-bottom: 1px solid #444;
     }
@@ -124,7 +148,6 @@
       background-color: rgba(0,0,0,0.8);
       font-weight: bold;
     }
-    /* Rank Column: narrower with bevel */
     th.rank-col, td.rank-col {
       width: 40px;
       min-width: 40px;
@@ -160,128 +183,214 @@
       100% { box-shadow: 0 0 20px #cd7f32; }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
 </head>
 <body>
   <div id="bg-container"></div>
   
   <div class="main-title">
-    <h1>Player Stats Page</h1>
+    <h1>Raider TC Stats</h1>
   </div>
   
-  <!-- Pagination / Tab Bar -->
-  <div class="pagination">
-    <button id="tab1" class="active" onclick="switchTable('stats-container-1')">Sheet 1</button>
-    <button id="tab2" onclick="switchTable('stats-container-2')">Sheet 2</button>
-    <button id="tab3" onclick="switchTable('stats-container-3')">Sheet 3</button>
-    <button id="tab4" onclick="switchTable('stats-container-4')">Sheet 4</button>
-    <button id="tab5" onclick="switchTable('stats-container-5')">Sheet 5</button>
+  <!-- NAV BAR -->
+  <div class="nav-bar">
+    <div class="category-buttons">
+      <a href="#" onclick="switchSection('qb-section')" class="qb">QB</a>
+      <a href="#" onclick="switchSection('wr-section')" class="wr">WR</a>
+      <a href="#" onclick="switchSection('db-section')" class="db">DB</a>
+      <a href="#" onclick="switchSection('de-section')" class="de">DE</a>
+    </div>
   </div>
   
-  <!-- Table Containers for Each CSV -->
-  <div id="stats-container-1" class="table-container"></div>
-  <div id="stats-container-2" class="table-container"></div>
-  <div id="stats-container-3" class="table-container"></div>
-  <div id="stats-container-4" class="table-container"></div>
-  <div id="stats-container-5" class="table-container"></div>
+  <!-- QB SECTION -->
+  <section id="qb-section">
+    <h2>Quarterback Stats</h2>
+    <div class="list-container" id="qb-container"></div>
+  </section>
+  
+  <!-- WR SECTION -->
+  <section id="wr-section">
+    <h2>Wide Receiver Stats</h2>
+    <div class="list-container" id="wr-container"></div>
+  </section>
+  
+  <!-- DB SECTION -->
+  <section id="db-section">
+    <h2>Defensive Back Stats</h2>
+    <div class="list-container" id="db-container"></div>
+  </section>
+  
+  <!-- DE SECTION -->
+  <section id="de-section">
+    <h2>Defensive End Stats</h2>
+    <div class="list-container" id="de-container"></div>
+  </section>
   
   <script>
-    // Define CSV links for 5 different sheets (replace with your actual CSV links)
-    const CSV_LINKS = {
-      "stats-container-1": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?output=csv",
-      "stats-container-2": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpAk3lRX606aOmjB9zgpHaQzxlKc-stoJRD-1DW2UjkeDUIpgfvorq1qfedCsOEc9Zg_8Z6RxCJV9x/pub?output=csv",
-      "stats-container-3": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4EemaFNDP_y7-mnuKQdES6iAoNCAKpeWD0kbDsY_geFPbttzs0umb5Ja-Xg2fu8hpIE3uhP3fXdIO/pub?output=csv",
-      "stats-container-4": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuB1-17W9_4DvGrinp3ovMjspVwLlVm6sL44sQM1yZY-EttTSKCVfazjlnmaglwf_bN0Acq0XOmIw8/pub?output=csv",
-      "stats-container-5": "https://docs.google.com/spreadsheets/d/e/2PACX-1vExampleCSVLink/pub?output=csv"
+    // Global flag: true for initial load, then false.
+    let initialLoad = true;
+    
+    // Background images for each section.
+    const bgImages = {
+      "qb-section": "https://wallpaperaccess.com/full/1840637.jpg",
+      "wr-section": "https://wallpapercave.com/wp/cRNhjfm.jpg",
+      "db-section": "https://wallpapercave.com/wp/wp2087757.jpg",
+      "de-section": "https://w0.peakpx.com/wallpaper/803/1005/HD-wallpaper-las-vegas-raiders-american-football-team-black-stone-background-las-vegas-raiders-logo-grunge-art-nfl-american-football-usa-las-vegas-raiders-emblem.jpg"
     };
 
-    // Show only the chosen table container, hide others
-    function switchTable(containerId) {
-      document.querySelectorAll('.table-container').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.pagination button').forEach(btn => btn.classList.remove('active'));
-      document.getElementById(containerId).classList.add('active');
-      const tabNum = containerId.split('-').pop();
-      document.getElementById("tab" + tabNum).classList.add("active");
-    }
+    // CSV links for each section.
+    const CSV_QB_LINK = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?output=csv";
+    const CSV_WR_LINK = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpAk3lRX606aOmjB9zgpHaQzxlKc-stoJRD-1DW2UjkeDUIpgfvorq1qfedCsOEc9Zg_8Z6RxCJV9x/pub?output=csv";
+    const CSV_DB_LINK = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4EemaFNDP_y7-mnuKQdES6iAoNCAKpeWD0kbDsY_geFPbttzs0umb5Ja-Xg2fu8hpIE3uhP3fXdIO/pub?output=csv";
+    const CSV_DE_LINK = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuB1-17W9_4DvGrinp3ovMjspVwLlVm6sL44sQM1yZY-EttTSKCVfazjlnmaglwf_bN0Acq0XOmIw8/pub?output=csv";
 
-    // On DOM load, fetch each CSV, remove last column, then show the first container
-    document.addEventListener('DOMContentLoaded', () => {
-      for (const containerId in CSV_LINKS) {
-        fetchAndBuildTable(CSV_LINKS[containerId], containerId);
-      }
-      switchTable('stats-container-1');
+    // On DOM load, build all lists and show QB section by default.
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchAndBuildList(CSV_QB_LINK, "qb-container", 10);
+      fetchAndBuildList(CSV_WR_LINK, "wr-container", 9);
+      fetchAndBuildList(CSV_DB_LINK, "db-container", 8);
+      fetchAndBuildList(CSV_DE_LINK, "de-container", 8);
+      showSection("qb-section", true);
+      initialLoad = false;
     });
 
-    function fetchAndBuildTable(csvLink, containerId) {
+    // Switch sections with slide transitions.
+    function switchSection(newSectionId) {
+      showSection(newSectionId, false);
+    }
+
+    // Show section with appropriate animation.
+    function showSection(sectionId, isInitial) {
+      updateBackground(sectionId);
+      sections.forEach(id => {
+        let secEl = document.getElementById(id);
+        if (id === sectionId) {
+          secEl.style.display = "block";
+          if (isInitial) {
+            secEl.classList.remove("slide-in-right", "slide-out-left");
+            secEl.classList.add("slide-in-down");
+          } else {
+            secEl.classList.remove("slide-out-left", "slide-in-down");
+            secEl.classList.add("slide-in-right");
+          }
+        } else {
+          if (secEl.style.display === "block") {
+            secEl.classList.remove("slide-in-right", "slide-in-down");
+            secEl.classList.add("slide-out-left");
+            secEl.addEventListener("animationend", function handler() {
+              secEl.style.display = "none";
+              secEl.classList.remove("slide-out-left");
+              secEl.removeEventListener("animationend", handler);
+            });
+          }
+        }
+      });
+    }
+
+    // Update background with slide animation.
+    function updateBackground(sectionId) {
+      const bgContainer = document.getElementById("bg-container");
+      bgContainer.style.transform = "translateX(-100%)";
+      bgContainer.style.opacity = 0;
+      setTimeout(() => {
+        bgContainer.style.backgroundImage = `url('${bgImages[sectionId]}')`;
+        bgContainer.style.transform = "translateX(100%)";
+        setTimeout(() => {
+          bgContainer.style.transform = "translateX(0)";
+          bgContainer.style.opacity = 1;
+        }, 50);
+      }, 500);
+    }
+
+    // Parallax effect for scrolling.
+    window.addEventListener('scroll', () => {
+      const scrollPos = window.scrollY;
+      const factor = 0.3;
+      const bgContainer = document.getElementById("bg-container");
+      bgContainer.style.backgroundPosition = `center ${-scrollPos * factor}px`;
+    });
+
+    /**
+     * Build a grid-based table from the CSV.
+     * Merges "STARs" into the same cell as "Usernames" (star rating on a new line).
+     * The header row excludes a separate STARs column.
+     * @param {string} csvLink - The CSV URL.
+     * @param {string} containerId - The container element ID.
+     * @param {number} colCount - Number of CSV columns (excluding rank) after merging STARs.
+     */
+    function fetchAndBuildList(csvLink, containerId, colCount) {
       fetch(csvLink)
         .then(response => response.text())
         .then(csvText => {
           const results = Papa.parse(csvText, { header: true, skipEmptyLines: true });
-          let data = results.data;
-          // Instead of modifying results.meta.fields in place, use a slice.
-          const allFields = results.meta.fields;
-          const fields = allFields.slice(0, allFields.length - 1);
-          data.forEach(row => {
-            delete row[allFields[allFields.length - 1]];
+          const data = results.data;
+          let fields = customReorderFields(results.meta.fields);
+          // Build displayFields: remove STARs from separate display.
+          let displayFields = fields.filter(f => f.toUpperCase() !== "STARS");
+          const container = document.getElementById(containerId);
+          container.innerHTML = "";
+          // Grid template: rank column + one column for each display field.
+          const gridTemplate = `60px repeat(${displayFields.length}, 1fr)`;
+          // Build heading row.
+          const headingRow = document.createElement("div");
+          headingRow.classList.add("heading-row");
+          headingRow.style.gridTemplateColumns = gridTemplate;
+          headingRow.style.animationDelay = "0s";
+          headingRow.classList.add(initialLoad ? "slide-in-down" : "slide-in-right");
+          // Rank header cell (blank)
+          const rankHeading = document.createElement("div");
+          rankHeading.classList.add("heading-cell", "rank-cell");
+          rankHeading.textContent = "";
+          headingRow.appendChild(rankHeading);
+          // Create header cells for each display field.
+          displayFields.forEach(fieldName => {
+            const cell = document.createElement("div");
+            cell.classList.add("heading-cell");
+            cell.textContent = fieldName;
+            headingRow.appendChild(cell);
           });
-          buildTable(fields, data, containerId);
+          container.appendChild(headingRow);
+          // Build data rows.
+          data.forEach((rowObj, index) => {
+            const rowDiv = document.createElement("div");
+            rowDiv.classList.add("player-row");
+            rowDiv.classList.add(initialLoad ? "slide-in-down" : "slide-in-right");
+            rowDiv.style.gridTemplateColumns = gridTemplate;
+            rowDiv.style.animationDelay = ((index + 1) * 0.1) + "s";
+            // Rank cell.
+            const rankDiv = document.createElement("div");
+            rankDiv.classList.add("player-rank");
+            rankDiv.textContent = index + 1;
+            if (index === 0)      rankDiv.classList.add("top1");
+            else if (index === 1) rankDiv.classList.add("top2");
+            else if (index === 2) rankDiv.classList.add("top3");
+            else                  rankDiv.classList.add("other");
+            rowDiv.appendChild(rankDiv);
+            // Create cells for each display field.
+            displayFields.forEach(fieldName => {
+              const cellDiv = document.createElement("div");
+              cellDiv.classList.add("player-cell");
+              let rawValue = rowObj[fieldName] || "";
+              if (fieldName.toUpperCase() === "USERNAMES") {
+                const starValue = parseFloat(rowObj["STARs"] || 0);
+                if (starValue > 0) {
+                  cellDiv.innerHTML = rawValue + "<br>" + "⭐".repeat(Math.floor(starValue));
+                } else {
+                  cellDiv.textContent = rawValue;
+                }
+              } else {
+                cellDiv.textContent = rawValue;
+              }
+              rowDiv.appendChild(cellDiv);
+            });
+            container.appendChild(rowDiv);
+          });
         })
         .catch(err => console.error("Error fetching CSV:", err));
     }
 
-    function buildTable(fields, data, containerId) {
-      // Create a table element
-      const table = document.createElement('table');
-      table.classList.add('stats-table');
-      
-      // Build table head
-      const thead = document.createElement('thead');
-      const headRow = document.createElement('tr');
-      
-      // "Rank" heading
-      const rankTh = document.createElement('th');
-      rankTh.classList.add('rank-col');
-      rankTh.textContent = "Rank";
-      headRow.appendChild(rankTh);
-      
-      // CSV headings (from fields)
-      fields.forEach(f => {
-        const th = document.createElement('th');
-        th.textContent = f;
-        headRow.appendChild(th);
-      });
-      thead.appendChild(headRow);
-      
-      // Build table body
-      const tbody = document.createElement('tbody');
-      data.forEach((row, i) => {
-        const tr = document.createElement('tr');
-        
-        // Rank cell
-        const rankTd = document.createElement('td');
-        rankTd.classList.add('rank-col');
-        rankTd.textContent = i + 1;
-        // Apply glowing border to top 3
-        if (i === 0) rankTd.classList.add('top1');
-        else if (i === 1) rankTd.classList.add('top2');
-        else if (i === 2) rankTd.classList.add('top3');
-        tr.appendChild(rankTd);
-        
-        // Data cells for each field
-        fields.forEach(f => {
-          const td = document.createElement('td');
-          td.textContent = row[f] !== undefined ? row[f] : "";
-          tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-      });
-      
-      table.appendChild(thead);
-      table.appendChild(tbody);
-      
-      // Insert table into container
-      const container = document.getElementById(containerId);
-      container.innerHTML = "";
-      container.appendChild(table);
+    function customReorderFields(fields) {
+      return fields.filter(f => f !== "SomeColumn");
     }
   </script>
 </body>
