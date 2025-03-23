@@ -13,8 +13,8 @@
   <style>
     /* Global Reset & Body */
     * {
-      margin: 0;
-      padding: 0;
+      margin: 0; 
+      padding: 0; 
       box-sizing: border-box;
     }
     body {
@@ -31,6 +31,7 @@
     a:hover {
       color: #ffb84d;
     }
+
     /* Header */
     header {
       background-color: #222;
@@ -69,6 +70,7 @@
       background-color: #333;
       color: #fff;
     }
+
     /* Main Content */
     .main-content {
       padding: 40px 20px;
@@ -80,6 +82,7 @@
       font-size: 2em;
       margin-bottom: 20px;
     }
+
     /* Pagination Controls */
     .pagination {
       text-align: center;
@@ -110,6 +113,7 @@
     .pagination .dot.active {
       background-color: orange;
     }
+
     /* Table Wrapper */
     .table-wrapper {
       width: 85vw; /* 85% of viewport width */
@@ -118,6 +122,7 @@
       border-radius: 8px;
       background-color: #111;
     }
+
     /* Standings Table */
     .standings-table {
       width: 100%;
@@ -150,21 +155,22 @@
       font-size: 0.95em;
       word-wrap: break-word;
     }
-    /* Rank Cell: smaller box, smaller height */
+
+    /* Rank Cell: smaller badge, minimal vertical space, team name below badge */
     .rank-cell {
-      min-width: 80px;   /* enough for the badge + text */
-      min-height: 60px;  /* less vertical space than before */
+      min-width: 80px;
+      min-height: 60px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
+      gap: 4px;
     }
     .rank-badge {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 35px;       /* smaller badge size */
+      width: 35px; /* smaller badge size */
       height: 35px;
       background: #222;
       border: 2px solid #444;
@@ -175,7 +181,7 @@
       font-size: 0.85em;
       line-height: 1.2;
     }
-    /* Glowing borders for top 3 ranks */
+    /* Top 3 rank glows */
     .rank-1 {
       border-color: gold;
       animation: glowGold 2s infinite;
@@ -203,26 +209,40 @@
       50%  { box-shadow: 0 0 15px #cd7f32; }
       100% { box-shadow: 0 0 5px #cd7f32; }
     }
+
     /* Font-scaling for large numeric values */
     .shrink {
       font-size: 0.8em;
     }
-    /* Column widths: col1 => 60px, col2 => 200px, rest => 120px */
+
+    /* Column widths:
+       - Column #1 => Rank => 60px
+       - Column #2 => "USERS" => 200px
+       - Remaining => 120px
+    */
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
-      colgroupHTML += `<col style="width:60px;" />`;  /* rank col */
+      // col #1 => rank => 60px
+      colgroupHTML += `<col style="width:60px;" />`;
+      // col #2 => "USERS" => 200px
       if (filteredHeaders.length > 0) {
-        colgroupHTML += `<col style="width:200px;" />`; /* users col */
+        colgroupHTML += `<col style="width:200px;" />`;
       }
+      // the rest => 120px
       for (let i = 1; i < filteredHeaders.length; i++) {
         colgroupHTML += `<col style="width:120px;" />`;
       }
       colgroupHTML += "</colgroup>";
       return colgroupHTML;
     }
+
     @media (max-width: 900px) {
-      .main-content { padding: 20px; }
-      .table-wrapper { width: 100%; }
+      .main-content {
+        padding: 20px;
+      }
+      .table-wrapper {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -230,7 +250,9 @@
   <!-- Header -->
   <header>
     <div class="branding">
-      <div class="logo"><img src="logo.png" alt="PSFL Logo"></div>
+      <div class="logo">
+        <img src="logo.png" alt="PSFL Logo">
+      </div>
       <h1>PSFL</h1>
     </div>
     <nav>
@@ -260,7 +282,7 @@
 
     <div class="table-wrapper">
       <table class="standings-table" id="standings-table">
-        <!-- Table header and body inserted dynamically -->
+        <!-- Table header/body inserted dynamically -->
       </table>
     </div>
   </div>
@@ -294,7 +316,7 @@
   </footer>
 
   <script>
-    // CSV links for each page (QB, WR, TE, DB, DE)
+    // CSV links for 5 pages (QB, WR, TE, DB, DE)
     const csvUrls = [
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
@@ -314,7 +336,8 @@
     }
 
     async function fetchCSV(url) {
-      const fullUrl = `${url}&t=${Date.now()}`; // cache-buster
+      // cache-busting query param
+      const fullUrl = `${url}&t=${Date.now()}`;
       const response = await fetch(fullUrl);
       return response.text();
     }
@@ -323,6 +346,7 @@
       const lines = text.trim().split("\n");
       if (lines.length < 2) return { headers: [], data: [] };
       const header = lines[0].split(",");
+      // ignore the last column
       const headers = header.slice(0, header.length - 1).map(h => h.trim());
       const data = lines.slice(1).map(line => {
         const values = line.split(",").slice(0, header.length - 1).map(v => v.trim());
@@ -340,13 +364,30 @@
       return `<span class="rank-badge">${rank}</span>`;
     }
 
+    function buildColGroup(filteredHeaders) {
+      let colgroupHTML = "<colgroup>";
+      // Column #1 => rank => 60px
+      colgroupHTML += `<col style="width:60px;" />`;
+      // Column #2 => "USERS" => 200px
+      if (filteredHeaders.length > 0) {
+        colgroupHTML += `<col style="width:200px;" />`;
+      }
+      // Remaining => 120px
+      for (let i = 1; i < filteredHeaders.length; i++) {
+        colgroupHTML += `<col style="width:120px;" />`;
+      }
+      colgroupHTML += "</colgroup>";
+      return colgroupHTML;
+    }
+
     function buildTable(headers, rows) {
-      // Filter out TEAMS from the displayed headers
+      // remove "TEAMS" from displayed headers
       const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
+      // build colgroup
       const colgroup = buildColGroup(filteredHeaders);
 
       let html = `${colgroup}<thead><tr>`;
-      html += `<th>RANK</th>`;  // first col => rank cell
+      html += `<th>RANK</th>`; // rank column
       filteredHeaders.forEach(h => {
         html += `<th>${h}</th>`;
       });
@@ -374,11 +415,11 @@
       fixFontScaling();
     }
 
-    // shrink big numeric values
     function fixFontScaling() {
       const cells = tableEl.querySelectorAll("td");
       cells.forEach(cell => {
         const txt = cell.textContent.trim();
+        // if purely numeric & length > 4 => shrink
         if (/^\d+$/.test(txt) && txt.length > 4) {
           cell.classList.add("shrink");
         }
@@ -397,7 +438,7 @@
       }
     }
 
-    // Pagination
+    // Pagination arrows
     document.getElementById("prevPage").addEventListener("click", () => {
       currentIndex = (currentIndex - 1 + csvUrls.length) % csvUrls.length;
       updateTable();
@@ -406,6 +447,7 @@
       currentIndex = (currentIndex + 1) % csvUrls.length;
       updateTable();
     });
+    // Dot clicks
     dots.forEach((dot, idx) => {
       dot.addEventListener("click", () => {
         currentIndex = idx;
@@ -416,7 +458,7 @@
     // auto-update every 30 seconds
     setInterval(updateTable, 30000);
 
-    // initial load
+    // initial
     updateActiveDot();
     updateTable();
   </script>
