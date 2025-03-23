@@ -101,7 +101,6 @@
     .player-row {
       background: rgba(0,0,0,0.5);
       box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-      /* Default transparent border */
       border: 2px solid transparent;
     }
     .heading-cell,
@@ -117,7 +116,7 @@
     }
     .player-rank {
       font-weight: bold;
-      background: #000; 
+      background: #000;
       border-radius: 5px;
       padding: 0.3em;
     }
@@ -139,7 +138,7 @@
     }
     .slide-out-left { animation: slideOutLeft 0.5s ease forwards; }
 
-    /* Glowing borders for top 3 rows */
+    /* Glowing borders for top 3 ranking cells */
     .top1 {
       border: 2px solid gold !important;
       animation: goldGlow 1.5s infinite alternate;
@@ -157,7 +156,7 @@
       100% { box-shadow: 0 0 20px silver; }
     }
     .top3 {
-      border: 2px solid #cd7f32 !important; /* Bronze color */
+      border: 2px solid #cd7f32 !important;
       animation: bronzeGlow 1.5s infinite alternate;
     }
     @keyframes bronzeGlow {
@@ -217,7 +216,6 @@
         return;
       }
 
-      const colCount = fields.length + 1; // 1 for rank
       const gridTemplate = `50px repeat(${fields.length}, 1fr)`;
 
       // Create heading row
@@ -248,19 +246,19 @@
         const rankDiv = document.createElement("div");
         rankDiv.classList.add("player-rank");
         rankDiv.textContent = index + 1;
-        rowDiv.appendChild(rankDiv);
-
-        // Only add special glow classes for the top three rows
+        
+        // For top three, apply glowing border on the rank cell only.
         if (index === 0) {
-          console.log("Applying top1 to row", index + 1);
-          rowDiv.classList.add("top1");
+          console.log("Applying top1 to rank cell for row", index + 1);
+          rankDiv.classList.add("top1");
         } else if (index === 1) {
-          console.log("Applying top2 to row", index + 1);
-          rowDiv.classList.add("top2");
+          console.log("Applying top2 to rank cell for row", index + 1);
+          rankDiv.classList.add("top2");
         } else if (index === 2) {
-          console.log("Applying top3 to row", index + 1);
-          rowDiv.classList.add("top3");
+          console.log("Applying top3 to rank cell for row", index + 1);
+          rankDiv.classList.add("top3");
         }
+        rowDiv.appendChild(rankDiv);
 
         fields.forEach(f => {
           const cellDiv = document.createElement("div");
