@@ -10,11 +10,12 @@
   <meta property="og:url" content="https://psflrbx.github.io/homepage/standings.html" />
   <meta name="twitter:card" content="summary_large_image" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+
   <style>
     /* Global Reset & Body */
     * {
-      margin: 0;
-      padding: 0;
+      margin: 0; 
+      padding: 0; 
       box-sizing: border-box;
     }
     body {
@@ -31,6 +32,7 @@
     a:hover {
       color: #ffb84d;
     }
+
     /* Header */
     header {
       background-color: #222;
@@ -69,6 +71,7 @@
       background-color: #333;
       color: #fff;
     }
+
     /* Main Content */
     .main-content {
       padding: 40px 20px;
@@ -80,6 +83,7 @@
       font-size: 2em;
       margin-bottom: 20px;
     }
+
     /* Pagination Controls */
     .pagination {
       text-align: center;
@@ -110,6 +114,7 @@
     .pagination .dot.active {
       background-color: orange;
     }
+
     /* Table Wrapper */
     .table-wrapper {
       width: 85vw;
@@ -118,6 +123,7 @@
       border-radius: 8px;
       background-color: #111;
     }
+
     /* Standings Table */
     .standings-table {
       width: 100%;
@@ -150,7 +156,8 @@
       font-size: 0.95em;
       word-wrap: break-word;
     }
-    /* Rank Cell: Contains rank badge and team name (data from TEAMS or Team) */
+
+    /* Rank Cell: smaller badge, minimal vertical space, team name below badge */
     .rank-cell {
       min-width: 80px;
       min-height: 60px;
@@ -164,7 +171,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 35px;
+      width: 35px; 
       height: 35px;
       background: #222;
       border: 2px solid #444;
@@ -175,6 +182,7 @@
       font-size: 0.85em;
       line-height: 1.2;
     }
+
     /* Glow Effects for Top 3 Ranks */
     .rank-1 {
       border-color: gold;
@@ -203,30 +211,94 @@
       50% { box-shadow: 0 0 15px #cd7f32; }
       100% { box-shadow: 0 0 5px #cd7f32; }
     }
-    /* Font-scaling for long numeric values */
+
+    /* Font-scaling for large numeric values */
     .shrink {
       font-size: 0.8em;
     }
-    /* Dynamic Column Widths via colgroup:
-         Column 1 (RANK): 60px,
-         Column 2 (USERS): 200px,
-         Remaining: 120px each
-    */
+
+    /* colgroup widths: Rank => 60px, Users => 200px, rest => 120px */
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
-      colgroupHTML += `<col style="width:60px;" />`;
+      colgroupHTML += '<col style="width:60px;" />';
       if (filteredHeaders.length > 0) {
-        colgroupHTML += `<col style="width:200px;" />`;
+        colgroupHTML += '<col style="width:200px;" />';
       }
       for (let i = 1; i < filteredHeaders.length; i++) {
-        colgroupHTML += `<col style="width:120px;" />`;
+        colgroupHTML += '<col style="width:120px;" />';
       }
       colgroupHTML += "</colgroup>";
       return colgroupHTML;
     }
+
     @media (max-width: 900px) {
-      .main-content { padding: 20px; }
-      .table-wrapper { width: 100%; }
+      .main-content {
+        padding: 20px;
+      }
+      .table-wrapper {
+        width: 100%;
+      }
+    }
+
+    /* Footer from rulebook.html */
+    footer {
+      background-color: #222;
+      text-align: center;
+      padding: 30px 0;
+    }
+    .footer-container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+    }
+    .footer-col h4 {
+      margin-bottom: 15px;
+      font-size: 1.2em;
+      color: #fff;
+    }
+    .footer-col ul {
+      list-style: none;
+    }
+    .footer-col ul li {
+      margin-bottom: 8px;
+    }
+    .footer-col ul li a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .footer-col ul li a:hover {
+      color: orange;
+    }
+    .social-icons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .icon {
+      width: 40px;
+      height: 40px;
+      background: #444;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.2em;
+      transition: background 0.3s ease;
+      position: relative;
+    }
+    .icon:hover {
+      background: #666;
+    }
+    .icon-discord {
+      background: url('discord.png') no-repeat center center;
+      background-size: cover;
     }
   </style>
 </head>
@@ -252,6 +324,8 @@
   <!-- Main Content -->
   <div class="main-content">
     <h2>League Standings</h2>
+
+    <!-- Pagination Controls -->
     <div class="pagination">
       <button id="prevPage">&laquo;</button>
       <span class="dot" data-index="0"></span>
@@ -261,14 +335,15 @@
       <span class="dot" data-index="4"></span>
       <button id="nextPage">&raquo;</button>
     </div>
+
     <div class="table-wrapper">
       <table class="standings-table" id="standings-table">
-        <!-- Table header and body inserted dynamically -->
+        <!-- Table header/body will be inserted dynamically -->
       </table>
     </div>
   </div>
 
-  <!-- Footer (exact copy from rulebook.html) -->
+  <!-- Footer (same as rulebook.html) -->
   <footer>
     <div class="footer-container">
       <div class="footer-col">
@@ -297,7 +372,7 @@
   </footer>
 
   <script>
-    // CSV links for 5 pages (QB, WR, TE, DB, DE)
+    // CSV links for five pages: QB, WR, TE, DB, DE
     const csvUrls = [
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
@@ -305,27 +380,28 @@
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRNfdMclgC6hSB6O_Gui7SsybfR2179fX57nkn9vpU24hptG-I7xybFpdIR5tv1hkNyvKLDA2OSsmut/pub?gid=0&single=true&output=csv",
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTlOIuefJ8umKaeWiW1yZfIr02xKIJqLpc-oFV0RgMXWY1gpF-2Kz-BafD9cdEEMK7kZzO1V0pM-U-O/pub?gid=0&single=true&output=csv"
     ];
-    
+
     let currentIndex = 0;
     const dots = document.querySelectorAll(".pagination .dot");
     const tableEl = document.getElementById("standings-table");
-    
+
     function updateActiveDot() {
       dots.forEach((dot, idx) => {
         dot.classList.toggle("active", idx === currentIndex);
       });
     }
-    
+
     async function fetchCSV(url) {
       const fullUrl = `${url}&t=${Date.now()}`; // cache-buster
       const response = await fetch(fullUrl);
       return response.text();
     }
-    
+
     function parseCSV(text) {
       const lines = text.trim().split("\n");
       if (lines.length < 2) return { headers: [], data: [] };
       const header = lines[0].split(",");
+      // remove last column
       const headers = header.slice(0, header.length - 1).map(h => h.trim());
       const data = lines.slice(1).map(line => {
         const values = line.split(",").slice(0, header.length - 1).map(v => v.trim());
@@ -335,14 +411,14 @@
       });
       return { headers, data };
     }
-    
+
     function buildRankBadge(rank) {
       if (rank === 1) return `<span class="rank-badge rank-1">1</span>`;
       if (rank === 2) return `<span class="rank-badge rank-2">2</span>`;
       if (rank === 3) return `<span class="rank-badge rank-3">3</span>`;
       return `<span class="rank-badge">${rank}</span>`;
     }
-    
+
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
       colgroupHTML += '<col style="width:60px;" />';
@@ -355,9 +431,9 @@
       colgroupHTML += "</colgroup>";
       return colgroupHTML;
     }
-    
+
     function buildTable(headers, rows) {
-      // Remove "TEAMS" from the displayed headers but use its data in the rank cell.
+      // remove "TEAMS" from displayed headers but show the data in the rank cell
       const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
       const colgroup = buildColGroup(filteredHeaders);
       let html = `${colgroup}<thead><tr>`;
@@ -371,7 +447,8 @@
         const teamName = row["TEAMS"] || row["Team"] || "";
         html += "<tr>";
         html += `<td class="rank-cell">
-                   ${buildRankBadge(rankNum)}<br>
+                   ${buildRankBadge(rankNum)}
+                   <br>
                    <span class="team-name">${teamName}</span>
                  </td>`;
         filteredHeaders.forEach(header => {
@@ -384,7 +461,7 @@
       tableEl.innerHTML = html;
       fixFontScaling();
     }
-    
+
     function fixFontScaling() {
       const cells = tableEl.querySelectorAll("td");
       cells.forEach(cell => {
@@ -394,7 +471,7 @@
         }
       });
     }
-    
+
     async function updateTable() {
       try {
         const csvText = await fetchCSV(csvUrls[currentIndex]);
@@ -406,7 +483,8 @@
         tableEl.innerHTML = "<thead><tr><th>Error</th></tr></thead><tbody><tr><td>Failed to load data</td></tr></tbody>";
       }
     }
-    
+
+    // Pagination controls
     document.getElementById("prevPage").addEventListener("click", () => {
       currentIndex = (currentIndex - 1 + csvUrls.length) % csvUrls.length;
       updateTable();
@@ -421,8 +499,11 @@
         updateTable();
       });
     });
-    
+
+    // Auto-update every 30s
     setInterval(updateTable, 30000);
+
+    // Initial load
     updateActiveDot();
     updateTable();
   </script>
