@@ -10,7 +10,6 @@
   <meta property="og:url" content="https://psflrbx.github.io/homepage/standings.html" />
   <meta name="twitter:card" content="summary_large_image" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
-
   <style>
     /* Global Reset & Body */
     * {
@@ -157,7 +156,7 @@
       word-wrap: break-word;
     }
 
-    /* Rank Cell: smaller badge, minimal vertical space, team name below badge */
+    /* Rank Cell: smaller badge, minimal vertical space, no extra line break */
     .rank-cell {
       min-width: 80px;
       min-height: 60px;
@@ -165,13 +164,13 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
+      gap: 3px; /* small gap between badge and team name */
     }
     .rank-badge {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 35px; 
+      width: 35px;
       height: 35px;
       background: #222;
       border: 2px solid #444;
@@ -217,7 +216,7 @@
       font-size: 0.8em;
     }
 
-    /* colgroup widths: Rank => 60px, Users => 200px, rest => 120px */
+    /* colgroup widths: Rank => 60px, Users => 200px, others => 120px */
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
       colgroupHTML += '<col style="width:60px;" />';
@@ -338,7 +337,7 @@
 
     <div class="table-wrapper">
       <table class="standings-table" id="standings-table">
-        <!-- Table header/body will be inserted dynamically -->
+        <!-- Table header/body inserted dynamically -->
       </table>
     </div>
   </div>
@@ -372,7 +371,7 @@
   </footer>
 
   <script>
-    // CSV links for five pages: QB, WR, TE, DB, DE
+    // CSV links for 5 pages (QB, WR, TE, DB, DE)
     const csvUrls = [
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
@@ -385,23 +384,25 @@
     const dots = document.querySelectorAll(".pagination .dot");
     const tableEl = document.getElementById("standings-table");
 
+    // Mark the active dot
     function updateActiveDot() {
       dots.forEach((dot, idx) => {
         dot.classList.toggle("active", idx === currentIndex);
       });
     }
 
+    // Fetch CSV with cache-busting
     async function fetchCSV(url) {
-      const fullUrl = `${url}&t=${Date.now()}`; // cache-buster
+      const fullUrl = `${url}&t=${Date.now()}`;
       const response = await fetch(fullUrl);
       return response.text();
     }
 
+    // Parse CSV, ignoring the last column
     function parseCSV(text) {
       const lines = text.trim().split("\n");
       if (lines.length < 2) return { headers: [], data: [] };
       const header = lines[0].split(",");
-      // remove last column
       const headers = header.slice(0, header.length - 1).map(h => h.trim());
       const data = lines.slice(1).map(line => {
         const values = line.split(",").slice(0, header.length - 1).map(v => v.trim());
@@ -412,6 +413,7 @@
       return { headers, data };
     }
 
+    // Build rank badge with top 3 glowing borders
     function buildRankBadge(rank) {
       if (rank === 1) return `<span class="rank-badge rank-1">1</span>`;
       if (rank === 2) return `<span class="rank-badge rank-2">2</span>`;
@@ -419,38 +421,43 @@
       return `<span class="rank-badge">${rank}</span>`;
     }
 
+    // Build colgroup for fixed column widths
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
-      colgroupHTML += '<col style="width:60px;" />';
+      colgroupHTML += '<col style="width:60px;" />'; // rank
       if (filteredHeaders.length > 0) {
-        colgroupHTML += '<col style="width:200px;" />';
+        colgroupHTML += '<col style="width:200px;" />'; // users
       }
       for (let i = 1; i < filteredHeaders.length; i++) {
-        colgroupHTML += '<col style="width:120px;" />';
+        colgroupHTML += '<col style="width:120px;" />'; // others
       }
       colgroupHTML += "</colgroup>";
       return colgroupHTML;
     }
 
+    // Build the table (removing "TEAMS" from displayed headers)
     function buildTable(headers, rows) {
-      // remove "TEAMS" from displayed headers but show the data in the rank cell
       const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
       const colgroup = buildColGroup(filteredHeaders);
+
       let html = `${colgroup}<thead><tr>`;
       html += '<th>RANK</th>';
       filteredHeaders.forEach(h => {
         html += `<th>${h}</th>`;
       });
       html += "</tr></thead><tbody>";
+
       rows.forEach((row, idx) => {
         const rankNum = idx + 1;
+        // Fallback for TEAMS or Team
         const teamName = row["TEAMS"] || row["Team"] || "";
         html += "<tr>";
-        html += `<td class="rank-cell">
-                   ${buildRankBadge(rankNum)}
-                   <br>
-                   <span class="team-name">${teamName}</span>
-                 </td>`;
+        html += `
+          <td class="rank-cell">
+            ${buildRankBadge(rankNum)}
+            <span class="team-name">${teamName}</span>
+          </td>
+        `;
         filteredHeaders.forEach(header => {
           const val = row[header] || "";
           html += `<td>${val}</td>`;
@@ -462,6 +469,7 @@
       fixFontScaling();
     }
 
+    // Font-scaling for large numeric values
     function fixFontScaling() {
       const cells = tableEl.querySelectorAll("td");
       cells.forEach(cell => {
@@ -472,6 +480,7 @@
       });
     }
 
+    // Update table with current CSV link
     async function updateTable() {
       try {
         const csvText = await fetchCSV(csvUrls[currentIndex]);
@@ -484,7 +493,7 @@
       }
     }
 
-    // Pagination controls
+    // Pagination arrow event listeners
     document.getElementById("prevPage").addEventListener("click", () => {
       currentIndex = (currentIndex - 1 + csvUrls.length) % csvUrls.length;
       updateTable();
@@ -493,6 +502,8 @@
       currentIndex = (currentIndex + 1) % csvUrls.length;
       updateTable();
     });
+
+    // Dot click event listeners
     dots.forEach((dot, idx) => {
       dot.addEventListener("click", () => {
         currentIndex = idx;
