@@ -31,7 +31,6 @@
     a:hover {
       color: #ffb84d;
     }
-
     /* Header */
     header {
       background-color: #222;
@@ -70,7 +69,6 @@
       background-color: #333;
       color: #fff;
     }
-
     /* Main Content */
     .main-content {
       padding: 40px 20px;
@@ -82,7 +80,6 @@
       font-size: 2em;
       margin-bottom: 20px;
     }
-
     /* Pagination Controls */
     .pagination {
       text-align: center;
@@ -113,7 +110,6 @@
     .pagination .dot.active {
       background-color: orange;
     }
-
     /* Table Wrapper */
     .table-wrapper {
       width: 85vw; /* 85% of viewport width */
@@ -154,12 +150,10 @@
       font-size: 0.95em;
       word-wrap: break-word;
     }
-
-    /* Rank Cell: Combined cell for rank badge and team name.
-       Using a <br> forces team name on a new line. */
+    /* Rank Cell: Contains the rank badge and team name (from TEAMS) */
     .rank-cell {
-      min-width: 100px; /* enough to hold badge and text */
-      min-height: 80px; /* extra height for a clear break */
+      min-width: 100px;
+      min-height: 80px; /* extra height so team name appears clearly below */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -181,6 +175,7 @@
       font-size: 0.9em;
       line-height: 1.2;
     }
+    /* Glowing borders for top ranks */
     .rank-1 {
       border-color: gold;
       animation: glowGold 2s infinite;
@@ -208,16 +203,15 @@
       50%  { box-shadow: 0 0 15px #cd7f32; }
       100% { box-shadow: 0 0 5px #cd7f32; }
     }
-
     /* Font-scaling for large numeric values */
     .shrink {
       font-size: 0.8em;
     }
-
-    /* Dynamic Column Widths via <colgroup> */
-    /* - col 1 (Rank): 60px
-       - col 2 (USERS): 200px
-       - remaining columns: 120px */
+    /* Dynamic Column Widths via colgroup:
+       - Column 1: Rank (60px)
+       - Column 2: USERS (200px)
+       - Remaining columns: 120px each
+    */
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
       colgroupHTML += `<col style="width:60px;" />`;
@@ -230,7 +224,6 @@
       colgroupHTML += "</colgroup>";
       return colgroupHTML;
     }
-
     @media (max-width: 900px) {
       .main-content { padding: 20px; }
       .table-wrapper { width: 100%; }
@@ -273,7 +266,7 @@
     </div>
   </div>
 
-  <!-- Footer -->
+  <!-- Footer (unchanged) -->
   <footer>
     <div class="footer-container">
       <div class="footer-col">
@@ -361,8 +354,8 @@
       return colgroupHTML;
     }
 
+    // Build the table. Remove "TEAMS" from the header, but still retrieve it for the rank cell.
     function buildTable(headers, rows) {
-      // Remove TEAMS from displayed headers but keep data in rank cell.
       const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
       const colgroup = buildColGroup(filteredHeaders);
       let html = `${colgroup}<thead><tr>`;
@@ -373,9 +366,10 @@
       html += "</tr></thead><tbody>";
       rows.forEach((row, idx) => {
         const rankNum = idx + 1;
-        const teamName = row["TEAMS"] || "";
+        // Fallback: Check both "TEAMS" and "Team" for the team name
+        const teamName = row["TEAMS"] || row["Team"] || "";
         html += "<tr>";
-        // Rank cell: display badge and below it, the team name.
+        // Rank cell: rank badge on top and team name below (using <br>)
         html += `<td class="rank-cell">
                    ${buildRankBadge(rankNum)}<br>
                    <span class="team-name">${teamName}</span>
