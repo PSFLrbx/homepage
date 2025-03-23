@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Open Graph Meta Tags for Link Preview -->
+  <!-- Open Graph & Twitter meta tags -->
   <meta property="og:title" content="Player Stats Page">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://495BC/495BC.github.io">
@@ -9,8 +9,6 @@
   <meta property="og:description" content="View player's stats from scrims/games. Updates every few hours.">
   <meta property="og:site_name" content="Raider TC Stats">
   <meta property="og:locale" content="en_US">
-
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Player Stats Page">
   <meta name="twitter:description" content="View player's stats from scrims/games. Updates every few hours.">
@@ -25,11 +23,7 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <style>
     /* Basic Reset & Body */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'IBM Plex Sans', sans-serif;
       background: #111;
@@ -53,10 +47,8 @@
     /* Optional Background Container */
     #bg-container {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: -1;
       background-size: cover;
       background-position: center;
@@ -73,7 +65,33 @@
     }
     .main-title h1 { font-size: 2rem; color: #fff; }
 
-    /* Stats Table Container */
+    /* Pagination (Tab Bar) */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .pagination button {
+      padding: 0.5em 1em;
+      font-size: 1rem;
+      background: #222;
+      color: #fff;
+      border: 2px solid #444;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .pagination button:hover,
+    .pagination button.active {
+      background: #444;
+    }
+
+    /* Table Container for each CSV */
+    .table-container { display: none; } /* Hide all by default */
+    .table-container.active { display: block; }
+
+    /* List/Table Styles */
     .list-container {
       display: flex;
       flex-direction: column;
@@ -81,9 +99,7 @@
       margin: 0 auto;
       max-width: 95%;
     }
-    /* Grid Rows */
-    .heading-row,
-    .player-row {
+    .heading-row, .player-row {
       display: grid;
       gap: 5px;
       align-items: center;
@@ -94,25 +110,15 @@
       visibility: hidden;
       text-align: center;
     }
-    .heading-row {
-      background: rgba(0,0,0,0.7);
-      font-weight: bold;
-    }
+    .heading-row { background: rgba(0,0,0,0.7); font-weight: bold; }
     .player-row {
       background: rgba(0,0,0,0.5);
       box-shadow: 0 2px 4px rgba(0,0,0,0.5);
       border: 2px solid transparent;
     }
-    .heading-cell,
-    .player-cell {
-      padding: 0 10px;
-      white-space: nowrap;
-    }
-    /* Rank Column: Fixed width (50px) */
-    .heading-cell.rank-cell,
-    .player-rank {
-      width: 50px;
-      min-width: 50px;
+    .heading-cell, .player-cell { padding: 0 10px; white-space: nowrap; }
+    .heading-cell.rank-cell, .player-rank {
+      width: 50px; min-width: 50px;
     }
     .player-rank {
       font-weight: bold;
@@ -121,7 +127,7 @@
       padding: 0.3em;
     }
 
-    /* Animations for row entry */
+    /* Animations */
     @keyframes slideInDown {
       0% { opacity: 0; transform: translateY(-50px); visibility: hidden; }
       100% { opacity: 1; transform: translateY(0); visibility: visible; }
@@ -138,7 +144,7 @@
     }
     .slide-out-left { animation: slideOutLeft 0.5s ease forwards; }
 
-    /* Glowing borders for top 3 ranking cells */
+    /* Glowing borders for rank cell (top 3 only) */
     .top1 {
       border: 2px solid gold !important;
       animation: goldGlow 1.5s infinite alternate;
@@ -171,14 +177,54 @@
   <div class="main-title">
     <h1>Player Stats Page</h1>
   </div>
-  
-  <div class="list-container" id="stats-container"></div>
+
+  <!-- Pagination / Tab Bar -->
+  <div class="pagination">
+    <button id="tab1" class="active" onclick="switchTable('stats-container-1')">1</button>
+    <button id="tab2" onclick="switchTable('stats-container-2')">2</button>
+    <button id="tab3" onclick="switchTable('stats-container-3')">3</button>
+    <button id="tab4" onclick="switchTable('stats-container-4')">4</button>
+    <button id="tab5" onclick="switchTable('stats-container-5')">5</button>
+  </div>
+
+  <!-- Table Containers for Each CSV -->
+  <div id="stats-container-1" class="table-container list-container"></div>
+  <div id="stats-container-2" class="table-container list-container"></div>
+  <div id="stats-container-3" class="table-container list-container"></div>
+  <div id="stats-container-4" class="table-container list-container"></div>
+  <div id="stats-container-5" class="table-container list-container"></div>
 
   <script>
-    const CSV_LINK = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?output=csv";
+    // Define CSV links for 5 tables (replace these with your actual CSV URLs)
+    const CSV_LINKS = {
+      "stats-container-1": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?output=csv",
+      "stats-container-2": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpAk3lRX606aOmjB9zgpHaQzxlKc-stoJRD-1DW2UjkeDUIpgfvorq1qfedCsOEc9Zg_8Z6RxCJV9x/pub?output=csv",
+      "stats-container-3": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4EemaFNDP_y7-mnuKQdES6iAoNCAKpeWD0kbDsY_geFPbttzs0umb5Ja-Xg2fu8hpIE3uhP3fXdIO/pub?output=csv",
+      "stats-container-4": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuB1-17W9_4DvGrinp3ovMjspVwLlVm6sL44sQM1yZY-EttTSKCVfazjlnmaglwf_bN0Acq0XOmIw8/pub?output=csv",
+      "stats-container-5": "https://docs.google.com/spreadsheets/d/e/2PACX-1vExampleCSVLink/pub?output=csv" // Replace with your 5th CSV URL.
+    };
 
+    // Function to switch between tables
+    function switchTable(containerId) {
+      // Hide all table containers
+      const tables = document.querySelectorAll('.table-container');
+      tables.forEach(table => table.classList.remove('active'));
+      // Remove active class from all buttons
+      const buttons = document.querySelectorAll('.pagination button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      // Show selected container
+      document.getElementById(containerId).classList.add('active');
+      // Set the corresponding tab button active
+      document.getElementById("tab" + containerId.split('-').pop()).classList.add('active');
+    }
+
+    // On DOM load, load all CSVs into their respective containers, but only show the first table.
     document.addEventListener('DOMContentLoaded', () => {
-      fetchAndBuildList(CSV_LINK, "stats-container");
+      for (const containerId in CSV_LINKS) {
+        fetchAndBuildList(CSV_LINKS[containerId], containerId);
+      }
+      // Show first table by default
+      switchTable('stats-container-1');
     });
 
     function fetchAndBuildList(csvLink, containerId) {
@@ -189,18 +235,12 @@
           let data = results.data;
           let fields = results.meta.fields;
 
-          console.log("Fields:", fields);
-          console.log("Data:", data);
-
           // Remove the last column from the CSV
           const removedField = fields.pop();
           data = data.map(row => {
             delete row[removedField];
             return row;
           });
-
-          console.log("Fields (after pop):", fields);
-          console.log("Data (after removal):", data);
 
           buildTable(fields, data, containerId);
         })
@@ -210,15 +250,14 @@
     function buildTable(fields, data, containerId) {
       const container = document.getElementById(containerId);
       container.innerHTML = "";
-
       if (!data || data.length === 0) {
-        console.warn("No data rows found.");
+        console.warn("No data rows found for", containerId);
         return;
       }
-
+      // Grid template: 50px for rank, then one column per CSV field
       const gridTemplate = `50px repeat(${fields.length}, 1fr)`;
-
-      // Create heading row
+      
+      // Heading row
       const headingRow = document.createElement("div");
       headingRow.classList.add("heading-row", "slide-in-down");
       headingRow.style.gridTemplateColumns = gridTemplate;
@@ -227,7 +266,6 @@
       rankHeading.classList.add("heading-cell", "rank-cell");
       rankHeading.textContent = "Rank";
       headingRow.appendChild(rankHeading);
-
       fields.forEach(f => {
         const cell = document.createElement("div");
         cell.classList.add("heading-cell");
@@ -236,7 +274,7 @@
       });
       container.appendChild(headingRow);
 
-      // Create data rows
+      // Data rows
       data.forEach((row, index) => {
         const rowDiv = document.createElement("div");
         rowDiv.classList.add("player-row", "slide-in-right");
@@ -246,16 +284,12 @@
         const rankDiv = document.createElement("div");
         rankDiv.classList.add("player-rank");
         rankDiv.textContent = index + 1;
-        
-        // For top three, apply glowing border on the rank cell only.
+        // Apply glowing border on rank cell for top 3 only
         if (index === 0) {
-          console.log("Applying top1 to rank cell for row", index + 1);
           rankDiv.classList.add("top1");
         } else if (index === 1) {
-          console.log("Applying top2 to rank cell for row", index + 1);
           rankDiv.classList.add("top2");
         } else if (index === 2) {
-          console.log("Applying top3 to rank cell for row", index + 1);
           rankDiv.classList.add("top3");
         }
         rowDiv.appendChild(rankDiv);
