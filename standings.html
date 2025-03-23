@@ -69,40 +69,11 @@
       background-color: #333;
       color: #fff;
     }
-    /* Layout */
-    .container {
-      display: flex;
-      min-height: 80vh;
-    }
-    .sidebar {
-      background-color: #131313;
-      width: 250px;
-      padding: 20px;
-      border-right: 2px solid #333;
-    }
-    .sidebar h2 {
-      margin-bottom: 20px;
-      font-size: 1.3em;
-    }
-    .sidebar ul {
-      list-style: none;
-    }
-    .sidebar ul li {
-      margin-bottom: 10px;
-    }
-    .sidebar ul li a {
-      color: #ccc;
-      font-size: 0.95em;
-      display: inline-block;
-      padding: 6px 0;
-    }
-    .sidebar ul li a:hover {
-      color: #fff;
-    }
+    /* Main Content */
     .main-content {
-      flex: 1;
       padding: 40px 20px;
       background-color: #111;
+      min-height: 80vh;
     }
     .main-content h2 {
       font-size: 2em;
@@ -236,14 +207,6 @@
     }
     /* Responsive */
     @media (max-width: 900px) {
-      .container {
-        flex-direction: column;
-      }
-      .sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 2px solid #333;
-      }
       .main-content {
         padding: 20px;
       }
@@ -269,37 +232,23 @@
     </nav>
   </header>
 
-  <!-- Main Container -->
-  <div class="container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <h2>PSFL Info</h2>
-      <ul>
-        <li><a href="https://discord.gg/psfl" target="_blank">Join Discord</a></li>
-        <li><a href="stats.html">View Stats</a></li>
-        <li><a href="rulebook.html">Read Rulebook</a></li>
-        <li><a href="credits.html">Meet the Team</a></li>
-      </ul>
-    </aside>
+  <!-- Main Content -->
+  <div class="main-content">
+    <h2>League Standings</h2>
+    <table class="standings-table" id="standings-table">
+      <!-- Table header and body will be generated dynamically -->
+    </table>
 
-    <!-- Main Content -->
-    <div class="main-content">
-      <h2>League Standings</h2>
-      <table class="standings-table" id="standings-table">
-        <!-- Table header and body will be generated dynamically -->
-      </table>
-
-      <!-- Pagination Controls -->
-      <div class="pagination">
-        <button id="prevPage">&laquo;</button>
-        <!-- Pagination dots for QB, WR, TE, DB, DE -->
-        <span class="dot" data-pos="QB"></span>
-        <span class="dot" data-pos="WR"></span>
-        <span class="dot" data-pos="TE"></span>
-        <span class="dot" data-pos="DB"></span>
-        <span class="dot" data-pos="DE"></span>
-        <button id="nextPage">&raquo;</button>
-      </div>
+    <!-- Pagination Controls -->
+    <div class="pagination">
+      <button id="prevPage">&laquo;</button>
+      <!-- Pagination dots for QB, WR, TE, DB, DE -->
+      <span class="dot" data-index="0"></span>
+      <span class="dot" data-index="1"></span>
+      <span class="dot" data-index="2"></span>
+      <span class="dot" data-index="3"></span>
+      <span class="dot" data-index="4"></span>
+      <button id="nextPage">&raquo;</button>
     </div>
   </div>
 
@@ -332,27 +281,38 @@
   </footer>
 
   <script>
-    // Set your Google Sheets CSV link here
-    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-EXAMPLE/pub?output=csv";
+    // Define the CSV links for each page in order (QB, WR, TE, DB, DE)
+    const csvUrls = [
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTaCoNjF522XiQcmuG1FBHK6LbLY6pkDcQjxM6ESEaXJqflwndse0VqsXRbrpCWmBowu8TNW5k-AHki/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vRNfdMclgC6hSB6O_Gui7SsybfR2179fX57nkn9vpU24hptG-I7xybFpdIR5tv1hkNyvKLDA2OSsmut/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTlOIuefJ8umKaeWiW1yZfIr02xKIJqLpc-oFV0RgMXWY1gpF-2Kz-BafD9cdEEMK7kZzO1V0pM-U-O/pub?gid=0&single=true&output=csv"
+    ];
 
-    // Define the positions order for pagination
+    // Position names for display purposes (order: QB, WR, TE, DB, DE)
     const positions = ["QB", "WR", "TE", "DB", "DE"];
-    let currentPosIndex = 0;
+    let currentIndex = 0;
     const dots = document.querySelectorAll(".pagination .dot");
     const tableEl = document.getElementById("standings-table");
 
     // Mark active dot
     function updateActiveDot() {
       dots.forEach((dot, idx) => {
-        dot.classList.toggle("active", idx === currentPosIndex);
+        dot.classList.toggle("active", idx === currentIndex);
       });
     }
 
-    // Fetch and parse CSV
-    async function fetchCSV(url) {
-      const response = await fetch(url);
-      const csvText = await response.text();
-      return parseCSV(csvText);
+    // Fetch and parse CSV from the URL corresponding to the current page
+    async function loadCSV(url) {
+      try {
+        const response = await fetch(url);
+        const csvText = await response.text();
+        return parseCSV(csvText);
+      } catch (error) {
+        console.error("Error fetching CSV:", error);
+        return null;
+      }
     }
 
     // Simple CSV parser (assumes no commas inside fields)
@@ -370,7 +330,7 @@
       return { headers, data };
     }
 
-    // Build table: expects the data rows for the current position
+    // Build the standings table given headers and rows
     function buildTable(headers, rows) {
       let html = "<thead><tr>";
       headers.forEach(header => {
@@ -388,57 +348,34 @@
       tableEl.innerHTML = html;
     }
 
-    // Filter data for the given position
-    function filterByPosition(data, pos) {
-      // Assuming there is a column named "Position" (adjust if needed)
-      return data.filter(row => row["Position"] === pos);
-    }
-
-    let csvHeaders = [];
-    let csvData = [];
-
-    // Load CSV and then show table for current position
-    async function loadData() {
-      try {
-        const { headers, data } = await fetchCSV(csvUrl);
-        csvHeaders = headers;
-        csvData = data;
-        updateTable();
-      } catch (error) {
-        console.error("Error loading CSV:", error);
-        tableEl.innerHTML = "<tr><td colspan='100%'>Failed to load data.</td></tr>";
-      }
-    }
-
-    // Update table based on current position pagination
-    function updateTable() {
-      const pos = positions[currentPosIndex];
-      const filtered = filterByPosition(csvData, pos);
-      buildTable(csvHeaders, filtered);
+    // Load data for the current CSV URL and update table
+    async function updateTable() {
+      const { headers, data } = await loadCSV(csvUrls[currentIndex]) || { headers: [], data: [] };
+      buildTable(headers, data);
       updateActiveDot();
     }
 
     // Pagination arrow event listeners
     document.getElementById("prevPage").addEventListener("click", () => {
-      currentPosIndex = (currentPosIndex - 1 + positions.length) % positions.length;
+      currentIndex = (currentIndex - 1 + csvUrls.length) % csvUrls.length;
       updateTable();
     });
     document.getElementById("nextPage").addEventListener("click", () => {
-      currentPosIndex = (currentPosIndex + 1) % positions.length;
+      currentIndex = (currentIndex + 1) % csvUrls.length;
       updateTable();
     });
 
     // Dot click event listeners
     dots.forEach((dot, idx) => {
       dot.addEventListener("click", () => {
-        currentPosIndex = idx;
+        currentIndex = idx;
         updateTable();
       });
     });
 
-    // Initialize active dot and load CSV data
+    // Initialize
     updateActiveDot();
-    loadData();
+    updateTable();
   </script>
 </body>
 </html>
