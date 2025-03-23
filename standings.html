@@ -21,6 +21,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap" rel="stylesheet">
   <!-- PapaParse for CSV parsing -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+
   <style>
     /* Basic Reset & Body */
     * {
@@ -45,8 +46,13 @@
       border-radius: 6px;
       border: 3px solid #222;
     }
-    ::-webkit-scrollbar-thumb:hover { background-color: #aaa; }
-    html { scrollbar-width: thin; scrollbar-color: #888 #222; }
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: #aaa;
+    }
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: #888 #222;
+    }
 
     /* Optional Background Container */
     #bg-container {
@@ -96,25 +102,26 @@
 
     /* Table Containers: only one is visible at a time */
     .table-container {
-      display: none;        /* Hide by default */
-      min-height: 600px;    /* Fixed min-height for consistent spacing */
-      margin-bottom: 20px;  /* Space below table */
+      display: none;         /* Hide by default */
+      min-height: 800px;     /* Larger min-height for consistent spacing */
+      margin-bottom: 40px;   /* More space below table */
     }
     .table-container.active {
-      display: block;       /* Show active container */
+      display: block;        /* Show only the active container */
     }
 
     /* Table Styles */
     table.stats-table {
       width: 100%;
       border-collapse: collapse;
-      box-shadow: inset 2px 2px 5px #000, inset -2px -2px 5px #333; /* Bevel effect */
-      border-radius: 4px;
+      margin: 0 auto;  /* Center table horizontally */
+      box-shadow: inset 3px 3px 6px #000, inset -3px -3px 6px #333; /* Stronger bevel effect */
+      border-radius: 5px;
       overflow: hidden;
     }
     table.stats-table th,
     table.stats-table td {
-      padding: 15px;  /* Increased padding */
+      padding: 18px; /* More padding for spacing */
       text-align: center;
       border-bottom: 1px solid #444;
       background-color: rgba(0,0,0,0.4);
@@ -127,7 +134,7 @@
       width: 50px;
       min-width: 50px;
       background-color: #000;
-      border-radius: 4px;
+      border-radius: 5px;
       color: #fff;
     }
 
@@ -182,16 +189,16 @@
   <div id="stats-container-5" class="table-container"></div>
 
   <script>
-    // Define CSV links for 5 different sheets (replace these with your actual CSV links)
+    // 5 CSV links - replace with your own
     const CSV_LINKS = {
       "stats-container-1": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?output=csv",
       "stats-container-2": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpAk3lRX606aOmjB9zgpHaQzxlKc-stoJRD-1DW2UjkeDUIpgfvorq1qfedCsOEc9Zg_8Z6RxCJV9x/pub?output=csv",
       "stats-container-3": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4EemaFNDP_y7-mnuKQdES6iAoNCAKpeWD0kbDsY_geFPbttzs0umb5Ja-Xg2fu8hpIE3uhP3fXdIO/pub?output=csv",
       "stats-container-4": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuB1-17W9_4DvGrinp3ovMjspVwLlVm6sL44sQM1yZY-EttTSKCVfazjlnmaglwf_bN0Acq0XOmIw8/pub?output=csv",
-      "stats-container-5": "https://docs.google.com/spreadsheets/d/e/2PACX-1vExampleCSVLink/pub?output=csv" // Replace with your 5th CSV URL.
+      "stats-container-5": "https://docs.google.com/spreadsheets/d/e/2PACX-1vExampleCSVLink/pub?output=csv" // Replace with your 5th CSV URL
     };
 
-    // Function to switch visible table container
+    // Show the chosen table container, hide others
     function switchTable(containerId) {
       document.querySelectorAll('.table-container').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.pagination button').forEach(btn => btn.classList.remove('active'));
@@ -200,7 +207,7 @@
       document.getElementById("tab" + tabNum).classList.add("active");
     }
 
-    // Load CSV for each container on DOM load, then show the first table
+    // On load, fetch each CSV, then show the first container
     document.addEventListener('DOMContentLoaded', () => {
       for (const containerId in CSV_LINKS) {
         fetchAndBuildTable(CSV_LINKS[containerId], containerId);
@@ -213,35 +220,28 @@
         .then(response => response.text())
         .then(csvText => {
           const results = Papa.parse(csvText, { header: true, skipEmptyLines: true });
-          let data = results.data;
-          let fields = results.meta.fields;
-          // Remove the last column
-          fields.pop();
-          data = data.map(row => {
-            const lastField = results.meta.fields[results.meta.fields.length - 1];
-            delete row[lastField];
-            return row;
-          });
+          const data = results.data;
+          const fields = results.meta.fields; // Not removing columns now
           buildTable(fields, data, containerId);
         })
         .catch(err => console.error("Error fetching CSV:", err));
     }
 
     function buildTable(fields, data, containerId) {
-      // Create table element
+      // Create a table element
       const table = document.createElement('table');
       table.classList.add('stats-table');
       
-      // Build table head
+      // Build thead
       const thead = document.createElement('thead');
       const headRow = document.createElement('tr');
-      
-      // Rank heading
+
+      // "Rank" heading
       const rankTh = document.createElement('th');
       rankTh.classList.add('rank-col');
       rankTh.textContent = "Rank";
       headRow.appendChild(rankTh);
-      
+
       // CSV headings
       fields.forEach(f => {
         const th = document.createElement('th');
@@ -250,7 +250,7 @@
       });
       thead.appendChild(headRow);
       
-      // Build table body
+      // Build tbody
       const tbody = document.createElement('tbody');
       data.forEach((row, i) => {
         const tr = document.createElement('tr');
@@ -259,24 +259,25 @@
         const rankTd = document.createElement('td');
         rankTd.classList.add('rank-col');
         rankTd.textContent = i + 1;
-        // Apply glowing border for top 3
+        // Glowing for top 3
         if (i === 0) rankTd.classList.add('top1');
         else if (i === 1) rankTd.classList.add('top2');
         else if (i === 2) rankTd.classList.add('top3');
         tr.appendChild(rankTd);
-        
-        // Other data cells
+
+        // Data cells
         fields.forEach(f => {
           const td = document.createElement('td');
-          td.textContent = row[f] || "";
+          // Show the cell value or empty if undefined
+          td.textContent = row[f] !== undefined ? row[f] : "";
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
       });
-      
+
       table.appendChild(thead);
       table.appendChild(tbody);
-      
+
       // Insert table into container
       const container = document.getElementById(containerId);
       container.innerHTML = "";
