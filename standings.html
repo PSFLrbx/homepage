@@ -150,32 +150,32 @@
       font-size: 0.95em;
       word-wrap: break-word;
     }
-    /* Rank Cell: Contains the rank badge and team name (from TEAMS) */
+    /* Rank Cell: smaller box, smaller height */
     .rank-cell {
-      min-width: 100px;
-      min-height: 80px; /* extra height so team name appears clearly below */
+      min-width: 80px;   /* enough for the badge + text */
+      min-height: 60px;  /* less vertical space than before */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 4px;
+      gap: 3px;
     }
     .rank-badge {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 45px;
-      height: 45px;
+      width: 35px;       /* smaller badge size */
+      height: 35px;
       background: #222;
       border: 2px solid #444;
       border-radius: 6px;
       box-shadow: inset 1px 1px 2px #000;
     }
     .team-name {
-      font-size: 0.9em;
+      font-size: 0.85em;
       line-height: 1.2;
     }
-    /* Glowing borders for top ranks */
+    /* Glowing borders for top 3 ranks */
     .rank-1 {
       border-color: gold;
       animation: glowGold 2s infinite;
@@ -207,16 +207,12 @@
     .shrink {
       font-size: 0.8em;
     }
-    /* Dynamic Column Widths via colgroup:
-       - Column 1: Rank (60px)
-       - Column 2: USERS (200px)
-       - Remaining columns: 120px each
-    */
+    /* Column widths: col1 => 60px, col2 => 200px, rest => 120px */
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
-      colgroupHTML += `<col style="width:60px;" />`;
+      colgroupHTML += `<col style="width:60px;" />`;  /* rank col */
       if (filteredHeaders.length > 0) {
-        colgroupHTML += `<col style="width:200px;" />`;
+        colgroupHTML += `<col style="width:200px;" />`; /* users col */
       }
       for (let i = 1; i < filteredHeaders.length; i++) {
         colgroupHTML += `<col style="width:120px;" />`;
@@ -250,6 +246,8 @@
   <!-- Main Content -->
   <div class="main-content">
     <h2>League Standings</h2>
+
+    <!-- Pagination Controls -->
     <div class="pagination">
       <button id="prevPage">&laquo;</button>
       <span class="dot" data-index="0"></span>
@@ -259,6 +257,7 @@
       <span class="dot" data-index="4"></span>
       <button id="nextPage">&raquo;</button>
     </div>
+
     <div class="table-wrapper">
       <table class="standings-table" id="standings-table">
         <!-- Table header and body inserted dynamically -->
@@ -266,7 +265,7 @@
     </div>
   </div>
 
-  <!-- Footer (unchanged) -->
+  <!-- Footer -->
   <footer>
     <div class="footer-container">
       <div class="footer-col">
@@ -315,7 +314,7 @@
     }
 
     async function fetchCSV(url) {
-      const fullUrl = `${url}&t=${Date.now()}`;
+      const fullUrl = `${url}&t=${Date.now()}`; // cache-buster
       const response = await fetch(fullUrl);
       return response.text();
     }
@@ -341,39 +340,29 @@
       return `<span class="rank-badge">${rank}</span>`;
     }
 
-    function buildColGroup(filteredHeaders) {
-      let colgroupHTML = "<colgroup>";
-      colgroupHTML += `<col style="width:60px;" />`;
-      if (filteredHeaders.length > 0) {
-        colgroupHTML += `<col style="width:200px;" />`;
-      }
-      for (let i = 1; i < filteredHeaders.length; i++) {
-        colgroupHTML += `<col style="width:120px;" />`;
-      }
-      colgroupHTML += "</colgroup>";
-      return colgroupHTML;
-    }
-
-    // Build the table. Remove "TEAMS" from the header, but still retrieve it for the rank cell.
     function buildTable(headers, rows) {
+      // Filter out TEAMS from the displayed headers
       const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
       const colgroup = buildColGroup(filteredHeaders);
+
       let html = `${colgroup}<thead><tr>`;
-      html += `<th>RANK</th>`;
+      html += `<th>RANK</th>`;  // first col => rank cell
       filteredHeaders.forEach(h => {
         html += `<th>${h}</th>`;
       });
       html += "</tr></thead><tbody>";
+
       rows.forEach((row, idx) => {
         const rankNum = idx + 1;
-        // Fallback: Check both "TEAMS" and "Team" for the team name
+        // fallback for TEAMS or Team
         const teamName = row["TEAMS"] || row["Team"] || "";
         html += "<tr>";
-        // Rank cell: rank badge on top and team name below (using <br>)
-        html += `<td class="rank-cell">
-                   ${buildRankBadge(rankNum)}<br>
-                   <span class="team-name">${teamName}</span>
-                 </td>`;
+        html += `
+          <td class="rank-cell">
+            ${buildRankBadge(rankNum)}
+            <span class="team-name">${teamName}</span>
+          </td>
+        `;
         filteredHeaders.forEach(header => {
           const val = row[header] || "";
           html += `<td>${val}</td>`;
@@ -385,6 +374,7 @@
       fixFontScaling();
     }
 
+    // shrink big numeric values
     function fixFontScaling() {
       const cells = tableEl.querySelectorAll("td");
       cells.forEach(cell => {
@@ -407,6 +397,7 @@
       }
     }
 
+    // Pagination
     document.getElementById("prevPage").addEventListener("click", () => {
       currentIndex = (currentIndex - 1 + csvUrls.length) % csvUrls.length;
       updateTable();
@@ -422,7 +413,10 @@
       });
     });
 
+    // auto-update every 30 seconds
     setInterval(updateTable, 30000);
+
+    // initial load
     updateActiveDot();
     updateTable();
   </script>
