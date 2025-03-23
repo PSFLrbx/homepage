@@ -57,8 +57,10 @@
     /* Optional Background Container */
     #bg-container {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
       z-index: -1;
       background-size: cover;
       background-position: center;
@@ -102,26 +104,26 @@
 
     /* Table Containers: only one is visible at a time */
     .table-container {
-      display: none;         /* Hide by default */
-      min-height: 800px;     /* Larger min-height for consistent spacing */
+      display: none;         
+      min-height: 800px;     /* Larger min-height for more vertical spacing */
       margin-bottom: 40px;   /* More space below table */
     }
     .table-container.active {
-      display: block;        /* Show only the active container */
+      display: block;       
     }
 
     /* Table Styles */
     table.stats-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 0 auto;  /* Center table horizontally */
-      box-shadow: inset 3px 3px 6px #000, inset -3px -3px 6px #333; /* Stronger bevel effect */
+      margin: 0 auto;  
+      box-shadow: inset 3px 3px 6px #000, inset -3px -3px 6px #333; /* Bevel effect */
       border-radius: 5px;
       overflow: hidden;
     }
     table.stats-table th,
     table.stats-table td {
-      padding: 18px; /* More padding for spacing */
+      padding: 25px; /* Increased vertical padding for spacing */
       text-align: center;
       border-bottom: 1px solid #444;
       background-color: rgba(0,0,0,0.4);
@@ -189,13 +191,13 @@
   <div id="stats-container-5" class="table-container"></div>
 
   <script>
-    // 5 CSV links - replace with your own
+    // 5 CSV links - replace with your actual ones
     const CSV_LINKS = {
       "stats-container-1": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?output=csv",
       "stats-container-2": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpAk3lRX606aOmjB9zgpHaQzxlKc-stoJRD-1DW2UjkeDUIpgfvorq1qfedCsOEc9Zg_8Z6RxCJV9x/pub?output=csv",
       "stats-container-3": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4EemaFNDP_y7-mnuKQdES6iAoNCAKpeWD0kbDsY_geFPbttzs0umb5Ja-Xg2fu8hpIE3uhP3fXdIO/pub?output=csv",
       "stats-container-4": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuB1-17W9_4DvGrinp3ovMjspVwLlVm6sL44sQM1yZY-EttTSKCVfazjlnmaglwf_bN0Acq0XOmIw8/pub?output=csv",
-      "stats-container-5": "https://docs.google.com/spreadsheets/d/e/2PACX-1vExampleCSVLink/pub?output=csv" // Replace with your 5th CSV URL
+      "stats-container-5": "https://docs.google.com/spreadsheets/d/e/2PACX-1vExampleCSVLink/pub?output=csv" 
     };
 
     // Show the chosen table container, hide others
@@ -207,7 +209,7 @@
       document.getElementById("tab" + tabNum).classList.add("active");
     }
 
-    // On load, fetch each CSV, then show the first container
+    // On load, fetch each CSV, remove last column, then show the first container
     document.addEventListener('DOMContentLoaded', () => {
       for (const containerId in CSV_LINKS) {
         fetchAndBuildTable(CSV_LINKS[containerId], containerId);
@@ -220,8 +222,16 @@
         .then(response => response.text())
         .then(csvText => {
           const results = Papa.parse(csvText, { header: true, skipEmptyLines: true });
-          const data = results.data;
-          const fields = results.meta.fields; // Not removing columns now
+          let data = results.data;
+          let fields = results.meta.fields;
+          
+          // Remove the last column name from 'fields'
+          const removedField = fields.pop();
+          // Remove that property from each row
+          data.forEach(row => {
+            delete row[removedField];
+          });
+
           buildTable(fields, data, containerId);
         })
         .catch(err => console.error("Error fetching CSV:", err));
@@ -268,8 +278,7 @@
         // Data cells
         fields.forEach(f => {
           const td = document.createElement('td');
-          // Show the cell value or empty if undefined
-          td.textContent = row[f] !== undefined ? row[f] : "";
+          td.textContent = row[f] || "";
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
