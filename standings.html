@@ -101,7 +101,7 @@
     .player-row {
       background: rgba(0,0,0,0.5);
       box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-      /* Set a default transparent border so special borders stand out */
+      /* Default transparent border */
       border: 2px solid transparent;
     }
     .heading-cell,
@@ -141,7 +141,7 @@
 
     /* Glowing borders for top 3 rows */
     .top1 {
-      border: 2px solid gold;
+      border: 2px solid gold !important;
       animation: goldGlow 1.5s infinite alternate;
     }
     @keyframes goldGlow {
@@ -149,7 +149,7 @@
       100% { box-shadow: 0 0 20px gold; }
     }
     .top2 {
-      border: 2px solid silver;
+      border: 2px solid silver !important;
       animation: silverGlow 1.5s infinite alternate;
     }
     @keyframes silverGlow {
@@ -157,7 +157,7 @@
       100% { box-shadow: 0 0 20px silver; }
     }
     .top3 {
-      border: 2px solid #cd7f32; /* Bronze color */
+      border: 2px solid #cd7f32 !important; /* Bronze color */
       animation: bronzeGlow 1.5s infinite alternate;
     }
     @keyframes bronzeGlow {
