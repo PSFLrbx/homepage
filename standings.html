@@ -19,8 +19,9 @@
   <title>Player Stats Page</title>
   <!-- IBM Plex Sans font -->
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Papaparse for CSV parsing -->
+  <!-- PapaParse for CSV parsing -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+
   <style>
     /* Basic Reset & Body */
     * {
@@ -34,8 +35,8 @@
       color: #fff;
       min-height: 100vh;
       padding: 20px;
-      overflow-x: hidden;
       position: relative;
+      overflow-x: hidden;
     }
     /* Custom Scrollbar */
     ::-webkit-scrollbar { width: 12px; }
@@ -45,16 +46,19 @@
       border-radius: 6px;
       border: 3px solid #222;
     }
-    ::-webkit-scrollbar-thumb:hover { background-color: #aaa; }
-    html { scrollbar-width: thin; scrollbar-color: #888 #222; }
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: #aaa;
+    }
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: #888 #222;
+    }
 
     /* Optional Background Container */
     #bg-container {
       position: fixed;
-      top: 0; 
-      left: 0;
-      width: 100%; 
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: -1;
       background-size: cover;
       background-position: center;
@@ -98,79 +102,37 @@
 
     /* Table Containers: only one is visible at a time */
     .table-container {
-      display: none;       /* Hide by default */
-      min-height: 600px;   /* Ensures consistent vertical spacing */
-      margin-bottom: 20px; /* A bit of space after the table */
+      display: none;        /* Hide by default */
+      min-height: 600px;    /* Ensures consistent vertical spacing across tabs */
+      margin-bottom: 20px;  /* Some space below the table */
     }
     .table-container.active {
       display: block; /* Show only the active container */
     }
 
-    /* List/Table Styles */
-    .list-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin: 0 auto;
-      max-width: 95%;
+    /* The table itself */
+    table.stats-table {
+      width: 100%;
+      border-collapse: collapse;
     }
-    .heading-row, .player-row {
-      display: grid;
-      gap: 5px;
-      align-items: center;
+    table.stats-table th, 
+    table.stats-table td {
       padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 5px;
-      opacity: 0;
-      visibility: hidden;
       text-align: center;
+      border-bottom: 1px solid #444;
+      background-color: rgba(0,0,0,0.4);
     }
-    .heading-row {
-      background: rgba(0,0,0,0.7);
+    thead tr {
+      background-color: rgba(0,0,0,0.7);
       font-weight: bold;
     }
-    .player-row {
-      background: rgba(0,0,0,0.5);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-      border: 2px solid transparent;
-    }
-    .heading-cell, .player-cell {
-      padding: 0 10px;
-      white-space: nowrap;
-    }
-    /* Rank Column: Fixed width (50px) */
-    .heading-cell.rank-cell, .player-rank {
+    /* Optional: rank column narrower */
+    th.rank-col, td.rank-col {
       width: 50px;
       min-width: 50px;
-    }
-    .player-rank {
-      font-weight: bold;
-      background: #000;
+      background-color: #000;
       border-radius: 5px;
-      padding: 0.3em;
-    }
-
-    /* Animations for row entry */
-    @keyframes slideInDown {
-      0% { opacity: 0; transform: translateY(-50px); visibility: hidden; }
-      100% { opacity: 1; transform: translateY(0); visibility: visible; }
-    }
-    .slide-in-down {
-      animation: slideInDown 0.5s ease forwards;
-    }
-    @keyframes slideInRight {
-      0% { opacity: 0; transform: translateX(100%); visibility: hidden; }
-      100% { opacity: 1; transform: translateX(0); visibility: visible; }
-    }
-    .slide-in-right {
-      animation: slideInRight 0.5s ease forwards;
-    }
-    @keyframes slideOutLeft {
-      0% { opacity: 1; transform: translateX(0); }
-      100% { opacity: 0; transform: translateX(-100%); }
-    }
-    .slide-out-left {
-      animation: slideOutLeft 0.5s ease forwards;
+      color: #fff;
     }
 
     /* Glowing border on rank cell for top 3 */
@@ -217,57 +179,54 @@
   </div>
 
   <!-- Table Containers for Each CSV -->
-  <div id="stats-container-1" class="table-container list-container"></div>
-  <div id="stats-container-2" class="table-container list-container"></div>
-  <div id="stats-container-3" class="table-container list-container"></div>
-  <div id="stats-container-4" class="table-container list-container"></div>
-  <div id="stats-container-5" class="table-container list-container"></div>
+  <div id="stats-container-1" class="table-container"></div>
+  <div id="stats-container-2" class="table-container"></div>
+  <div id="stats-container-3" class="table-container"></div>
+  <div id="stats-container-4" class="table-container"></div>
+  <div id="stats-container-5" class="table-container"></div>
 
   <script>
-    // Define CSV links for 5 different sheets (replace with your actual CSV links)
+    // 5 CSV links - replace with your own
     const CSV_LINKS = {
       "stats-container-1": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?output=csv",
       "stats-container-2": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpAk3lRX606aOmjB9zgpHaQzxlKc-stoJRD-1DW2UjkeDUIpgfvorq1qfedCsOEc9Zg_8Z6RxCJV9x/pub?output=csv",
       "stats-container-3": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4EemaFNDP_y7-mnuKQdES6iAoNCAKpeWD0kbDsY_geFPbttzs0umb5Ja-Xg2fu8hpIE3uhP3fXdIO/pub?output=csv",
       "stats-container-4": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuB1-17W9_4DvGrinp3ovMjspVwLlVm6sL44sQM1yZY-EttTSKCVfazjlnmaglwf_bN0Acq0XOmIw8/pub?output=csv",
-      "stats-container-5": "https://docs.google.com/spreadsheets/d/e/2PACX-1vExampleCSVLink/pub?output=csv"  // Replace with your 5th CSV URL
+      "stats-container-5": "https://docs.google.com/spreadsheets/d/e/2PACX-1vExampleCSVLink/pub?output=csv"
     };
 
-    // Switch the visible table
+    // Show one container at a time
     function switchTable(containerId) {
       // Hide all containers
       document.querySelectorAll('.table-container').forEach(el => el.classList.remove('active'));
-      // Deactivate all tab buttons
+      // Remove active from all tab buttons
       document.querySelectorAll('.pagination button').forEach(btn => btn.classList.remove('active'));
-      // Show the chosen container
+      // Show chosen container
       document.getElementById(containerId).classList.add('active');
-      // Activate the corresponding tab
+      // Mark correct button as active
       const tabNum = containerId.split('-').pop(); // e.g. "stats-container-2" -> "2"
       document.getElementById("tab" + tabNum).classList.add("active");
     }
 
-    // On DOM load, fetch CSV for each container, then show the first container
+    // On load, fetch each CSV. Then show the first table by default.
     document.addEventListener('DOMContentLoaded', () => {
       for (const containerId in CSV_LINKS) {
-        fetchAndBuildList(CSV_LINKS[containerId], containerId);
+        fetchAndBuildTable(CSV_LINKS[containerId], containerId);
       }
-      // Show the first table container by default
       switchTable('stats-container-1');
     });
 
-    function fetchAndBuildList(csvLink, containerId) {
+    function fetchAndBuildTable(csvLink, containerId) {
       fetch(csvLink)
         .then(response => response.text())
         .then(csvText => {
           const results = Papa.parse(csvText, { header: true, skipEmptyLines: true });
           let data = results.data;
           let fields = results.meta.fields;
-          // Remove the last column
+          // Remove last column if needed
           fields.pop();
-          data = data.map(row => {
-            const lastField = results.meta.fields[results.meta.fields.length - 1];
-            delete row[lastField];
-            return row;
+          data.forEach(row => {
+            delete row[results.meta.fields[results.meta.fields.length - 1]];
           });
           buildTable(fields, data, containerId);
         })
@@ -275,62 +234,58 @@
     }
 
     function buildTable(fields, data, containerId) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = "";
-      if (!data || data.length === 0) return;
+      // Create a table
+      const table = document.createElement('table');
+      table.classList.add('stats-table');
 
-      // For rank column + CSV fields
-      const gridTemplate = `50px repeat(${fields.length}, 1fr)`;
+      // Build thead
+      const thead = document.createElement('thead');
+      const headRow = document.createElement('tr');
 
-      // Heading row
-      const headingRow = document.createElement("div");
-      headingRow.classList.add("heading-row", "slide-in-down");
-      headingRow.style.gridTemplateColumns = gridTemplate;
+      // "Rank" heading
+      const rankTh = document.createElement('th');
+      rankTh.classList.add('rank-col');
+      rankTh.textContent = "Rank";
+      headRow.appendChild(rankTh);
 
-      // Rank heading
-      const rankHeading = document.createElement("div");
-      rankHeading.classList.add("heading-cell", "rank-cell");
-      rankHeading.textContent = "Rank";
-      headingRow.appendChild(rankHeading);
-
-      // CSV column headings
+      // CSV headings
       fields.forEach(f => {
-        const cell = document.createElement("div");
-        cell.classList.add("heading-cell");
-        cell.textContent = f;
-        headingRow.appendChild(cell);
+        const th = document.createElement('th');
+        th.textContent = f;
+        headRow.appendChild(th);
       });
-      container.appendChild(headingRow);
+      thead.appendChild(headRow);
 
-      // Data rows
-      data.forEach((row, index) => {
-        const rowDiv = document.createElement("div");
-        rowDiv.classList.add("player-row", "slide-in-right");
-        rowDiv.style.gridTemplateColumns = gridTemplate;
-        // Stagger the animation slightly
-        rowDiv.style.animationDelay = ((index + 1) * 0.05) + "s";
-
+      // Build tbody
+      const tbody = document.createElement('tbody');
+      data.forEach((row, i) => {
+        const tr = document.createElement('tr');
         // Rank cell
-        const rankDiv = document.createElement("div");
-        rankDiv.classList.add("player-rank");
-        rankDiv.textContent = index + 1;
+        const rankTd = document.createElement('td');
+        rankTd.classList.add('rank-col');
+        rankTd.textContent = i + 1;
+        // Glow for top 3
+        if (i === 0) rankTd.classList.add('top1');
+        else if (i === 1) rankTd.classList.add('top2');
+        else if (i === 2) rankTd.classList.add('top3');
+        tr.appendChild(rankTd);
 
-        // Glowing border for top 3
-        if (index === 0) rankDiv.classList.add("top1");
-        else if (index === 1) rankDiv.classList.add("top2");
-        else if (index === 2) rankDiv.classList.add("top3");
-
-        rowDiv.appendChild(rankDiv);
-
+        // Data cells
         fields.forEach(f => {
-          const cellDiv = document.createElement("div");
-          cellDiv.classList.add("player-cell");
-          cellDiv.textContent = row[f] || "";
-          rowDiv.appendChild(cellDiv);
+          const td = document.createElement('td');
+          td.textContent = row[f] || "";
+          tr.appendChild(td);
         });
-
-        container.appendChild(rowDiv);
+        tbody.appendChild(tr);
       });
+
+      table.appendChild(thead);
+      table.appendChild(tbody);
+
+      // Insert table into the container
+      const container = document.getElementById(containerId);
+      container.innerHTML = ""; // Clear old content
+      container.appendChild(table);
     }
   </script>
 </body>
