@@ -117,27 +117,31 @@
       width: 100%;
       border-collapse: collapse;
       margin: 0 auto;  
-      box-shadow: inset 3px 3px 6px #000, inset -3px -3px 6px #333; /* Bevel effect */
+      /* 50% opacity background + stronger bevel effect */
+      background-color: rgba(0,0,0,0.5);
+      box-shadow: inset 4px 4px 8px #000, inset -4px -4px 8px #333;
       border-radius: 5px;
       overflow: hidden;
     }
     table.stats-table th,
     table.stats-table td {
-      padding: 25px; /* Increased vertical padding for spacing */
+      /* Increased vertical padding for spacing */
+      padding: 30px 25px; 
       text-align: center;
       border-bottom: 1px solid #444;
-      background-color: rgba(0,0,0,0.4);
     }
     table.stats-table thead tr {
-      background-color: rgba(0,0,0,0.7);
+      background-color: rgba(0,0,0,0.8);
       font-weight: bold;
     }
     th.rank-col, td.rank-col {
-      width: 50px;
-      min-width: 50px;
+      width: 40px;  /* narrower so it doesn't fill up the row */
+      min-width: 40px;
       background-color: #000;
-      border-radius: 5px;
       color: #fff;
+      /* bevel effect on rank cells only */
+      box-shadow: inset 2px 2px 4px #333, inset -2px -2px 4px #000;
+      border-radius: 5px;
     }
 
     /* Glowing border on rank cell for top 3 */
@@ -197,7 +201,7 @@
       "stats-container-2": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpAk3lRX606aOmjB9zgpHaQzxlKc-stoJRD-1DW2UjkeDUIpgfvorq1qfedCsOEc9Zg_8Z6RxCJV9x/pub?output=csv",
       "stats-container-3": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4EemaFNDP_y7-mnuKQdES6iAoNCAKpeWD0kbDsY_geFPbttzs0umb5Ja-Xg2fu8hpIE3uhP3fXdIO/pub?output=csv",
       "stats-container-4": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuB1-17W9_4DvGrinp3ovMjspVwLlVm6sL44sQM1yZY-EttTSKCVfazjlnmaglwf_bN0Acq0XOmIw8/pub?output=csv",
-      "stats-container-5": "https://docs.google.com/spreadsheets/d/e/2PACX-1vExampleCSVLink/pub?output=csv" 
+      "stats-container-5": "https://docs.google.com/spreadsheets/d/e/2PACX-1vExampleCSVLink/pub?output=csv"
     };
 
     // Show the chosen table container, hide others
