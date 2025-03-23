@@ -71,7 +71,10 @@
       padding: 1rem;
       margin-bottom: 1rem;
     }
-    .main-title h1 { font-size: 2rem; color: #fff; }
+    .main-title h1 {
+      font-size: 2rem;
+      color: #fff;
+    }
 
     /* Stats Table Container */
     .list-container {
@@ -82,7 +85,8 @@
       max-width: 95%;
     }
     /* Grid Rows */
-    .heading-row, .player-row {
+    .heading-row,
+    .player-row {
       display: grid;
       gap: 5px;
       align-items: center;
@@ -101,23 +105,28 @@
       background: rgba(0,0,0,0.5);
       box-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
-    .heading-cell, .player-cell {
+    .heading-cell,
+    .player-cell {
       padding: 0 10px;
       white-space: nowrap;
     }
     /* Rank Column: Fixed width (50px) */
-    .heading-cell.rank-cell, .player-rank {
+    .heading-cell.rank-cell,
+    .player-rank {
       width: 50px;
       min-width: 50px;
     }
     .player-rank {
       font-weight: bold;
-      background: #000;
+      background: #000; /* Keep the rank box black */
       border-radius: 5px;
-      padding: 0.2em;
+      position: relative;
+      z-index: 1; /* So the pseudo-element sits behind it */
+      padding: 0.3em;
+      overflow: visible;
     }
 
-    /* Animations for rows */
+    /* Animations for row entry */
     @keyframes slideInDown {
       0% { opacity: 0; transform: translateY(-50px); visibility: hidden; }
       100% { opacity: 1; transform: translateY(0); visibility: visible; }
@@ -140,46 +149,67 @@
       animation: slideOutLeft 0.5s ease forwards;
     }
 
-    /* Top 1: Gold fire texture with animated flicker */
-    .top1 {
-      background: 
-        linear-gradient(rgba(255,215,0,0.3), rgba(255,140,0,0.3)),
-        url('https://images.unsplash.com/photo-1514315217590-9312f5ca7b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
-      padding: 0.2em;
-      border-radius: 5px;
+    /* 
+      FIRE / SILVER / BRONZE BORDER 
+      We'll use a pseudo-element ::before 
+      to display an animated texture around the black rank box
+    */
+
+    /* #1: Fire Border */
+    .top1::before {
+      content: "";
+      position: absolute;
+      top: -4px; 
+      left: -4px; 
+      right: -4px; 
+      bottom: -4px;
+      border-radius: inherit;
+      z-index: -1;
+      background: url('https://images.unsplash.com/photo-1514315217590-9312f5ca7b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')
+                 center/cover no-repeat;
       animation: fireFlicker 1s infinite alternate;
     }
     @keyframes fireFlicker {
-      0% { filter: brightness(1); background-position: 0% 0%; }
-      50% { filter: brightness(1.2); background-position: 10% 10%; }
-      100% { filter: brightness(0.9); background-position: 5% 5%; }
+      0%   { filter: brightness(1);   background-position: 0%   0%; }
+      50%  { filter: brightness(1.2); background-position: 10%  10%; }
+      100% { filter: brightness(0.9); background-position: 5%   5%; }
     }
 
-    /* Top 2: Silver texture with animated flicker */
-    .top2 {
-      background:
-        linear-gradient(rgba(192,192,192,0.3), rgba(192,192,192,0.3)),
-        url('https://images.unsplash.com/photo-1604537466572-90ae7b3a81cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
-      padding: 0.2em;
-      border-radius: 5px;
+    /* #2: Silver Border */
+    .top2::before {
+      content: "";
+      position: absolute;
+      top: -4px; 
+      left: -4px; 
+      right: -4px; 
+      bottom: -4px;
+      border-radius: inherit;
+      z-index: -1;
+      background: url('https://images.unsplash.com/photo-1604537466572-90ae7b3a81cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')
+                 center/cover no-repeat;
       animation: silverFlicker 1.5s infinite alternate;
     }
     @keyframes silverFlicker {
-      0% { filter: brightness(1); background-position: 0% 0%; }
+      0%   { filter: brightness(1);   background-position: 0%  0%; }
       100% { filter: brightness(1.2); background-position: 15% 15%; }
     }
 
-    /* Top 3: Bronze texture with animated flicker */
-    .top3 {
-      background:
-        linear-gradient(rgba(205,127,50,0.3), rgba(205,127,50,0.3)),
-        url('https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
-      padding: 0.2em;
-      border-radius: 5px;
+    /* #3: Bronze Border */
+    .top3::before {
+      content: "";
+      position: absolute;
+      top: -4px; 
+      left: -4px; 
+      right: -4px; 
+      bottom: -4px;
+      border-radius: inherit;
+      z-index: -1;
+      background: url('https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')
+                 center/cover no-repeat;
       animation: bronzeFlicker 1.5s infinite alternate;
     }
     @keyframes bronzeFlicker {
-      0% { filter: brightness(1); background-position: 0% 0%; }
+      0%   { filter: brightness(1);   background-position: 0%  0%; }
       100% { filter: brightness(1.2); background-position: 10% 10%; }
     }
   </style>
@@ -195,7 +225,7 @@
   
   <!-- Stats Table Container -->
   <div class="list-container" id="stats-container">
-    <!-- Table rows (heading and data) will be inserted here by JS -->
+    <!-- The table rows (heading and data) will be inserted here by JS -->
   </div>
 
   <script>
@@ -231,9 +261,9 @@
       const container = document.getElementById(containerId);
       container.innerHTML = "";
 
-      // Total columns: 1 (for rank) + number of CSV fields (last removed)
+      // Total columns: 1 (for rank) + number of CSV fields
       const colCount = fields.length + 1;
-      // First column fixed at 50px, the rest equal
+      // First column fixed at 50px, the rest equally share the space
       const gridTemplate = `50px repeat(${fields.length}, 1fr)`;
 
       // Create heading row
@@ -241,7 +271,7 @@
       headingRow.classList.add("heading-row", "slide-in-down");
       headingRow.style.gridTemplateColumns = gridTemplate;
 
-      // Rank header cell
+      // Rank heading
       const rankHeading = document.createElement("div");
       rankHeading.classList.add("heading-cell", "rank-cell");
       rankHeading.textContent = "Rank";
@@ -268,7 +298,7 @@
         rankDiv.classList.add("player-rank");
         rankDiv.textContent = index + 1;
 
-        // Add animated fire/metal effects for top 3 ranks
+        // Fire border for #1, silver for #2, bronze for #3
         if (index === 0) {
           rankDiv.classList.add("top1");
         } else if (index === 1) {
