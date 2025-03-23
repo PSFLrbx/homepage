@@ -118,12 +118,9 @@
     }
     .player-rank {
       font-weight: bold;
-      background: #000; /* Keep the rank box black */
+      background: #000; 
       border-radius: 5px;
-      position: relative;
-      z-index: 1; /* So the pseudo-element sits behind it */
       padding: 0.3em;
-      overflow: visible;
     }
 
     /* Animations for row entry */
@@ -149,68 +146,30 @@
       animation: slideOutLeft 0.5s ease forwards;
     }
 
-    /* 
-      FIRE / SILVER / BRONZE BORDER 
-      We'll use a pseudo-element ::before 
-      to display an animated texture around the black rank box
-    */
-
-    /* #1: Fire Border */
-    .top1::before {
-      content: "";
-      position: absolute;
-      top: -4px; 
-      left: -4px; 
-      right: -4px; 
-      bottom: -4px;
-      border-radius: inherit;
-      z-index: -1;
-      background: url('https://images.unsplash.com/photo-1514315217590-9312f5ca7b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')
-                 center/cover no-repeat;
-      animation: fireFlicker 1s infinite alternate;
+    /* GLOWING GOLD, SILVER, BRONZE BORDERS FOR ENTIRE ROW */
+    .top1 {
+      border: 2px solid gold;
+      animation: goldGlow 1.5s infinite alternate;
     }
-    @keyframes fireFlicker {
-      0%   { filter: brightness(1);   background-position: 0%   0%; }
-      50%  { filter: brightness(1.2); background-position: 10%  10%; }
-      100% { filter: brightness(0.9); background-position: 5%   5%; }
+    @keyframes goldGlow {
+      0% { box-shadow: 0 0 6px gold; }
+      100% { box-shadow: 0 0 20px gold; }
     }
-
-    /* #2: Silver Border */
-    .top2::before {
-      content: "";
-      position: absolute;
-      top: -4px; 
-      left: -4px; 
-      right: -4px; 
-      bottom: -4px;
-      border-radius: inherit;
-      z-index: -1;
-      background: url('https://images.unsplash.com/photo-1604537466572-90ae7b3a81cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')
-                 center/cover no-repeat;
-      animation: silverFlicker 1.5s infinite alternate;
+    .top2 {
+      border: 2px solid silver;
+      animation: silverGlow 1.5s infinite alternate;
     }
-    @keyframes silverFlicker {
-      0%   { filter: brightness(1);   background-position: 0%  0%; }
-      100% { filter: brightness(1.2); background-position: 15% 15%; }
+    @keyframes silverGlow {
+      0% { box-shadow: 0 0 6px silver; }
+      100% { box-shadow: 0 0 20px silver; }
     }
-
-    /* #3: Bronze Border */
-    .top3::before {
-      content: "";
-      position: absolute;
-      top: -4px; 
-      left: -4px; 
-      right: -4px; 
-      bottom: -4px;
-      border-radius: inherit;
-      z-index: -1;
-      background: url('https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')
-                 center/cover no-repeat;
-      animation: bronzeFlicker 1.5s infinite alternate;
+    .top3 {
+      border: 2px solid #cd7f32; /* Bronze color */
+      animation: bronzeGlow 1.5s infinite alternate;
     }
-    @keyframes bronzeFlicker {
-      0%   { filter: brightness(1);   background-position: 0%  0%; }
-      100% { filter: brightness(1.2); background-position: 10% 10%; }
+    @keyframes bronzeGlow {
+      0% { box-shadow: 0 0 6px #cd7f32; }
+      100% { box-shadow: 0 0 20px #cd7f32; }
     }
   </style>
 </head>
@@ -297,17 +256,16 @@
         const rankDiv = document.createElement("div");
         rankDiv.classList.add("player-rank");
         rankDiv.textContent = index + 1;
-
-        // Fire border for #1, silver for #2, bronze for #3
-        if (index === 0) {
-          rankDiv.classList.add("top1");
-        } else if (index === 1) {
-          rankDiv.classList.add("top2");
-        } else if (index === 2) {
-          rankDiv.classList.add("top3");
-        }
-
         rowDiv.appendChild(rankDiv);
+
+        // Apply gold/silver/bronze glow to entire row for top 3
+        if (index === 0) {
+          rowDiv.classList.add("top1");
+        } else if (index === 1) {
+          rowDiv.classList.add("top2");
+        } else if (index === 2) {
+          rowDiv.classList.add("top3");
+        }
 
         // Create a cell for each CSV field
         fields.forEach(f => {
