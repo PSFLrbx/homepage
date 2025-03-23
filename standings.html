@@ -2,19 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Standings | PSFL</title>
-  <meta property="og:title" content="PSFL Standings" />
-  <meta property="og:description" content="Check your team's standing in the PSFL ro-football league." />
-  <meta property="og:image" content="logo.png" />
-  <meta property="og:url" content="https://psflrbx.github.io/homepage/standings.html" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:title" content="PSFL Standings"/>
+  <meta property="og:description" content="Check your team's standing in the PSFL ro-football league."/>
+  <meta property="og:image" content="logo.png"/>
+  <meta property="og:url" content="https://psflrbx.github.io/homepage/standings.html"/>
+  <meta name="twitter:card" content="summary_large_image"/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+
   <style>
-    /* Global Styles */
+    /* Global Reset & Body */
     * {
-      margin: 0;
-      padding: 0;
+      margin: 0; 
+      padding: 0; 
       box-sizing: border-box;
     }
     body {
@@ -23,6 +24,8 @@
       color: #fff;
       line-height: 1.6;
     }
+
+    /* Links */
     a {
       color: orange;
       text-decoration: none;
@@ -31,6 +34,7 @@
     a:hover {
       color: #ffb84d;
     }
+
     /* Header */
     header {
       background-color: #222;
@@ -69,6 +73,7 @@
       background-color: #333;
       color: #fff;
     }
+
     /* Main Content */
     .main-content {
       padding: 40px 20px;
@@ -80,24 +85,26 @@
       font-size: 2em;
       margin-bottom: 20px;
     }
-    /* Table Wrapper */
+
+    /* Table Wrapper: 95% width */
     .table-wrapper {
-      width: 95vw; /* 95% of the viewport width */
+      width: 95%;
       margin: 0 auto;
-      overflow-x: auto;
+      overflow-x: auto; 
       border-radius: 8px;
       background-color: #111;
     }
-    /* Standings Table */
-    .standings-table {
+
+    /* Table */
+    table {
       width: 100%;
       border-collapse: collapse;
-      table-layout: fixed; /* ensures columns stretch to fill width */
+      table-layout: fixed; /* Ensures columns stretch evenly */
     }
-    .standings-table thead {
+    thead {
       background-color: #222;
     }
-    .standings-table thead th {
+    thead th {
       padding: 15px;
       text-align: left;
       font-size: 1em;
@@ -105,21 +112,22 @@
       letter-spacing: 1px;
       border-bottom: 2px solid #444;
     }
-    .standings-table tbody tr {
+    tbody tr {
       transition: background 0.2s ease;
     }
-    .standings-table tbody tr:nth-child(even) {
+    tbody tr:nth-child(even) {
       background-color: #1a1a1a;
     }
-    .standings-table tbody tr:hover {
+    tbody tr:hover {
       background-color: #333;
     }
-    .standings-table td {
+    td {
       padding: 15px;
       border-bottom: 1px solid #444;
       font-size: 0.95em;
-      word-wrap: break-word; /* helps wrap long text if needed */
+      word-wrap: break-word;
     }
+
     /* Footer */
     footer {
       background-color: #222;
@@ -180,6 +188,7 @@
       background: url('discord.png') no-repeat center center;
       background-size: cover;
     }
+
     /* Responsive */
     @media (max-width: 900px) {
       .main-content {
@@ -213,11 +222,9 @@
   <!-- Main Content -->
   <div class="main-content">
     <h2>League Standings</h2>
-
-    <!-- Table Wrapper -->
     <div class="table-wrapper">
-      <table class="standings-table" id="standings-table">
-        <!-- Table header and body will be generated dynamically -->
+      <table id="standings-table">
+        <!-- Table header/body inserted dynamically -->
       </table>
     </div>
   </div>
@@ -251,38 +258,40 @@
   </footer>
 
   <script>
-    // Single CSV link
-    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-EXAMPLE/pub?output=csv";
+    // Your single CSV link:
+    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv";
 
-    // Reference to the table element
     const tableEl = document.getElementById("standings-table");
 
-    // Always fetch fresh CSV (no localStorage caching)
+    // Always fetch fresh CSV
     async function fetchCSV(url) {
-      // Append a random query param to bust any browser cache
+      // Append a random query param to bust browser cache
       const fullUrl = url + `&t=${Date.now()}`;
       const response = await fetch(fullUrl);
       return response.text();
     }
 
-    // Simple CSV parser (assumes no commas inside fields)
+    // Simple CSV parser (ignoring the last column)
     function parseCSV(text) {
       const lines = text.trim().split("\n");
       if (lines.length < 2) {
         return { headers: [], data: [] };
       }
       const header = lines[0].split(",");
+      // ignoring the last column
       const headers = header.slice(0, header.length - 1).map(h => h.trim());
       const data = lines.slice(1).map(line => {
         const values = line.split(",").slice(0, header.length - 1).map(v => v.trim());
         const rowObj = {};
-        headers.forEach((h, i) => rowObj[h] = values[i]);
+        headers.forEach((h, i) => {
+          rowObj[h] = values[i];
+        });
         return rowObj;
       });
       return { headers, data };
     }
 
-    // Build the standings table
+    // Build the table
     function buildTable(headers, rows) {
       let html = "<thead><tr>";
       headers.forEach(header => {
@@ -292,7 +301,7 @@
       rows.forEach(row => {
         html += "<tr>";
         headers.forEach(header => {
-          html += `<td>${row[header]}</td>`;
+          html += `<td>${row[header] ?? ""}</td>`;
         });
         html += "</tr>";
       });
@@ -300,14 +309,14 @@
       tableEl.innerHTML = html;
     }
 
-    // Fetch the CSV and build table
+    // Load data and update table
     async function updateTable() {
       try {
         const csvText = await fetchCSV(csvUrl);
         const { headers, data } = parseCSV(csvText);
         buildTable(headers, data);
-      } catch (error) {
-        console.error("Error updating table:", error);
+      } catch (err) {
+        console.error("Error loading CSV:", err);
         tableEl.innerHTML = "<thead><tr><th>Error</th></tr></thead><tbody><tr><td>Failed to load data</td></tr></tbody>";
       }
     }
