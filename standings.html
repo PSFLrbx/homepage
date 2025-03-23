@@ -13,8 +13,8 @@
   <style>
     /* Global Reset & Body */
     * {
-      margin: 0; 
-      padding: 0; 
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
     body {
@@ -31,7 +31,6 @@
     a:hover {
       color: #ffb84d;
     }
-
     /* Header */
     header {
       background-color: #222;
@@ -70,7 +69,6 @@
       background-color: #333;
       color: #fff;
     }
-
     /* Main Content */
     .main-content {
       padding: 40px 20px;
@@ -82,7 +80,6 @@
       font-size: 2em;
       margin-bottom: 20px;
     }
-
     /* Pagination Controls */
     .pagination {
       text-align: center;
@@ -113,7 +110,6 @@
     .pagination .dot.active {
       background-color: orange;
     }
-
     /* Table Wrapper */
     .table-wrapper {
       width: 85vw; /* 85% of viewport width */
@@ -122,7 +118,6 @@
       border-radius: 8px;
       background-color: #111;
     }
-
     /* Standings Table */
     .standings-table {
       width: 100%;
@@ -155,9 +150,7 @@
       font-size: 0.95em;
       word-wrap: break-word;
     }
-
-    /* Rank Cell: Contains the rank badge and team name.
-       The team name is shown immediately below the badge with one line break. */
+    /* Rank Cell: Contains the rank badge and team name */
     .rank-cell {
       min-width: 80px;
       min-height: 60px;
@@ -165,7 +158,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
+      gap: 2px;
     }
     .rank-badge {
       display: flex;
@@ -182,14 +175,14 @@
       font-size: 0.85em;
       line-height: 1.2;
     }
-    /* Top 3 Rank Glow Effects */
+    /* Glow Effects for Top 3 Ranks */
     .rank-1 {
       border-color: gold;
       animation: glowGold 2s infinite;
     }
     @keyframes glowGold {
-      0%   { box-shadow: 0 0 5px gold; }
-      50%  { box-shadow: 0 0 15px gold; }
+      0% { box-shadow: 0 0 5px gold; }
+      50% { box-shadow: 0 0 15px gold; }
       100% { box-shadow: 0 0 5px gold; }
     }
     .rank-2 {
@@ -197,8 +190,8 @@
       animation: glowSilver 2s infinite;
     }
     @keyframes glowSilver {
-      0%   { box-shadow: 0 0 5px silver; }
-      50%  { box-shadow: 0 0 15px silver; }
+      0% { box-shadow: 0 0 5px silver; }
+      50% { box-shadow: 0 0 15px silver; }
       100% { box-shadow: 0 0 5px silver; }
     }
     .rank-3 {
@@ -206,34 +199,31 @@
       animation: glowBronze 2s infinite;
     }
     @keyframes glowBronze {
-      0%   { box-shadow: 0 0 5px #cd7f32; }
-      50%  { box-shadow: 0 0 15px #cd7f32; }
+      0% { box-shadow: 0 0 5px #cd7f32; }
+      50% { box-shadow: 0 0 15px #cd7f32; }
       100% { box-shadow: 0 0 5px #cd7f32; }
     }
-
     /* Font-scaling for large numeric values */
     .shrink {
       font-size: 0.8em;
     }
-
     /* Dynamic Column Widths via colgroup:
          - Column 1 (RANK): 60px
          - Column 2 (USERS): 200px
-         - Remaining: 120px each
+         - Remaining columns: 120px each
     */
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
-      colgroupHTML += '<col style="width:60px;" />';
+      colgroupHTML += `<col style="width:60px;" />`;
       if (filteredHeaders.length > 0) {
-        colgroupHTML += '<col style="width:200px;" />';
+        colgroupHTML += `<col style="width:200px;" />`;
       }
       for (let i = 1; i < filteredHeaders.length; i++) {
-        colgroupHTML += '<col style="width:120px;" />';
+        colgroupHTML += `<col style="width:120px;" />`;
       }
       colgroupHTML += "</colgroup>";
       return colgroupHTML;
     }
-
     @media (max-width: 900px) {
       .main-content { padding: 20px; }
       .table-wrapper { width: 100%; }
@@ -276,7 +266,7 @@
     </div>
   </div>
 
-  <!-- Footer (exactly as in rulebook.html) -->
+  <!-- Footer (exact copy from rulebook.html) -->
   <footer>
     <div class="footer-container">
       <div class="footer-col">
@@ -365,7 +355,7 @@
     }
 
     function buildTable(headers, rows) {
-      // Remove "TEAMS" from the header display but still use its data
+      // Remove "TEAMS" from the displayed headers, but use its data in rank cell.
       const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
       const colgroup = buildColGroup(filteredHeaders);
       let html = `${colgroup}<thead><tr>`;
