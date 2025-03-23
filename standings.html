@@ -1,1 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Standings | PSFL</title>
+  <meta property="og:title" content="PSFL Standings" />
+  <meta property="og:description" content="Check your team's standing in the PSFL ro-football league." />
+  <meta property="og:image" content="logo.png" />
+  <meta property="og:url" content="https://psflrbx.github.io/homepage/standings.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+  <style>
+    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background-color: #111;
+      color: #fff;
+      line-height: 1.6;
+    }
+    a {
+      color: orange;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #ffb84d;
+    }
+    /* Header */
+    header {
+      background-color: #222;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .branding {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo img {
+      width: 60px;
+    }
+    header h1 {
+      font-size: 2em;
+      margin: 0;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    nav ul li a {
+      color: #ccc;
+      font-size: 1em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background 0.3s ease;
+    }
+    nav ul li a:hover {
+      background-color: #333;
+      color: #fff;
+    }
+    /* Layout */
+    .container {
+      display: flex;
+      min-height: 80vh;
+    }
+    .sidebar {
+      background-color: #131313;
+      width: 250px;
+      padding: 20px;
+      border-right: 2px solid #333;
+    }
+    .sidebar h2 {
+      margin-bottom: 20px;
+      font-size: 1.3em;
+    }
+    .sidebar ul {
+      list-style: none;
+    }
+    .sidebar ul li {
+      margin-bottom: 10px;
+    }
+    .sidebar ul li a {
+      color: #ccc;
+      font-size: 0.95em;
+      display: inline-block;
+      padding: 6px 0;
+    }
+    .sidebar ul li a:hover {
+      color: #fff;
+    }
+    .main-content {
+      flex: 1;
+      padding: 40px 20px;
+      background-color: #111;
+    }
+    .main-content h2 {
+      font-size: 2em;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    /* Standings Table */
+    .standings-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 auto 20px;
+      max-width: 800px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      overflow: hidden;
+      border-radius: 8px;
+    }
+    .standings-table thead {
+      background-color: #222;
+    }
+    .standings-table thead th {
+      padding: 15px;
+      text-align: left;
+      font-size: 1em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 2px solid #444;
+    }
+    .standings-table tbody tr {
+      transition: background 0.2s ease;
+    }
+    .standings-table tbody tr:nth-child(even) {
+      background-color: #1a1a1a;
+    }
+    .standings-table tbody tr:hover {
+      background-color: #333;
+    }
+    .standings-table td {
+      padding: 15px;
+      border-bottom: 1px solid #444;
+      font-size: 0.95em;
+    }
+    /* Pagination Controls */
+    .pagination {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .pagination button {
+      background: none;
+      border: none;
+      color: orange;
+      font-size: 1.5em;
+      cursor: pointer;
+      margin: 0 10px;
+      transition: color 0.3s ease;
+    }
+    .pagination button:hover {
+      color: #ffb84d;
+    }
+    .pagination .dot {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      background-color: #444;
+      border-radius: 50%;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .pagination .dot.active {
+      background-color: orange;
+    }
+    /* Footer */
+    footer {
+      background-color: #222;
+      text-align: center;
+      padding: 30px 0;
+    }
+    .footer-container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+    }
+    .footer-col h4 {
+      margin-bottom: 15px;
+      font-size: 1.2em;
+      color: #fff;
+    }
+    .footer-col ul {
+      list-style: none;
+    }
+    .footer-col ul li {
+      margin-bottom: 8px;
+    }
+    .footer-col ul li a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .footer-col ul li a:hover {
+      color: orange;
+    }
+    .social-icons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .icon {
+      width: 40px;
+      height: 40px;
+      background: #444;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.2em;
+      transition: background 0.3s ease;
+      position: relative;
+    }
+    .icon:hover {
+      background: #666;
+    }
+    .icon-discord {
+      background: url('discord.png') no-repeat center center;
+      background-size: cover;
+    }
+    /* Responsive */
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 2px solid #333;
+      }
+      .main-content {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="branding">
+      <div class="logo">
+        <img src="logo.png" alt="PSFL Logo">
+      </div>
+      <h1>PSFL</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="homepage.html">Home</a></li>
+        <li><a href="stats.html">Stats</a></li>
+        <li><a href="rulebook.html">Rulebook</a></li>
+        <li><a href="credits.html">Credits</a></li>
+      </ul>
+    </nav>
+  </header>
 
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>PSFL Info</h2>
+      <ul>
+        <li><a href="https://discord.gg/psfl" target="_blank">Join Discord</a></li>
+        <li><a href="stats.html">View Stats</a></li>
+        <li><a href="rulebook.html">Read Rulebook</a></li>
+        <li><a href="credits.html">Meet the Team</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <h2>League Standings</h2>
+      <table class="standings-table" id="standings-table">
+        <!-- Table header and body will be generated dynamically -->
+      </table>
+
+      <!-- Pagination Controls -->
+      <div class="pagination">
+        <button id="prevPage">&laquo;</button>
+        <!-- Pagination dots for QB, WR, TE, DB, DE -->
+        <span class="dot" data-pos="QB"></span>
+        <span class="dot" data-pos="WR"></span>
+        <span class="dot" data-pos="TE"></span>
+        <span class="dot" data-pos="DB"></span>
+        <span class="dot" data-pos="DE"></span>
+        <button id="nextPage">&raquo;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4>Quicklinks</h4>
+        <ul>
+          <li><a href="homepage.html">Home</a></li>
+          <li><a href="standings.html">Standings</a></li>
+          <li><a href="rulebook.html">Rulebook</a></li>
+          <li><a href="credits.html">Credits</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Discord</h4>
+        <div class="social-icons">
+          <a href="https://discord.gg/psfl" class="icon icon-discord"></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Credits</h4>
+        <ul>
+          <li>@ps9lu (psyklu)</li>
+          <li>@siyazof (495BC)</li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Set your Google Sheets CSV link here
+    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-EXAMPLE/pub?output=csv";
+
+    // Define the positions order for pagination
+    const positions = ["QB", "WR", "TE", "DB", "DE"];
+    let currentPosIndex = 0;
+    const dots = document.querySelectorAll(".pagination .dot");
+    const tableEl = document.getElementById("standings-table");
+
+    // Mark active dot
+    function updateActiveDot() {
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle("active", idx === currentPosIndex);
+      });
+    }
+
+    // Fetch and parse CSV
+    async function fetchCSV(url) {
+      const response = await fetch(url);
+      const csvText = await response.text();
+      return parseCSV(csvText);
+    }
+
+    // Simple CSV parser (assumes no commas inside fields)
+    function parseCSV(text) {
+      const lines = text.trim().split("\n");
+      const header = lines[0].split(",");
+      // Ignore the last column of header
+      const headers = header.slice(0, header.length - 1).map(h => h.trim());
+      const data = lines.slice(1).map(line => {
+        const values = line.split(",").slice(0, header.length - 1).map(v => v.trim());
+        const rowObj = {};
+        headers.forEach((h, i) => rowObj[h] = values[i]);
+        return rowObj;
+      });
+      return { headers, data };
+    }
+
+    // Build table: expects the data rows for the current position
+    function buildTable(headers, rows) {
+      let html = "<thead><tr>";
+      headers.forEach(header => {
+        html += `<th>${header}</th>`;
+      });
+      html += "</tr></thead><tbody>";
+      rows.forEach(row => {
+        html += "<tr>";
+        headers.forEach(header => {
+          html += `<td>${row[header]}</td>`;
+        });
+        html += "</tr>";
+      });
+      html += "</tbody>";
+      tableEl.innerHTML = html;
+    }
+
+    // Filter data for the given position
+    function filterByPosition(data, pos) {
+      // Assuming there is a column named "Position" (adjust if needed)
+      return data.filter(row => row["Position"] === pos);
+    }
+
+    let csvHeaders = [];
+    let csvData = [];
+
+    // Load CSV and then show table for current position
+    async function loadData() {
+      try {
+        const { headers, data } = await fetchCSV(csvUrl);
+        csvHeaders = headers;
+        csvData = data;
+        updateTable();
+      } catch (error) {
+        console.error("Error loading CSV:", error);
+        tableEl.innerHTML = "<tr><td colspan='100%'>Failed to load data.</td></tr>";
+      }
+    }
+
+    // Update table based on current position pagination
+    function updateTable() {
+      const pos = positions[currentPosIndex];
+      const filtered = filterByPosition(csvData, pos);
+      buildTable(csvHeaders, filtered);
+      updateActiveDot();
+    }
+
+    // Pagination arrow event listeners
+    document.getElementById("prevPage").addEventListener("click", () => {
+      currentPosIndex = (currentPosIndex - 1 + positions.length) % positions.length;
+      updateTable();
+    });
+    document.getElementById("nextPage").addEventListener("click", () => {
+      currentPosIndex = (currentPosIndex + 1) % positions.length;
+      updateTable();
+    });
+
+    // Dot click event listeners
+    dots.forEach((dot, idx) => {
+      dot.addEventListener("click", () => {
+        currentPosIndex = idx;
+        updateTable();
+      });
+    });
+
+    // Initialize active dot and load CSV data
+    updateActiveDot();
+    loadData();
+  </script>
+</body>
+</html>
