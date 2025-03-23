@@ -301,7 +301,6 @@
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTlOIuefJ8umKaeWiW1yZfIr02xKIJqLpc-oFV0RgMXWY1gpF-2Kz-BafD9cdEEMK7kZzO1V0pM-U-O/pub?gid=0&single=true&output=csv"
     ];
 
-    // Turn off localStorage caching to ensure fresh data each time
     let currentIndex = 0;
     const dots = document.querySelectorAll(".pagination .dot");
     const tableEl = document.getElementById("standings-table");
@@ -316,12 +315,12 @@
     // Always fetch fresh CSV (no localStorage caching)
     async function fetchCSV(url) {
       // Append a random query param to bust any browser cache
-      const fullUrl = url + &t=${Date.now()};
+      const fullUrl = `${url}&t=${Date.now()}`;
       const response = await fetch(fullUrl);
       return response.text();
     }
 
-    // Simple CSV parser (assumes no commas inside fields)
+    // Simple CSV parser (ignores the last column)
     function parseCSV(text) {
       const lines = text.trim().split("\n");
       if (lines.length < 2) {
@@ -332,7 +331,9 @@
       const data = lines.slice(1).map(line => {
         const values = line.split(",").slice(0, header.length - 1).map(v => v.trim());
         const rowObj = {};
-        headers.forEach((h, i) => rowObj[h] = values[i]);
+        headers.forEach((h, i) => {
+          rowObj[h] = values[i];
+        });
         return rowObj;
       });
       return { headers, data };
@@ -342,13 +343,13 @@
     function buildTable(headers, rows) {
       let html = "<thead><tr>";
       headers.forEach(header => {
-        html += <th>${header}</th>;
+        html += `<th>${header}</th>`;
       });
       html += "</tr></thead><tbody>";
       rows.forEach(row => {
         html += "<tr>";
         headers.forEach(header => {
-          html += <td>${row[header]}</td>;
+          html += `<td>${row[header]}</td>`;
         });
         html += "</tr>";
       });
