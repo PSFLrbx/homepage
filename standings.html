@@ -13,8 +13,8 @@
   <style>
     /* Global Reset & Body */
     * {
-      margin: 0;
-      padding: 0;
+      margin: 0; 
+      padding: 0; 
       box-sizing: border-box;
     }
     body {
@@ -31,6 +31,7 @@
     a:hover {
       color: #ffb84d;
     }
+
     /* Header */
     header {
       background-color: #222;
@@ -69,6 +70,7 @@
       background-color: #333;
       color: #fff;
     }
+
     /* Main Content */
     .main-content {
       padding: 40px 20px;
@@ -80,6 +82,7 @@
       font-size: 2em;
       margin-bottom: 20px;
     }
+
     /* Pagination Controls */
     .pagination {
       text-align: center;
@@ -110,6 +113,7 @@
     .pagination .dot.active {
       background-color: orange;
     }
+
     /* Table Wrapper */
     .table-wrapper {
       width: 85vw; /* 85% of viewport width */
@@ -118,6 +122,7 @@
       border-radius: 8px;
       background-color: #111;
     }
+
     /* Standings Table */
     .standings-table {
       width: 100%;
@@ -150,7 +155,9 @@
       font-size: 0.95em;
       word-wrap: break-word;
     }
-    /* Rank Cell: Contains the rank badge and team name (from CSV "TEAMS") */
+
+    /* Rank Cell: Contains the rank badge and team name.
+       The team name is shown immediately below the badge with one line break. */
     .rank-cell {
       min-width: 80px;
       min-height: 60px;
@@ -175,14 +182,14 @@
       font-size: 0.85em;
       line-height: 1.2;
     }
-    /* Glow effects for top 3 ranks */
+    /* Top 3 Rank Glow Effects */
     .rank-1 {
       border-color: gold;
       animation: glowGold 2s infinite;
     }
     @keyframes glowGold {
-      0% { box-shadow: 0 0 5px gold; }
-      50% { box-shadow: 0 0 15px gold; }
+      0%   { box-shadow: 0 0 5px gold; }
+      50%  { box-shadow: 0 0 15px gold; }
       100% { box-shadow: 0 0 5px gold; }
     }
     .rank-2 {
@@ -190,8 +197,8 @@
       animation: glowSilver 2s infinite;
     }
     @keyframes glowSilver {
-      0% { box-shadow: 0 0 5px silver; }
-      50% { box-shadow: 0 0 15px silver; }
+      0%   { box-shadow: 0 0 5px silver; }
+      50%  { box-shadow: 0 0 15px silver; }
       100% { box-shadow: 0 0 5px silver; }
     }
     .rank-3 {
@@ -199,14 +206,16 @@
       animation: glowBronze 2s infinite;
     }
     @keyframes glowBronze {
-      0% { box-shadow: 0 0 5px #cd7f32; }
-      50% { box-shadow: 0 0 15px #cd7f32; }
+      0%   { box-shadow: 0 0 5px #cd7f32; }
+      50%  { box-shadow: 0 0 15px #cd7f32; }
       100% { box-shadow: 0 0 5px #cd7f32; }
     }
-    /* Font-scaling for long numbers */
+
+    /* Font-scaling for large numeric values */
     .shrink {
       font-size: 0.8em;
     }
+
     /* Dynamic Column Widths via colgroup:
          - Column 1 (RANK): 60px
          - Column 2 (USERS): 200px
@@ -214,16 +223,17 @@
     */
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
-      colgroupHTML += `<col style="width:60px;" />`;
+      colgroupHTML += '<col style="width:60px;" />';
       if (filteredHeaders.length > 0) {
-        colgroupHTML += `<col style="width:200px;" />`;
+        colgroupHTML += '<col style="width:200px;" />';
       }
       for (let i = 1; i < filteredHeaders.length; i++) {
-        colgroupHTML += `<col style="width:120px;" />`;
+        colgroupHTML += '<col style="width:120px;" />';
       }
       colgroupHTML += "</colgroup>";
       return colgroupHTML;
     }
+
     @media (max-width: 900px) {
       .main-content { padding: 20px; }
       .table-wrapper { width: 100%; }
@@ -295,7 +305,7 @@
   </footer>
 
   <script>
-    // CSV links for each page (QB, WR, TE, DB, DE)
+    // CSV links for 5 pages (QB, WR, TE, DB, DE)
     const csvUrls = [
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
@@ -315,7 +325,7 @@
     }
 
     async function fetchCSV(url) {
-      const fullUrl = `${url}&t=${Date.now()}`;
+      const fullUrl = `${url}&t=${Date.now()}`; // cache-buster
       const response = await fetch(fullUrl);
       return response.text();
     }
@@ -324,7 +334,6 @@
       const lines = text.trim().split("\n");
       if (lines.length < 2) return { headers: [], data: [] };
       const header = lines[0].split(",");
-      // remove last column
       const headers = header.slice(0, header.length - 1).map(h => h.trim());
       const data = lines.slice(1).map(line => {
         const values = line.split(",").slice(0, header.length - 1).map(v => v.trim());
@@ -344,30 +353,29 @@
 
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
-      colgroupHTML += `<col style="width:60px;" />`;
+      colgroupHTML += '<col style="width:60px;" />';
       if (filteredHeaders.length > 0) {
-        colgroupHTML += `<col style="width:200px;" />`;
+        colgroupHTML += '<col style="width:200px;" />';
       }
       for (let i = 1; i < filteredHeaders.length; i++) {
-        colgroupHTML += `<col style="width:120px;" />`;
+        colgroupHTML += '<col style="width:120px;" />';
       }
       colgroupHTML += "</colgroup>";
       return colgroupHTML;
     }
 
     function buildTable(headers, rows) {
-      // Remove TEAMS from header display
+      // Remove "TEAMS" from the header display but still use its data
       const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
       const colgroup = buildColGroup(filteredHeaders);
       let html = `${colgroup}<thead><tr>`;
-      html += `<th>RANK</th>`;
+      html += '<th>RANK</th>';
       filteredHeaders.forEach(h => {
         html += `<th>${h}</th>`;
       });
       html += "</tr></thead><tbody>";
       rows.forEach((row, idx) => {
         const rankNum = idx + 1;
-        // Fallback for team name from TEAMS or Team column
         const teamName = row["TEAMS"] || row["Team"] || "";
         html += "<tr>";
         html += `<td class="rank-cell">
