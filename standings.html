@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Standings | PSFL</title>
   <meta property="og:title" content="PSFL Standings" />
   <meta property="og:description" content="Check your team's standing in the PSFL ro-football league." />
@@ -118,7 +118,6 @@
       border-radius: 8px;
       background-color: #111;
     }
-    /* We'll generate a <colgroup> to control column widths */
     .standings-table {
       width: 100%;
       border-collapse: collapse;
@@ -150,21 +149,27 @@
       font-size: 0.95em;
       word-wrap: break-word;
     }
-    /* Rank Cell merges rank badge + TEAMS name */
+
+    /* Rank Cell merges rank badge + TEAMS name with extra vertical space */
     .rank-cell {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      justify-content: start; /* place rank at top, team below */
+      gap: 8px;
+      min-height: 80px; /* extra vertical space */
     }
+    .team-name {
+      font-size: 0.9em;
+      line-height: 1.2;
+    }
+
     .rank-badge {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 45px;
       height: 45px;
-      font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 1em;
       background: #222;
       border: 2px solid #444;
       border-radius: 6px;
@@ -197,10 +202,12 @@
       50%  { box-shadow: 0 0 15px #cd7f32; }
       100% { box-shadow: 0 0 5px #cd7f32; }
     }
+
     /* Font-scaling for large numeric values */
     .shrink {
       font-size: 0.8em;
     }
+
     /* Footer */
     footer {
       background-color: #222;
@@ -262,10 +269,10 @@
       background-size: cover;
     }
 
-    /* We fix the widths: 
-       - col #1 (Rank) => 60px
-       - col #2 (USERS) => 200px
-       - the rest => 120px 
+    /* We'll fix column widths: 
+       - col #1 => 60px
+       - col #2 => 200px
+       - rest => 120px
     */
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
@@ -293,9 +300,7 @@
   <!-- Header -->
   <header>
     <div class="branding">
-      <div class="logo">
-        <img src="logo.png" alt="PSFL Logo">
-      </div>
+      <div class="logo"><img src="logo.png" alt="PSFL Logo"></div>
       <h1>PSFL</h1>
     </div>
     <nav>
@@ -311,6 +316,8 @@
   <!-- Main Content -->
   <div class="main-content">
     <h2>League Standings</h2>
+
+    <!-- Pagination Controls -->
     <div class="pagination">
       <button id="prevPage">&laquo;</button>
       <span class="dot" data-index="0"></span>
@@ -320,6 +327,7 @@
       <span class="dot" data-index="4"></span>
       <button id="nextPage">&raquo;</button>
     </div>
+
     <div class="table-wrapper">
       <table class="standings-table" id="standings-table">
         <!-- Table header and body inserted dynamically -->
@@ -385,7 +393,7 @@
       const lines = text.trim().split("\n");
       if (lines.length < 2) return { headers: [], data: [] };
       const header = lines[0].split(",");
-      // remove last column from header
+      // remove last column
       const headers = header.slice(0, header.length - 1).map(h => h.trim());
       const data = lines.slice(1).map(line => {
         const values = line.split(",").slice(0, header.length - 1).map(v => v.trim());
@@ -403,16 +411,15 @@
       return `<span class="rank-badge">${rank}</span>`;
     }
 
-    // Build <colgroup> => col #1: 60px, col #2: 200px, rest: 120px
+    // col #1 => 60px
+    // col #2 => 200px
+    // the rest => 120px
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
-      // col #1 => rank => 60px
-      colgroupHTML += `<col style="width:60px;" />`;
-      // col #2 => "USERS" => 200px
+      colgroupHTML += `<col style="width:60px;" />`;   // rank
       if (filteredHeaders.length > 0) {
-        colgroupHTML += `<col style="width:200px;" />`;
+        colgroupHTML += `<col style="width:200px;" />`; // users
       }
-      // rest => 120px
       for (let i = 1; i < filteredHeaders.length; i++) {
         colgroupHTML += `<col style="width:120px;" />`;
       }
@@ -420,21 +427,16 @@
       return colgroupHTML;
     }
 
-    // Build the table
-    // "TEAMS" data goes under the rank badge, "USERS" remains as a separate column
+    // Build table
+    // We remove TEAMS from the displayed headers
+    // but we still retrieve the TEAMS data to show below the rank badge
     function buildTable(headers, rows) {
-      // remove "TEAMS" from the displayed headers
       const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
-      // build colgroup
       const colgroup = buildColGroup(filteredHeaders);
 
-      // The first column is "RANK"
-      // The second column is presumably "USERS"
-      // The rest are numeric columns
-
-      // Build thead
+      // Thead
       let html = `${colgroup}<thead><tr>`;
-      html += "<th>RANK</th>";
+      html += `<th>Rank</th>`; // rank col
       filteredHeaders.forEach(h => {
         html += `<th>${h}</th>`;
       });
@@ -444,11 +446,11 @@
         const rankNum = idx + 1;
         const teamName = row["TEAMS"] || "";
         html += "<tr>";
-        // rank cell merges rank badge + team name
+        // rank cell merges rank badge + team name, with extra vertical space
         html += `
           <td class="rank-cell">
             ${buildRankBadge(rankNum)}
-            <div style="font-size:0.9em;">${teamName}</div>
+            <div class="team-name">${teamName}</div>
           </td>
         `;
         // the rest
@@ -464,7 +466,7 @@
       fixFontScaling();
     }
 
-    // Shrink big numeric values
+    // shrink big numbers
     function fixFontScaling() {
       const cells = tableEl.querySelectorAll("td");
       cells.forEach(cell => {
@@ -487,7 +489,7 @@
       }
     }
 
-    // Pagination arrows
+    // Pagination
     document.getElementById("prevPage").addEventListener("click", () => {
       currentIndex = (currentIndex - 1 + csvUrls.length) % csvUrls.length;
       updateTable();
@@ -496,8 +498,6 @@
       currentIndex = (currentIndex + 1) % csvUrls.length;
       updateTable();
     });
-
-    // Dot clicks
     dots.forEach((dot, idx) => {
       dot.addEventListener("click", () => {
         currentIndex = idx;
@@ -505,10 +505,10 @@
       });
     });
 
-    // Auto-refresh every 30s
+    // auto-update
     setInterval(updateTable, 30000);
 
-    // Initial load
+    // initial
     updateActiveDot();
     updateTable();
   </script>
