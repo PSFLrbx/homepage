@@ -112,18 +112,18 @@
     }
     /* Table Wrapper */
     .table-wrapper {
-      width: 80vw; /* 80% of viewport width */
+      width: 85vw; /* 85% of viewport width */
       margin: 0 auto;
       overflow-x: auto;
       border-radius: 8px;
       background-color: #111;
     }
     /* We'll generate a <colgroup> to control column widths */
-    /* Standings Table */
     .standings-table {
       width: 100%;
       border-collapse: collapse;
       text-align: center;
+      font-family: 'IBM Plex Sans', sans-serif;
     }
     .standings-table thead {
       background-color: #222;
@@ -150,13 +150,11 @@
       font-size: 0.95em;
       word-wrap: break-word;
     }
-    /* Rank Cell: merged column for Rank badge & TEAMS */
+    /* Rank Cell merges rank badge + TEAMS name */
     .rank-cell {
-      width: 60px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       gap: 4px;
     }
     .rank-badge {
@@ -172,7 +170,6 @@
       border-radius: 6px;
       box-shadow: inset 1px 1px 2px #000;
     }
-    /* Glowing borders for top 3 ranks */
     .rank-1 {
       border-color: gold;
       animation: glowGold 2s infinite;
@@ -200,7 +197,7 @@
       50%  { box-shadow: 0 0 15px #cd7f32; }
       100% { box-shadow: 0 0 5px #cd7f32; }
     }
-    /* Font-scaling for large numbers */
+    /* Font-scaling for large numeric values */
     .shrink {
       font-size: 0.8em;
     }
@@ -264,25 +261,28 @@
       background: url('discord.png') no-repeat center center;
       background-size: cover;
     }
-    /* Dynamic Column Widths using colgroup */
-    /* Rank col: 60px, Users col: auto, Others: 90px */
+
+    /* We fix the widths: 
+       - col #1 (Rank) => 60px
+       - col #2 (USERS) => 200px
+       - the rest => 120px 
+    */
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
-      // Rank column fixed 60px
+      // col #1 => rank => 60px
       colgroupHTML += `<col style="width:60px;" />`;
-      // Users column (assumed to be the first in filteredHeaders)
-      if(filteredHeaders.length > 0) {
-        colgroupHTML += `<col style="width:auto;" />`;
+      // col #2 => USERS => 200px
+      if (filteredHeaders.length > 0) {
+        colgroupHTML += `<col style="width:200px;" />`;
       }
-      // Remaining columns fixed at 90px
+      // the rest => 120px each
       for (let i = 1; i < filteredHeaders.length; i++) {
-        colgroupHTML += `<col style="width:90px;" />`;
+        colgroupHTML += `<col style="width:120px;" />`;
       }
       colgroupHTML += "</colgroup>";
       return colgroupHTML;
     }
 
-    /* Footer CSS remains unchanged */
     @media (max-width: 900px) {
       .main-content { padding: 20px; }
       .table-wrapper { width: 100%; }
@@ -293,7 +293,9 @@
   <!-- Header -->
   <header>
     <div class="branding">
-      <div class="logo"><img src="logo.png" alt="PSFL Logo"></div>
+      <div class="logo">
+        <img src="logo.png" alt="PSFL Logo">
+      </div>
       <h1>PSFL</h1>
     </div>
     <nav>
@@ -309,7 +311,6 @@
   <!-- Main Content -->
   <div class="main-content">
     <h2>League Standings</h2>
-    <!-- Pagination Controls -->
     <div class="pagination">
       <button id="prevPage">&laquo;</button>
       <span class="dot" data-index="0"></span>
@@ -319,7 +320,6 @@
       <span class="dot" data-index="4"></span>
       <button id="nextPage">&raquo;</button>
     </div>
-    <!-- Table Wrapper -->
     <div class="table-wrapper">
       <table class="standings-table" id="standings-table">
         <!-- Table header and body inserted dynamically -->
@@ -365,29 +365,27 @@
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTlOIuefJ8umKaeWiW1yZfIr02xKIJqLpc-oFV0RgMXWY1gpF-2Kz-BafD9cdEEMK7kZzO1V0pM-U-O/pub?gid=0&single=true&output=csv"
     ];
 
-    let currentIndex = 0; // Which CSV is currently displayed
+    let currentIndex = 0;
     const dots = document.querySelectorAll(".pagination .dot");
     const tableEl = document.getElementById("standings-table");
 
-    // Mark active dot
     function updateActiveDot() {
       dots.forEach((dot, idx) => {
         dot.classList.toggle("active", idx === currentIndex);
       });
     }
 
-    // Always fetch fresh CSV
     async function fetchCSV(url) {
-      const fullUrl = `${url}&t=${Date.now()}`;
+      const fullUrl = `${url}&t=${Date.now()}`; // cache-buster
       const response = await fetch(fullUrl);
       return response.text();
     }
 
-    // Parse CSV, ignoring the last column
     function parseCSV(text) {
       const lines = text.trim().split("\n");
       if (lines.length < 2) return { headers: [], data: [] };
       const header = lines[0].split(",");
+      // remove last column from header
       const headers = header.slice(0, header.length - 1).map(h => h.trim());
       const data = lines.slice(1).map(line => {
         const values = line.split(",").slice(0, header.length - 1).map(v => v.trim());
@@ -398,71 +396,75 @@
       return { headers, data };
     }
 
-    // Build a rank badge
     function buildRankBadge(rank) {
-      if (rank === 1) {
-        return `<span class="rank-badge rank-1">1</span>`;
-      } else if (rank === 2) {
-        return `<span class="rank-badge rank-2">2</span>`;
-      } else if (rank === 3) {
-        return `<span class="rank-badge rank-3">3</span>`;
-      } else {
-        return `<span class="rank-badge">${rank}</span>`;
-      }
+      if (rank === 1) return `<span class="rank-badge rank-1">1</span>`;
+      if (rank === 2) return `<span class="rank-badge rank-2">2</span>`;
+      if (rank === 3) return `<span class="rank-badge rank-3">3</span>`;
+      return `<span class="rank-badge">${rank}</span>`;
     }
 
-    // Dynamically build <colgroup>
+    // Build <colgroup> => col #1: 60px, col #2: 200px, rest: 120px
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
-      // Column 1: Rank column fixed 60px
+      // col #1 => rank => 60px
       colgroupHTML += `<col style="width:60px;" />`;
-      // Column 2: USERS column (assumed to be first in filteredHeaders) gets auto width
-      if(filteredHeaders.length > 0) {
-        colgroupHTML += `<col style="width:auto;" />`;
+      // col #2 => "USERS" => 200px
+      if (filteredHeaders.length > 0) {
+        colgroupHTML += `<col style="width:200px;" />`;
       }
-      // The remaining columns fixed at 90px each
+      // rest => 120px
       for (let i = 1; i < filteredHeaders.length; i++) {
-        colgroupHTML += `<col style="width:90px;" />`;
+        colgroupHTML += `<col style="width:120px;" />`;
       }
       colgroupHTML += "</colgroup>";
       return colgroupHTML;
     }
 
-    // Build the table with Rank cell merged with team name
+    // Build the table
+    // "TEAMS" data goes under the rank badge, "USERS" remains as a separate column
     function buildTable(headers, rows) {
-      // Remove "TEAMS" column from headers
+      // remove "TEAMS" from the displayed headers
       const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
-      // Create colgroup for proper widths
+      // build colgroup
       const colgroup = buildColGroup(filteredHeaders);
+
+      // The first column is "RANK"
+      // The second column is presumably "USERS"
+      // The rest are numeric columns
+
+      // Build thead
       let html = `${colgroup}<thead><tr>`;
-      html += "<th>Rank</th>"; // Rank header
+      html += "<th>RANK</th>";
       filteredHeaders.forEach(h => {
         html += `<th>${h}</th>`;
       });
       html += "</tr></thead><tbody>";
+
       rows.forEach((row, idx) => {
         const rankNum = idx + 1;
-        // Get team name from the TEAMS column (even though it's removed from headers)
         const teamName = row["TEAMS"] || "";
         html += "<tr>";
-        // Rank cell: contains the rank badge and below it the team name
-        html += `<td class="rank-cell">
-                   ${buildRankBadge(rankNum)}
-                   <div style="font-size:0.9em; margin-top:2px;">${teamName}</div>
-                 </td>`;
-        // For each remaining header, display the corresponding cell value
+        // rank cell merges rank badge + team name
+        html += `
+          <td class="rank-cell">
+            ${buildRankBadge(rankNum)}
+            <div style="font-size:0.9em;">${teamName}</div>
+          </td>
+        `;
+        // the rest
         filteredHeaders.forEach(header => {
           const val = row[header] || "";
           html += `<td>${val}</td>`;
         });
         html += "</tr>";
       });
+
       html += "</tbody>";
       tableEl.innerHTML = html;
       fixFontScaling();
     }
 
-    // Shrink font for large numeric values
+    // Shrink big numeric values
     function fixFontScaling() {
       const cells = tableEl.querySelectorAll("td");
       cells.forEach(cell => {
@@ -473,7 +475,6 @@
       });
     }
 
-    // Load data for the current CSV and update table
     async function updateTable() {
       try {
         const csvText = await fetchCSV(csvUrls[currentIndex]);
@@ -486,7 +487,7 @@
       }
     }
 
-    // Pagination arrow event listeners
+    // Pagination arrows
     document.getElementById("prevPage").addEventListener("click", () => {
       currentIndex = (currentIndex - 1 + csvUrls.length) % csvUrls.length;
       updateTable();
@@ -496,7 +497,7 @@
       updateTable();
     });
 
-    // Dot click event listeners
+    // Dot clicks
     dots.forEach((dot, idx) => {
       dot.addEventListener("click", () => {
         currentIndex = idx;
@@ -504,7 +505,7 @@
       });
     });
 
-    // Auto-update every 30 seconds
+    // Auto-refresh every 30s
     setInterval(updateTable, 30000);
 
     // Initial load
