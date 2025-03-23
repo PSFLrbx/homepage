@@ -29,9 +29,7 @@
     .branding { display: flex; align-items: center; gap: 10px; }
     .logo img { width: 60px; }
     header h1 { font-size: 2em; margin: 0; }
-    nav ul {
-      list-style: none; display: flex; gap: 20px;
-    }
+    nav ul { list-style: none; display: flex; gap: 20px; }
     nav ul li a {
       color: #ccc; font-size: 1em;
       text-transform: uppercase; letter-spacing: 1px;
@@ -102,13 +100,9 @@
       position: relative;
     }
     .icon:hover { background: #666; }
-    .icon-discord {
-      background: url('discord.png') no-repeat center center; background-size: cover;
-    }
+    .icon-discord { background: url('discord.png') no-repeat center center; background-size: cover; }
     /* Responsive */
-    @media (max-width: 900px) {
-      .main-content { padding: 20px; }
-    }
+    @media (max-width: 900px) { .main-content { padding: 20px; } }
   </style>
 </head>
 <body>
@@ -190,6 +184,8 @@
 
     // Array to hold cached CSV data in memory
     const csvCache = new Array(csvUrls.length).fill(null);
+    // Variable to hold the last fetched raw CSV text for the first CSV
+    let lastCSVText = null;
 
     let currentIndex = 0;
     const dots = document.querySelectorAll(".pagination .dot");
@@ -263,6 +259,8 @@
       await Promise.all(promises);
       console.log("Preloaded all CSV data.");
       updateTable();
+      // Also, store the raw CSV text from the first CSV for update checking
+      await updateFirstCSVText();
     }
 
     // Update table from cached data
@@ -272,15 +270,49 @@
       updateActiveDot();
     }
 
+    // Fetch and store the raw CSV text for the first CSV link
+    async function updateFirstCSVText() {
+      try {
+        const response = await fetch(csvUrls[0]);
+        lastCSVText = await response.text();
+      } catch (error) {
+        console.error("Error fetching first CSV for update checking:", error);
+      }
+    }
+
+    // Check for updates on the first CSV and refresh all if changed
+    async function checkForUpdates() {
+      try {
+        const response = await fetch(csvUrls[0]);
+        const newCSVText = await response.text();
+        if (newCSVText !== lastCSVText) {
+          console.log("CSV updated! Refreshing all data...");
+          // Update localStorage for first CSV (and others if needed)
+          await refreshAllCSVs();
+          lastCSVText = newCSVText;
+        }
+      } catch (error) {
+        console.error("Error checking for CSV updates:", error);
+      }
+    }
+
     // Refresh CSV data in background and update cache/localStorage
     async function refreshAllCSVs() {
       const promises = csvUrls.map(async (url, index) => {
-        const data = await loadCSV(url);
-        csvCache[index] = data;
+        // Force fetch new data by not using cached version from localStorage,
+        // or update the storage after fetching.
+        try {
+          const response = await fetch(url);
+          const csvText = await response.text();
+          const parsedData = parseCSV(csvText);
+          localStorage.setItem("csvData_" + btoa(url), JSON.stringify(parsedData));
+          csvCache[index] = parsedData;
+        } catch (error) {
+          console.error("Error refreshing CSV:", error);
+        }
       });
       await Promise.all(promises);
       console.log("Refreshed all CSV data.");
-      // Update table if the current page was refreshed
       updateTable();
     }
 
@@ -305,8 +337,8 @@
     // Preload CSVs on initial load
     preloadAllCSVs();
 
-    // Auto-update: refresh all CSVs every 30 seconds in background
-    setInterval(refreshAllCSVs, 30000);
+    // Check for updates on the first CSV every 30 seconds
+    setInterval(checkForUpdates, 30000);
   </script>
 </body>
 </html>
