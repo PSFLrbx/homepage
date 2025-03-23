@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Standings | PSFL</title>
   <meta property="og:title" content="PSFL Standings" />
   <meta property="og:description" content="Check your team's standing in the PSFL ro-football league." />
@@ -12,11 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
     /* Global Styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'IBM Plex Sans', sans-serif;
       background-color: #111;
@@ -28,9 +24,7 @@
       text-decoration: none;
       transition: color 0.3s ease;
     }
-    a:hover {
-      color: #ffb84d;
-    }
+    a:hover { color: #ffb84d; }
     /* Header */
     header {
       background-color: #222;
@@ -44,180 +38,90 @@
       align-items: center;
       gap: 10px;
     }
-    .logo img {
-      width: 60px;
-    }
-    header h1 {
-      font-size: 2em;
-      margin: 0;
-    }
+    .logo img { width: 60px; }
+    header h1 { font-size: 2em; margin: 0; }
     nav ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
+      list-style: none; display: flex; gap: 20px;
     }
     nav ul li a {
-      color: #ccc;
-      font-size: 1em;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      padding: 8px 12px;
-      border-radius: 4px;
-      transition: background 0.3s ease;
+      color: #ccc; font-size: 1em; text-transform: uppercase; letter-spacing: 1px;
+      padding: 8px 12px; border-radius: 4px; transition: background 0.3s ease;
     }
     nav ul li a:hover {
-      background-color: #333;
-      color: #fff;
+      background-color: #333; color: #fff;
     }
     /* Main Content */
     .main-content {
-      padding: 40px 20px;
-      background-color: #111;
-      min-height: 80vh;
-      text-align: center;
+      padding: 40px 20px; background-color: #111; min-height: 80vh; text-align: center;
     }
-    .main-content h2 {
-      font-size: 2em;
-      margin-bottom: 20px;
-    }
+    .main-content h2 { font-size: 2em; margin-bottom: 20px; }
     /* Pagination Controls (above table) */
     .pagination {
-      text-align: center;
-      margin-bottom: 20px;
+      text-align: center; margin-bottom: 20px;
     }
     .pagination button {
-      background: none;
-      border: none;
-      color: orange;
-      font-size: 1.5em;
-      cursor: pointer;
-      margin: 0 10px;
-      transition: color 0.3s ease;
+      background: none; border: none; color: orange; font-size: 1.5em;
+      cursor: pointer; margin: 0 10px; transition: color 0.3s ease;
     }
-    .pagination button:hover {
-      color: #ffb84d;
-    }
+    .pagination button:hover { color: #ffb84d; }
     .pagination .dot {
-      display: inline-block;
-      width: 15px;
-      height: 15px;
-      background-color: #444;
-      border-radius: 50%;
-      margin: 0 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+      display: inline-block; width: 15px; height: 15px; background-color: #444;
+      border-radius: 50%; margin: 0 5px; cursor: pointer; transition: background-color 0.3s ease;
     }
-    .pagination .dot.active {
-      background-color: orange;
-    }
-    /* Table Wrapper: fill nearly full screen width; no max-width */
+    .pagination .dot.active { background-color: orange; }
+    /* Table Wrapper */
     .table-wrapper {
-      width: 95vw; /* 95% of the viewport width */
-      margin: 0 auto;
-      overflow-x: auto;
-      border-radius: 8px;
-      background-color: #111;
+      width: 95vw; /* fill nearly the entire screen width */
+      margin: 0 auto; overflow-x: auto;
+      border-radius: 8px; background-color: #111;
     }
     /* Standings Table */
     .standings-table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed; /* ensures columns stretch to fill width */
+      width: 100%; border-collapse: collapse; table-layout: fixed;
     }
-    .standings-table thead {
-      background-color: #222;
-    }
+    .standings-table thead { background-color: #222; }
     .standings-table thead th {
-      padding: 15px;
-      text-align: left;
-      font-size: 1em;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      border-bottom: 2px solid #444;
+      padding: 15px; text-align: left; font-size: 1em;
+      text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #444;
     }
-    .standings-table tbody tr {
-      transition: background 0.2s ease;
-    }
-    .standings-table tbody tr:nth-child(even) {
-      background-color: #1a1a1a;
-    }
-    .standings-table tbody tr:hover {
-      background-color: #333;
-    }
+    .standings-table tbody tr { transition: background 0.2s ease; }
+    .standings-table tbody tr:nth-child(even) { background-color: #1a1a1a; }
+    .standings-table tbody tr:hover { background-color: #333; }
     .standings-table td {
-      padding: 15px;
-      border-bottom: 1px solid #444;
-      font-size: 0.95em;
-      word-wrap: break-word; /* helps wrap long text if needed */
+      padding: 15px; border-bottom: 1px solid #444; font-size: 0.95em; word-wrap: break-word;
     }
     /* Footer */
     footer {
-      background-color: #222;
-      text-align: center;
-      padding: 30px 0;
+      background-color: #222; text-align: center; padding: 30px 0;
     }
     .footer-container {
-      width: 90%;
-      max-width: 1000px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: space-between;
+      width: 90%; max-width: 1000px; margin: 0 auto;
+      display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between;
     }
     .footer-col h4 {
-      margin-bottom: 15px;
-      font-size: 1.2em;
-      color: #fff;
+      margin-bottom: 15px; font-size: 1.2em; color: #fff;
     }
-    .footer-col ul {
-      list-style: none;
-    }
-    .footer-col ul li {
-      margin-bottom: 8px;
-    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 8px; }
     .footer-col ul li a {
-      color: #ccc;
-      text-decoration: none;
-      transition: color 0.3s ease;
+      color: #ccc; text-decoration: none; transition: color 0.3s ease;
     }
-    .footer-col ul li a:hover {
-      color: orange;
-    }
-    .social-icons {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .footer-col ul li a:hover { color: orange; }
+    .social-icons { display: flex; align-items: center; gap: 10px; }
     .icon {
-      width: 40px;
-      height: 40px;
-      background: #444;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      color: #fff;
-      font-size: 1.2em;
-      transition: background 0.3s ease;
+      width: 40px; height: 40px; background: #444; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; color: #fff; font-size: 1.2em; transition: background 0.3s ease;
       position: relative;
     }
-    .icon:hover {
-      background: #666;
-    }
+    .icon:hover { background: #666; }
     .icon-discord {
-      background: url('discord.png') no-repeat center center;
-      background-size: cover;
+      background: url('discord.png') no-repeat center center; background-size: cover;
     }
     /* Responsive */
     @media (max-width: 900px) {
-      .main-content {
-        padding: 20px;
-      }
-      .table-wrapper {
-        width: 100%;
-      }
+      .main-content { padding: 20px; }
+      .table-wrapper { width: 100%; }
     }
   </style>
 </head>
@@ -244,7 +148,7 @@
   <div class="main-content">
     <h2>League Standings</h2>
 
-    <!-- Pagination Controls (above table) -->
+    <!-- Pagination Controls -->
     <div class="pagination">
       <button id="prevPage">&laquo;</button>
       <span class="dot" data-index="0"></span>
@@ -258,7 +162,7 @@
     <!-- Table Wrapper -->
     <div class="table-wrapper">
       <table class="standings-table" id="standings-table">
-        <!-- Table header and body will be generated dynamically -->
+        <!-- Table header and body generated dynamically -->
       </table>
     </div>
   </div>
@@ -292,7 +196,7 @@
   </footer>
 
   <script>
-    // CSV links for each page (order: QB, WR, TE, DB, DE)
+    // CSV links for QB, WR, TE, DB, DE
     const csvUrls = [
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
@@ -301,31 +205,27 @@
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTlOIuefJ8umKaeWiW1yZfIr02xKIJqLpc-oFV0RgMXWY1gpF-2Kz-BafD9cdEEMK7kZzO1V0pM-U-O/pub?gid=0&single=true&output=csv"
     ];
 
-    let currentIndex = 0;
-    const dots = document.querySelectorAll(".pagination .dot");
+    // In-memory cache for all CSV data
+    const csvCache = new Array(csvUrls.length).fill(null);
+    let currentIndex = 0; // Which CSV is currently shown
     const tableEl = document.getElementById("standings-table");
+    const dotEls = document.querySelectorAll(".pagination .dot");
 
-    // Mark active dot
-    function updateActiveDot() {
-      dots.forEach((dot, idx) => {
-        dot.classList.toggle("active", idx === currentIndex);
-      });
-    }
+    // (1) PRELOAD all CSVs on page load
+    // (2) SWITCH instantly among them when user clicks next/prev or dots
+    // (3) AUTO-UPDATE only the displayed CSV every 30s
 
-    // Always fetch fresh CSV (no localStorage caching)
+    // Basic CSV fetch with cache-busting
     async function fetchCSV(url) {
-      // Append a random query param to bust any browser cache
       const fullUrl = `${url}&t=${Date.now()}`;
       const response = await fetch(fullUrl);
       return response.text();
     }
 
-    // Simple CSV parser (ignores the last column)
+    // Parse CSV, ignoring the last column
     function parseCSV(text) {
       const lines = text.trim().split("\n");
-      if (lines.length < 2) {
-        return { headers: [], data: [] };
-      }
+      if (lines.length < 2) return { headers: [], data: [] };
       const header = lines[0].split(",");
       const headers = header.slice(0, header.length - 1).map(h => h.trim());
       const data = lines.slice(1).map(line => {
@@ -339,7 +239,7 @@
       return { headers, data };
     }
 
-    // Build the standings table
+    // Build table from headers & data
     function buildTable(headers, rows) {
       let html = "<thead><tr>";
       headers.forEach(header => {
@@ -349,7 +249,7 @@
       rows.forEach(row => {
         html += "<tr>";
         headers.forEach(header => {
-          html += `<td>${row[header]}</td>`;
+          html += `<td>${row[header] ?? ""}</td>`;
         });
         html += "</tr>";
       });
@@ -357,43 +257,74 @@
       tableEl.innerHTML = html;
     }
 
-    // Load data for the current CSV and update table
-    async function updateTable() {
+    // Show the CSV data for currentIndex from our in-memory cache
+    function renderTable() {
+      const cached = csvCache[currentIndex];
+      if (!cached) {
+        // If it's not loaded yet (unlikely after preload), fetch on the fly
+        updateCurrentCSV();
+        return;
+      }
+      buildTable(cached.headers, cached.data);
+      updateActiveDot();
+    }
+
+    // Mark active dot in pagination
+    function updateActiveDot() {
+      dotEls.forEach((dot, idx) => {
+        dot.classList.toggle("active", idx === currentIndex);
+      });
+    }
+
+    // Preload all CSV data
+    async function preloadAllCSVs() {
+      for (let i = 0; i < csvUrls.length; i++) {
+        try {
+          const csvText = await fetchCSV(csvUrls[i]);
+          csvCache[i] = parseCSV(csvText);
+        } catch (err) {
+          console.error("Error preloading CSV index", i, err);
+          csvCache[i] = { headers: [], data: [] };
+        }
+      }
+      console.log("All CSVs preloaded in memory.");
+      renderTable(); // Show the first CSV by default
+    }
+
+    // Re-fetch the currently displayed CSV
+    async function updateCurrentCSV() {
       try {
         const csvText = await fetchCSV(csvUrls[currentIndex]);
-        const { headers, data } = parseCSV(csvText);
-        buildTable(headers, data);
-        updateActiveDot();
-      } catch (error) {
-        console.error("Error updating table:", error);
-        tableEl.innerHTML = "<thead><tr><th>Error</th></tr></thead><tbody><tr><td>Failed to load data</td></tr></tbody>";
+        csvCache[currentIndex] = parseCSV(csvText);
+        renderTable(); // re-render after updating
+      } catch (err) {
+        console.error("Error updating current CSV:", err);
       }
     }
 
     // Pagination arrow event listeners
     document.getElementById("prevPage").addEventListener("click", () => {
       currentIndex = (currentIndex - 1 + csvUrls.length) % csvUrls.length;
-      updateTable();
+      renderTable();
     });
     document.getElementById("nextPage").addEventListener("click", () => {
       currentIndex = (currentIndex + 1) % csvUrls.length;
-      updateTable();
+      renderTable();
     });
 
     // Dot click event listeners
-    dots.forEach((dot, idx) => {
+    dotEls.forEach((dot, idx) => {
       dot.addEventListener("click", () => {
         currentIndex = idx;
-        updateTable();
+        renderTable();
       });
     });
 
-    // Auto-update every 30 seconds
-    setInterval(updateTable, 30000);
+    // Auto-update the currently visible CSV every 30 seconds
+    setInterval(updateCurrentCSV, 30000);
 
-    // Initial load
-    updateActiveDot();
-    updateTable();
+    // Preload everything once page loads
+    preloadAllCSVs();
   </script>
 </body>
 </html>
