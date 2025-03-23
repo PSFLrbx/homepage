@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Standings | PSFL</title>
   <meta property="og:title" content="PSFL Standings" />
   <meta property="og:description" content="Check your team's standing in the PSFL ro-football league." />
@@ -116,19 +116,21 @@
 
     /* Table Wrapper */
     .table-wrapper {
-      width: 80vw; /* now 80% of the viewport width */
+      width: 80vw; /* 80% of viewport width */
       margin: 0 auto;
       overflow-x: auto;
       border-radius: 8px;
       background-color: #111;
     }
 
+    /* We'll insert a <colgroup> dynamically to control column widths. */
+
     /* Standings Table */
     .standings-table {
       width: 100%;
       border-collapse: collapse;
-      table-layout: fixed; /* ensures columns stretch evenly */
       text-align: center;
+      font-family: 'IBM Plex Sans', sans-serif;
     }
     .standings-table thead {
       background-color: #222;
@@ -156,29 +158,19 @@
       word-wrap: break-word;
     }
 
-    /* Rank/Team merged column */
-    .rank-cell {
-      width: 70px; /* narrower rank column */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-    }
+    /* Rank Badge */
     .rank-badge {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 50px;
-      height: 50px;
-      font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 1em;
+      width: 45px;
+      height: 45px;
       background: #222;
-      box-shadow: inset 1px 1px 2px #000;
       border: 2px solid #444;
       border-radius: 6px;
+      box-shadow: inset 1px 1px 2px #000;
     }
-    /* 1st place: gold glow */
+    /* Gold, Silver, Bronze glows */
     .rank-1 {
       border-color: gold;
       animation: glowGold 2s infinite;
@@ -188,7 +180,6 @@
       50%  { box-shadow: 0 0 15px gold; }
       100% { box-shadow: 0 0 5px gold; }
     }
-    /* 2nd place: silver glow */
     .rank-2 {
       border-color: silver;
       animation: glowSilver 2s infinite;
@@ -198,7 +189,6 @@
       50%  { box-shadow: 0 0 15px silver; }
       100% { box-shadow: 0 0 5px silver; }
     }
-    /* 3rd place: bronze glow */
     .rank-3 {
       border-color: #cd7f32;
       animation: glowBronze 2s infinite;
@@ -312,7 +302,6 @@
     <!-- Pagination Controls (above table) -->
     <div class="pagination">
       <button id="prevPage">&laquo;</button>
-      <!-- 5 Dots for QB, WR, TE, DB, DE -->
       <span class="dot" data-index="0"></span>
       <span class="dot" data-index="1"></span>
       <span class="dot" data-index="2"></span>
@@ -323,8 +312,9 @@
 
     <!-- Table Wrapper -->
     <div class="table-wrapper">
+      <!-- We'll dynamically insert a <colgroup> to control widths. -->
       <table class="standings-table" id="standings-table">
-        <!-- Table header/body inserted dynamically -->
+        <!-- Table header and body inserted dynamically -->
       </table>
     </div>
   </div>
@@ -358,7 +348,7 @@
   </footer>
 
   <script>
-    // CSV links for QB, WR, TE, DB, DE
+    // CSV links for each page (QB, WR, TE, DB, DE):
     const csvUrls = [
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
@@ -380,7 +370,7 @@
 
     // Always fetch fresh CSV
     async function fetchCSV(url) {
-      const fullUrl = `${url}&t=${Date.now()}`;
+      const fullUrl = `${url}&t=${Date.now()}`; // cache-buster
       const response = await fetch(fullUrl);
       return response.text();
     }
@@ -415,38 +405,48 @@
       }
     }
 
-    // Build the table
-    // We remove "TEAMS" from the header and display the TEAMS data in the rank cell
-    function buildTable(headers, rows) {
-      // 1) Remove "TEAMS" from the headers array
-      const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
+    // Dynamically build <colgroup> so that:
+    //   - col #1 (Rank) => 60px
+    //   - col #2 (Teams) => auto
+    //   - the rest => 90px each
+    function buildColGroup(headers) {
+      // We'll insert "Rank" as the first column, so total columns = 1 + headers.length
+      const totalCols = 1 + headers.length;
+      // Create the colgroup HTML
+      let colgroupHTML = "<colgroup>";
+      // col #1 => rank => 60px
+      colgroupHTML += `<col style="width:60px;" />`;
+      if (totalCols > 1) {
+        // col #2 => auto
+        colgroupHTML += `<col style="width:auto;" />`;
+      }
+      // the rest => 90px each
+      for (let i = 2; i < totalCols; i++) {
+        colgroupHTML += `<col style="width:90px;" />`;
+      }
+      colgroupHTML += "</colgroup>";
+      return colgroupHTML;
+    }
 
-      let html = "<thead><tr>";
-      // Insert a single "Rank" heading
-      html += "<th style='width:70px;'>Rank</th>";
-      // For the rest of the columns
-      filteredHeaders.forEach(h => {
+    // Build the table with rank column
+    function buildTable(headers, rows) {
+      // Insert colgroup first
+      const colgroup = buildColGroup(headers);
+      // Build the thead
+      let html = `${colgroup}<thead><tr>`;
+      html += "<th>Rank</th>";
+      headers.forEach(h => {
         html += `<th>${h}</th>`;
       });
       html += "</tr></thead><tbody>";
 
       rows.forEach((row, idx) => {
         const rankNum = idx + 1;
-        // Extract the team name from the row (if it exists)
-        const teamName = row["TEAMS"] || "";
-
         html += "<tr>";
-        // rank cell merges rank badge & team name
-        html += `
-          <td class="rank-cell">
-            ${buildRankBadge(rankNum)}
-            <div style="font-size:0.9em; margin-top:2px;">
-              ${teamName}
-            </div>
-          </td>
-        `;
-        // the rest of the columns
-        filteredHeaders.forEach(header => {
+        // rank cell
+        html += `<td>${buildRankBadge(rankNum)}</td>`;
+        // the rest
+        headers.forEach(header => {
           const val = row[header] || "";
           html += `<td>${val}</td>`;
         });
@@ -455,7 +455,6 @@
       html += "</tbody>";
       tableEl.innerHTML = html;
 
-      // After building, apply font scaling
       fixFontScaling();
     }
 
@@ -464,8 +463,8 @@
       const cells = tableEl.querySelectorAll("td");
       cells.forEach(cell => {
         const txt = cell.textContent.trim();
-        // If it's purely digits and more than 5 in length, shrink
-        if (/^\d+$/.test(txt) && txt.length > 5) {
+        if (/^\d+$/.test(txt) && txt.length > 4) {
+          // If it's purely digits & more than 4 digits => shrink
           cell.classList.add("shrink");
         }
       });
