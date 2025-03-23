@@ -122,6 +122,7 @@
       border-radius: 8px;
       background-color: #111;
     }
+    /* Standings Table */
     .standings-table {
       width: 100%;
       border-collapse: collapse;
@@ -154,14 +155,16 @@
       word-wrap: break-word;
     }
 
-    /* Rank Cell merges rank badge + TEAMS name horizontally */
+    /* Rank Cell: Combined cell for rank badge and team name.
+       Using a <br> forces team name on a new line. */
     .rank-cell {
-      min-width: 100px; /* a bit wider to hold both badge + text */
-      min-height: 50px;
+      min-width: 100px; /* enough to hold badge and text */
+      min-height: 80px; /* extra height for a clear break */
       display: flex;
-      align-items: center; /* center vertically in the cell */
-      justify-content: center; /* center horizontally in the cell */
-      gap: 6px; /* space between the box and text */
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
     }
     .rank-badge {
       display: flex;
@@ -173,6 +176,10 @@
       border: 2px solid #444;
       border-radius: 6px;
       box-shadow: inset 1px 1px 2px #000;
+    }
+    .team-name {
+      font-size: 0.9em;
+      line-height: 1.2;
     }
     .rank-1 {
       border-color: gold;
@@ -207,77 +214,15 @@
       font-size: 0.8em;
     }
 
-    /* Footer */
-    footer {
-      background-color: #222;
-      text-align: center;
-      padding: 30px 0;
-    }
-    .footer-container {
-      width: 90%;
-      max-width: 1000px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: space-between;
-    }
-    .footer-col h4 {
-      margin-bottom: 15px;
-      font-size: 1.2em;
-      color: #fff;
-    }
-    .footer-col ul {
-      list-style: none;
-    }
-    .footer-col ul li {
-      margin-bottom: 8px;
-    }
-    .footer-col ul li a {
-      color: #ccc;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-    .footer-col ul li a:hover {
-      color: orange;
-    }
-    .social-icons {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .icon {
-      width: 40px;
-      height: 40px;
-      background: #444;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      color: #fff;
-      font-size: 1.2em;
-      transition: background 0.3s ease;
-      position: relative;
-    }
-    .icon:hover {
-      background: #666;
-    }
-    .icon-discord {
-      background: url('discord.png') no-repeat center center;
-      background-size: cover;
-    }
-
-    /* Fix columns:
-       - col #1 => 60px
-       - col #2 => 200px
-       - rest => 120px
-    */
+    /* Dynamic Column Widths via <colgroup> */
+    /* - col 1 (Rank): 60px
+       - col 2 (USERS): 200px
+       - remaining columns: 120px */
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
-      colgroupHTML += `<col style="width:60px;" />`;   // rank
+      colgroupHTML += `<col style="width:60px;" />`;
       if (filteredHeaders.length > 0) {
-        colgroupHTML += `<col style="width:200px;" />`; // users
+        colgroupHTML += `<col style="width:200px;" />`;
       }
       for (let i = 1; i < filteredHeaders.length; i++) {
         colgroupHTML += `<col style="width:120px;" />`;
@@ -357,7 +302,7 @@
   </footer>
 
   <script>
-    // CSV links
+    // CSV links for each page (QB, WR, TE, DB, DE)
     const csvUrls = [
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
@@ -377,7 +322,7 @@
     }
 
     async function fetchCSV(url) {
-      const fullUrl = `${url}&t=${Date.now()}`; // cache-buster
+      const fullUrl = `${url}&t=${Date.now()}`;
       const response = await fetch(fullUrl);
       return response.text();
     }
@@ -386,7 +331,6 @@
       const lines = text.trim().split("\n");
       if (lines.length < 2) return { headers: [], data: [] };
       const header = lines[0].split(",");
-      // remove last column
       const headers = header.slice(0, header.length - 1).map(h => h.trim());
       const data = lines.slice(1).map(line => {
         const values = line.split(",").slice(0, header.length - 1).map(v => v.trim());
@@ -406,13 +350,10 @@
 
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
-      // col #1 => rank => 60px
       colgroupHTML += `<col style="width:60px;" />`;
-      // col #2 => USERS => 200px
       if (filteredHeaders.length > 0) {
         colgroupHTML += `<col style="width:200px;" />`;
       }
-      // rest => 120px
       for (let i = 1; i < filteredHeaders.length; i++) {
         colgroupHTML += `<col style="width:120px;" />`;
       }
@@ -420,40 +361,32 @@
       return colgroupHTML;
     }
 
-    // Build the table
-    // TEAMS data => placed horizontally next to the rank badge
     function buildTable(headers, rows) {
-      // remove "TEAMS" from displayed headers
+      // Remove TEAMS from displayed headers but keep data in rank cell.
       const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
       const colgroup = buildColGroup(filteredHeaders);
-
       let html = `${colgroup}<thead><tr>`;
-      html += `<th>RANK</th>`; // rank col
+      html += `<th>RANK</th>`;
       filteredHeaders.forEach(h => {
         html += `<th>${h}</th>`;
       });
       html += "</tr></thead><tbody>";
-
       rows.forEach((row, idx) => {
         const rankNum = idx + 1;
         const teamName = row["TEAMS"] || "";
         html += "<tr>";
-        // rank cell merges rank badge + team name on the same line
-        html += `
-          <td class="rank-cell">
-            ${buildRankBadge(rankNum)}
-            <span>${teamName}</span>
-          </td>
-        `;
-        // the rest
+        // Rank cell: display badge and below it, the team name.
+        html += `<td class="rank-cell">
+                   ${buildRankBadge(rankNum)}<br>
+                   <span class="team-name">${teamName}</span>
+                 </td>`;
         filteredHeaders.forEach(header => {
           const val = row[header] || "";
           html += `<td>${val}</td>`;
         });
         html += "</tr>";
       });
-
-      html += "</tbody>`;
+      html += "</tbody>";
       tableEl.innerHTML = html;
       fixFontScaling();
     }
@@ -480,7 +413,6 @@
       }
     }
 
-    // Pagination
     document.getElementById("prevPage").addEventListener("click", () => {
       currentIndex = (currentIndex - 1 + csvUrls.length) % csvUrls.length;
       updateTable();
@@ -496,10 +428,7 @@
       });
     });
 
-    // Auto-update
     setInterval(updateTable, 30000);
-
-    // Initial load
     updateActiveDot();
     updateTable();
   </script>
