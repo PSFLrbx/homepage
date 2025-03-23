@@ -31,7 +31,6 @@
     a:hover {
       color: #ffb84d;
     }
-
     /* Header */
     header {
       background-color: #222;
@@ -70,7 +69,6 @@
       background-color: #333;
       color: #fff;
     }
-
     /* Main Content */
     .main-content {
       padding: 40px 20px;
@@ -82,7 +80,6 @@
       font-size: 2em;
       margin-bottom: 20px;
     }
-
     /* Pagination Controls */
     .pagination {
       text-align: center;
@@ -113,7 +110,6 @@
     .pagination .dot.active {
       background-color: orange;
     }
-
     /* Table Wrapper */
     .table-wrapper {
       width: 85vw; /* 85% of viewport width */
@@ -154,8 +150,7 @@
       font-size: 0.95em;
       word-wrap: break-word;
     }
-
-    /* Rank Cell: smaller badge, minimal vertical space */
+    /* Rank Cell: Contains the rank badge and team name (from CSV "TEAMS") */
     .rank-cell {
       min-width: 80px;
       min-height: 60px;
@@ -169,7 +164,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 35px; /* smaller badge */
+      width: 35px;
       height: 35px;
       background: #222;
       border: 2px solid #444;
@@ -180,14 +175,14 @@
       font-size: 0.85em;
       line-height: 1.2;
     }
-    /* Glowing borders for top 3 ranks */
+    /* Glow effects for top 3 ranks */
     .rank-1 {
       border-color: gold;
       animation: glowGold 2s infinite;
     }
     @keyframes glowGold {
-      0%   { box-shadow: 0 0 5px gold; }
-      50%  { box-shadow: 0 0 15px gold; }
+      0% { box-shadow: 0 0 5px gold; }
+      50% { box-shadow: 0 0 15px gold; }
       100% { box-shadow: 0 0 5px gold; }
     }
     .rank-2 {
@@ -195,8 +190,8 @@
       animation: glowSilver 2s infinite;
     }
     @keyframes glowSilver {
-      0%   { box-shadow: 0 0 5px silver; }
-      50%  { box-shadow: 0 0 15px silver; }
+      0% { box-shadow: 0 0 5px silver; }
+      50% { box-shadow: 0 0 15px silver; }
       100% { box-shadow: 0 0 5px silver; }
     }
     .rank-3 {
@@ -204,37 +199,31 @@
       animation: glowBronze 2s infinite;
     }
     @keyframes glowBronze {
-      0%   { box-shadow: 0 0 5px #cd7f32; }
-      50%  { box-shadow: 0 0 15px #cd7f32; }
+      0% { box-shadow: 0 0 5px #cd7f32; }
+      50% { box-shadow: 0 0 15px #cd7f32; }
       100% { box-shadow: 0 0 5px #cd7f32; }
     }
-
-    /* Font-scaling for large numeric values */
+    /* Font-scaling for long numbers */
     .shrink {
       font-size: 0.8em;
     }
-
-    /* Column widths:
-       - #1 => 60px (Rank)
-       - #2 => 200px (USERS)
-       - Others => 120px
+    /* Dynamic Column Widths via colgroup:
+         - Column 1 (RANK): 60px
+         - Column 2 (USERS): 200px
+         - Remaining: 120px each
     */
     function buildColGroup(filteredHeaders) {
       let colgroupHTML = "<colgroup>";
-      // Column #1 => rank => 60px
       colgroupHTML += `<col style="width:60px;" />`;
-      // Column #2 => "USERS" => 200px
       if (filteredHeaders.length > 0) {
         colgroupHTML += `<col style="width:200px;" />`;
       }
-      // Remaining => 120px
       for (let i = 1; i < filteredHeaders.length; i++) {
         colgroupHTML += `<col style="width:120px;" />`;
       }
       colgroupHTML += "</colgroup>";
       return colgroupHTML;
     }
-
     @media (max-width: 900px) {
       .main-content { padding: 20px; }
       .table-wrapper { width: 100%; }
@@ -245,9 +234,7 @@
   <!-- Header -->
   <header>
     <div class="branding">
-      <div class="logo">
-        <img src="logo.png" alt="PSFL Logo">
-      </div>
+      <div class="logo"><img src="logo.png" alt="PSFL Logo"></div>
       <h1>PSFL</h1>
     </div>
     <nav>
@@ -263,8 +250,6 @@
   <!-- Main Content -->
   <div class="main-content">
     <h2>League Standings</h2>
-
-    <!-- Pagination Controls -->
     <div class="pagination">
       <button id="prevPage">&laquo;</button>
       <span class="dot" data-index="0"></span>
@@ -274,22 +259,20 @@
       <span class="dot" data-index="4"></span>
       <button id="nextPage">&raquo;</button>
     </div>
-
     <div class="table-wrapper">
       <table class="standings-table" id="standings-table">
-        <!-- Table header & body inserted dynamically -->
+        <!-- Table header and body inserted dynamically -->
       </table>
     </div>
   </div>
 
-  <!-- Footer (EXACT same as rulebook.html) -->
+  <!-- Footer (exactly as in rulebook.html) -->
   <footer>
     <div class="footer-container">
       <div class="footer-col">
         <h4>Quicklinks</h4>
         <ul>
           <li><a href="homepage.html">Home</a></li>
-          <li><a href="stats.html">Stats</a></li>
           <li><a href="standings.html">Standings</a></li>
           <li><a href="rulebook.html">Rulebook</a></li>
           <li><a href="credits.html">Credits</a></li>
@@ -332,7 +315,7 @@
     }
 
     async function fetchCSV(url) {
-      const fullUrl = `${url}&t=${Date.now()}`; // bust cache
+      const fullUrl = `${url}&t=${Date.now()}`;
       const response = await fetch(fullUrl);
       return response.text();
     }
@@ -341,7 +324,7 @@
       const lines = text.trim().split("\n");
       if (lines.length < 2) return { headers: [], data: [] };
       const header = lines[0].split(",");
-      // ignore the last column
+      // remove last column
       const headers = header.slice(0, header.length - 1).map(h => h.trim());
       const data = lines.slice(1).map(line => {
         const values = line.split(",").slice(0, header.length - 1).map(v => v.trim());
@@ -359,46 +342,49 @@
       return `<span class="rank-badge">${rank}</span>`;
     }
 
-    function buildTable(headers, rows) {
-      // Remove "TEAMS" from displayed headers
-      const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
-      // Build colgroup for column widths
-      const colgroup = buildColGroup(filteredHeaders);
+    function buildColGroup(filteredHeaders) {
+      let colgroupHTML = "<colgroup>";
+      colgroupHTML += `<col style="width:60px;" />`;
+      if (filteredHeaders.length > 0) {
+        colgroupHTML += `<col style="width:200px;" />`;
+      }
+      for (let i = 1; i < filteredHeaders.length; i++) {
+        colgroupHTML += `<col style="width:120px;" />`;
+      }
+      colgroupHTML += "</colgroup>";
+      return colgroupHTML;
+    }
 
-      // Build thead
+    function buildTable(headers, rows) {
+      // Remove TEAMS from header display
+      const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
+      const colgroup = buildColGroup(filteredHeaders);
       let html = `${colgroup}<thead><tr>`;
-      html += `<th>RANK</th>`; // first col => rank cell
+      html += `<th>RANK</th>`;
       filteredHeaders.forEach(h => {
         html += `<th>${h}</th>`;
       });
       html += "</tr></thead><tbody>";
-
       rows.forEach((row, idx) => {
         const rankNum = idx + 1;
-        // fallback for TEAMS or Team
+        // Fallback for team name from TEAMS or Team column
         const teamName = row["TEAMS"] || row["Team"] || "";
         html += "<tr>";
-        // rank cell: badge + team name below
-        html += `
-          <td class="rank-cell">
-            ${buildRankBadge(rankNum)}
-            <span class="team-name">${teamName}</span>
-          </td>
-        `;
-        // other columns
+        html += `<td class="rank-cell">
+                   ${buildRankBadge(rankNum)}<br>
+                   <span class="team-name">${teamName}</span>
+                 </td>`;
         filteredHeaders.forEach(header => {
           const val = row[header] || "";
           html += `<td>${val}</td>`;
         });
         html += "</tr>";
       });
-
       html += "</tbody>";
       tableEl.innerHTML = html;
       fixFontScaling();
     }
 
-    // shrink big numeric values
     function fixFontScaling() {
       const cells = tableEl.querySelectorAll("td");
       cells.forEach(cell => {
@@ -421,7 +407,6 @@
       }
     }
 
-    // Pagination
     document.getElementById("prevPage").addEventListener("click", () => {
       currentIndex = (currentIndex - 1 + csvUrls.length) % csvUrls.length;
       updateTable();
@@ -437,10 +422,7 @@
       });
     });
 
-    // Auto-update every 30 seconds
     setInterval(updateTable, 30000);
-
-    // Initial load
     updateActiveDot();
     updateTable();
   </script>
