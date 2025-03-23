@@ -12,61 +12,110 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
     /* Global Styles */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
       font-family: 'IBM Plex Sans', sans-serif;
       background-color: #111;
       color: #fff;
       line-height: 1.6;
     }
-    a { color: orange; text-decoration: none; transition: color 0.3s ease; }
-    a:hover { color: #ffb84d; }
+    a {
+      color: orange;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #ffb84d;
+    }
     /* Header */
     header {
-      background-color: #222; padding: 20px;
-      display: flex; align-items: center; justify-content: space-between;
+      background-color: #222;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-    .branding { display: flex; align-items: center; gap: 10px; }
-    .logo img { width: 60px; }
-    header h1 { font-size: 2em; margin: 0; }
-    nav ul { list-style: none; display: flex; gap: 20px; }
+    .branding {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo img {
+      width: 60px;
+    }
+    header h1 {
+      font-size: 2em;
+      margin: 0;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
     nav ul li a {
-      color: #ccc; font-size: 1em;
-      text-transform: uppercase; letter-spacing: 1px;
-      padding: 8px 12px; border-radius: 4px; transition: background 0.3s ease;
+      color: #ccc;
+      font-size: 1em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background 0.3s ease;
     }
-    nav ul li a:hover { background-color: #333; color: #fff; }
+    nav ul li a:hover {
+      background-color: #333;
+      color: #fff;
+    }
     /* Main Content */
     .main-content {
-      padding: 40px 20px; background-color: #111; min-height: 80vh;
+      padding: 40px 20px;
+      background-color: #111;
+      min-height: 80vh;
     }
     .main-content h2 {
-      font-size: 2em; margin-bottom: 20px; text-align: center;
+      font-size: 2em;
+      margin-bottom: 20px;
+      text-align: center;
     }
-    /* Pagination Controls - now above the table */
+    /* Pagination Controls (above table) */
     .pagination {
-      text-align: center; margin-bottom: 20px;
+      text-align: center;
+      margin-bottom: 20px;
     }
     .pagination button {
-      background: none; border: none;
-      color: orange; font-size: 1.5em; cursor: pointer;
-      margin: 0 10px; transition: color 0.3s ease;
+      background: none;
+      border: none;
+      color: orange;
+      font-size: 1.5em;
+      cursor: pointer;
+      margin: 0 10px;
+      transition: color 0.3s ease;
     }
-    .pagination button:hover { color: #ffb84d; }
+    .pagination button:hover {
+      color: #ffb84d;
+    }
     .pagination .dot {
-      display: inline-block; width: 15px; height: 15px;
-      background-color: #444; border-radius: 50%;
-      margin: 0 5px; cursor: pointer;
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      background-color: #444;
+      border-radius: 50%;
+      margin: 0 5px;
+      cursor: pointer;
       transition: background-color 0.3s ease;
     }
-    .pagination .dot.active { background-color: orange; }
-    /* Table Wrapper for fixed size */
+    .pagination .dot.active {
+      background-color: orange;
+    }
+    /* Table Wrapper: now spans nearly the full width and height is dynamic */
     .table-wrapper {
-      width: 800px;
-      height: 500px; /* adjust as needed */
+      width: 95%;
+      max-width: 1200px;
       margin: 0 auto;
-      overflow-y: auto;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      overflow-x: auto;
       border-radius: 8px;
       background-color: #111;
     }
@@ -75,44 +124,99 @@
       width: 100%;
       border-collapse: collapse;
     }
-    .standings-table thead { background-color: #222; }
+    .standings-table thead {
+      background-color: #222;
+    }
     .standings-table thead th {
-      padding: 15px; text-align: left; font-size: 1em;
-      text-transform: uppercase; letter-spacing: 1px;
+      padding: 15px;
+      text-align: left;
+      font-size: 1em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       border-bottom: 2px solid #444;
     }
-    .standings-table tbody tr { transition: background 0.2s ease; }
-    .standings-table tbody tr:nth-child(even) { background-color: #1a1a1a; }
-    .standings-table tbody tr:hover { background-color: #333; }
+    .standings-table tbody tr {
+      transition: background 0.2s ease;
+    }
+    .standings-table tbody tr:nth-child(even) {
+      background-color: #1a1a1a;
+    }
+    .standings-table tbody tr:hover {
+      background-color: #333;
+    }
     .standings-table td {
-      padding: 15px; border-bottom: 1px solid #444; font-size: 0.95em;
+      padding: 15px;
+      border-bottom: 1px solid #444;
+      font-size: 0.95em;
     }
     /* Footer */
     footer {
-      background-color: #222; text-align: center; padding: 30px 0;
+      background-color: #222;
+      text-align: center;
+      padding: 30px 0;
     }
     .footer-container {
-      width: 90%; max-width: 1000px; margin: 0 auto;
-      display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between;
+      width: 90%;
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
     }
-    .footer-col h4 { margin-bottom: 15px; font-size: 1.2em; color: #fff; }
-    .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: 8px; }
-    .footer-col ul li a { color: #ccc; text-decoration: none; transition: color 0.3s ease; }
-    .footer-col ul li a:hover { color: orange; }
-    .social-icons { display: flex; align-items: center; gap: 10px; }
+    .footer-col h4 {
+      margin-bottom: 15px;
+      font-size: 1.2em;
+      color: #fff;
+    }
+    .footer-col ul {
+      list-style: none;
+    }
+    .footer-col ul li {
+      margin-bottom: 8px;
+    }
+    .footer-col ul li a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .footer-col ul li a:hover {
+      color: orange;
+    }
+    .social-icons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
     .icon {
-      width: 40px; height: 40px; background: #444; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      text-decoration: none; color: #fff; font-size: 1.2em; transition: background 0.3s ease;
+      width: 40px;
+      height: 40px;
+      background: #444;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.2em;
+      transition: background 0.3s ease;
       position: relative;
     }
-    .icon:hover { background: #666; }
-    .icon-discord { background: url('discord.png') no-repeat center center; background-size: cover; }
+    .icon:hover {
+      background: #666;
+    }
+    .icon-discord {
+      background: url('discord.png') no-repeat center center;
+      background-size: cover;
+    }
     /* Responsive */
     @media (max-width: 900px) {
-      .main-content { padding: 20px; }
-      .table-wrapper { width: 100%; height: auto; }
+      .main-content {
+        padding: 20px;
+      }
+      .table-wrapper {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -139,7 +243,7 @@
   <div class="main-content">
     <h2>League Standings</h2>
 
-    <!-- Pagination Controls (now above the table) -->
+    <!-- Pagination Controls (above table) -->
     <div class="pagination">
       <button id="prevPage">&laquo;</button>
       <span class="dot" data-index="0"></span>
