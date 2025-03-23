@@ -303,15 +303,25 @@
       });
     }
 
-    // Fetch and parse CSV from the URL corresponding to the current page
+    // Fetch and parse CSV with localStorage caching
     async function loadCSV(url) {
+      const storageKey = "csvData_" + btoa(url);
+      // Check cache
+      const cached = localStorage.getItem(storageKey);
+      if (cached) {
+        console.log("Using cached data for:", url);
+        return JSON.parse(cached);
+      }
+      // Fetch and cache if not available
       try {
         const response = await fetch(url);
         const csvText = await response.text();
-        return parseCSV(csvText);
+        const parsedData = parseCSV(csvText);
+        localStorage.setItem(storageKey, JSON.stringify(parsedData));
+        return parsedData;
       } catch (error) {
         console.error("Error fetching CSV:", error);
-        return null;
+        return { headers: [], data: [] };
       }
     }
 
@@ -373,7 +383,7 @@
       });
     });
 
-    // Initialize auto update every 30 seconds
+    // Auto-update every 30 seconds
     setInterval(updateTable, 30000);
 
     // Initialize
