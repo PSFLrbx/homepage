@@ -80,37 +80,7 @@
       font-size: 2em;
       margin-bottom: 20px;
     }
-    /* Pagination Controls (above table) */
-    .pagination {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .pagination button {
-      background: none;
-      border: none;
-      color: orange;
-      font-size: 1.5em;
-      cursor: pointer;
-      margin: 0 10px;
-      transition: color 0.3s ease;
-    }
-    .pagination button:hover {
-      color: #ffb84d;
-    }
-    .pagination .dot {
-      display: inline-block;
-      width: 15px;
-      height: 15px;
-      background-color: #444;
-      border-radius: 50%;
-      margin: 0 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .pagination .dot.active {
-      background-color: orange;
-    }
-    /* Table Wrapper: fill nearly full screen width; no max-width */
+    /* Table Wrapper */
     .table-wrapper {
       width: 95vw; /* 95% of the viewport width */
       margin: 0 auto;
@@ -244,17 +214,6 @@
   <div class="main-content">
     <h2>League Standings</h2>
 
-    <!-- Pagination Controls (above table) -->
-    <div class="pagination">
-      <button id="prevPage">&laquo;</button>
-      <span class="dot" data-index="0"></span>
-      <span class="dot" data-index="1"></span>
-      <span class="dot" data-index="2"></span>
-      <span class="dot" data-index="3"></span>
-      <span class="dot" data-index="4"></span>
-      <button id="nextPage">&raquo;</button>
-    </div>
-
     <!-- Table Wrapper -->
     <div class="table-wrapper">
       <table class="standings-table" id="standings-table">
@@ -292,26 +251,11 @@
   </footer>
 
   <script>
-    // CSV links for each page (order: QB, WR, TE, DB, DE)
-    const csvUrls = [
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQv20vUSyozLzoZmyfQGHiPHx0JNlnZoZlGxa6K9ZjdCPhHdjWXb8ToDvebBaxRz3CJfWPjj0bI18Zy/pub?gid=1885141927&single=true&output=csv",
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTaCoNjF522XiQcmuG1FBHK6LbLY6pkDcQjxM6ESEaXJqflwndse0VqsXRbrpCWmBowu8TNW5k-AHki/pub?gid=0&single=true&output=csv",
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vRNfdMclgC6hSB6O_Gui7SsybfR2179fX57nkn9vpU24hptG-I7xybFpdIR5tv1hkNyvKLDA2OSsmut/pub?gid=0&single=true&output=csv",
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTlOIuefJ8umKaeWiW1yZfIr02xKIJqLpc-oFV0RgMXWY1gpF-2Kz-BafD9cdEEMK7kZzO1V0pM-U-O/pub?gid=0&single=true&output=csv"
-    ];
+    // Single CSV link
+    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-EXAMPLE/pub?output=csv";
 
-    // Turn off localStorage caching to ensure fresh data each time
-    let currentIndex = 0;
-    const dots = document.querySelectorAll(".pagination .dot");
+    // Reference to the table element
     const tableEl = document.getElementById("standings-table");
-
-    // Mark active dot
-    function updateActiveDot() {
-      dots.forEach((dot, idx) => {
-        dot.classList.toggle("active", idx === currentIndex);
-      });
-    }
 
     // Always fetch fresh CSV (no localStorage caching)
     async function fetchCSV(url) {
@@ -356,42 +300,22 @@
       tableEl.innerHTML = html;
     }
 
-    // Load data for the current CSV and update table
+    // Fetch the CSV and build table
     async function updateTable() {
       try {
-        const csvText = await fetchCSV(csvUrls[currentIndex]);
+        const csvText = await fetchCSV(csvUrl);
         const { headers, data } = parseCSV(csvText);
         buildTable(headers, data);
-        updateActiveDot();
       } catch (error) {
         console.error("Error updating table:", error);
         tableEl.innerHTML = "<thead><tr><th>Error</th></tr></thead><tbody><tr><td>Failed to load data</td></tr></tbody>";
       }
     }
 
-    // Pagination arrow event listeners
-    document.getElementById("prevPage").addEventListener("click", () => {
-      currentIndex = (currentIndex - 1 + csvUrls.length) % csvUrls.length;
-      updateTable();
-    });
-    document.getElementById("nextPage").addEventListener("click", () => {
-      currentIndex = (currentIndex + 1) % csvUrls.length;
-      updateTable();
-    });
-
-    // Dot click event listeners
-    dots.forEach((dot, idx) => {
-      dot.addEventListener("click", () => {
-        currentIndex = idx;
-        updateTable();
-      });
-    });
-
     // Auto-update every 30 seconds
     setInterval(updateTable, 30000);
 
     // Initial load
-    updateActiveDot();
     updateTable();
   </script>
 </body>
