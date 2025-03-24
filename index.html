@@ -12,7 +12,6 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Base Styles & Variables */
     :root {
       --primary-bg: #111;
       --secondary-bg: #222;
@@ -20,9 +19,20 @@
       --overlay: rgba(0,0,0,0.35);
       --transition: 0.5s ease;
     }
-    html { scroll-behavior: smooth; }
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'IBM Plex Sans', sans-serif; background: var(--primary-bg); color: #fff; line-height: 1.6; }
+    html {
+      scroll-behavior: smooth;
+    }
+    *, *::before, *::after {
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--primary-bg);
+      color: #fff;
+      line-height: 1.6;
+    }
 
     /* Header */
     header {
@@ -31,11 +41,18 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      position: relative;
     }
-    .branding { display: flex; align-items: center; gap: 10px; }
-    .logo img { width: 60px; }
-    header h1 { font-size: 2.5em; }
+    .branding {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo img {
+      width: 60px;
+    }
+    header h1 {
+      font-size: 2.5em;
+    }
     nav { }
 
     /* Top Background Section */
@@ -65,30 +82,48 @@
     }
     @keyframes contentFadeIn {
       from { opacity: 0; transform: translate(-50%, -40%) scale(0.95); }
-      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
     }
-    .background .content h2 { font-size: 2.8em; margin-bottom: 0.5em; }
-    .background .content p a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-bottom 0.3s; }
-    .background .content p a:hover { border-bottom: 1px solid var(--accent); }
+    .background .content h2 {
+      font-size: 2.8em;
+      margin-bottom: 0.5em;
+    }
+    .background .content p a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-bottom 0.3s;
+    }
+    .background .content p a:hover {
+      border-bottom: 1px solid var(--accent);
+    }
 
     /* Portfolio Section */
     .portfolio {
       background: #131313;
-      padding: 100px 20px 80px;
+      /* Reduced top padding to move cards “up” */
+      padding: 60px 20px 80px;
       text-align: center;
     }
-    /* Force cards in one horizontal row */
+    /* Force a single horizontal row, centered, with horizontal scrolling */
     .card-grid {
       display: flex;
       flex-wrap: nowrap;
+      justify-content: center;  /* center the row */
       overflow-x: auto;
       gap: 40px;
       max-width: 100%;
       margin: 0 auto;
       padding: 0 20px;
     }
-    .card-grid-space { position: relative; flex: 0 0 auto; }
-    .card-grid-space .num { font-size: 2em; margin-bottom: 0.5rem; }
+    .card-grid-space {
+      position: relative;
+      flex: 0 0 auto; /* do not shrink or grow */
+    }
+    .card-grid-space .num {
+      font-size: 2em;
+      margin-bottom: 0.5rem;
+    }
 
     /* Card Styling */
     .card {
@@ -98,26 +133,31 @@
       border-radius: 1em;
       border: 5px solid #ccc;
       box-shadow: 0 0 5em -1em rgba(0,0,0,0.7);
-      overflow: hidden;
       background: var(--secondary-bg);
+      /* So it doesn’t get clipped when scaled */
+      overflow: visible;
+      /* Fade/slide effect */
       transform: translateY(30px);
       opacity: 0;
       transition: transform 0.6s ease, opacity 0.6s ease;
+      transform-origin: center bottom;
     }
     .card.animate {
       opacity: 1;
       transform: translateY(0);
     }
-    /* Card Image: scale (object-fit: cover fills the card) */
+    /* Card Image - scaled down pre-hover */
     .card img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: cover;   /* fill the card */
       object-position: center;
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       z-index: 0;
+      /* scale down images slightly before hover */
+      transform: scale(0.9);
+      transition: transform 0.5s ease;
     }
     /* Dark Gradient Overlay */
     .card::before {
@@ -141,11 +181,25 @@
       opacity: 1;
       transform: translateY(0);
     }
-    .card h3 { font-size: 1.6em; margin-bottom: 0.3em; }
-    .card p { font-size: 1em; line-height: 1.5; }
+    .card h3 {
+      font-size: 1.6em;
+      margin-bottom: 0.3em;
+    }
+    .card p {
+      font-size: 1em;
+      line-height: 1.5;
+    }
     /* Hover Effects */
-    .card:hover { transform: scale(1.04); box-shadow: 0 0 15px rgba(255,255,255,0.2); }
-    .card.left-align img { object-position: 15% center; }
+    .card:hover img {
+      transform: scale(1.0); /* scale to full size on hover */
+    }
+    .card:hover {
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
+    }
+    /* For the second card */
+    .card.left-align img {
+      object-position: 15% center;
+    }
 
     /* Footer */
     .footer {
@@ -162,24 +216,45 @@
       gap: 20px;
       justify-content: space-between;
     }
-    .footer-col h4 { margin-bottom: 15px; font-size: 1.2em; }
-    .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col h4 {
+      margin-bottom: 15px;
+      font-size: 1.2em;
+    }
+    .footer-col ul {
+      list-style: none;
+    }
+    .footer-col ul li {
+      margin-bottom: 8px;
+    }
     .footer-col ul li a {
-      color: #ccc; text-decoration: none;
+      color: #ccc;
+      text-decoration: none;
       transition: color 0.3s ease;
     }
-    .footer-col ul li a:hover { color: var(--accent); }
-    .social-icons { display: flex; gap: 10px; align-items: center; }
+    .footer-col ul li a:hover {
+      color: var(--accent);
+    }
+    .social-icons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
     .icon {
-      width: 40px; height: 40px;
-      background: #444; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 1.2em;
+      width: 40px;
+      height: 40px;
+      background: #444;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.2em;
       transition: background 0.3s ease;
       position: relative;
     }
-    .icon:hover { background: #666; }
+    .icon:hover {
+      background: #666;
+    }
     .tooltip {
       position: absolute;
       bottom: 50px;
@@ -205,7 +280,9 @@
       border-style: solid;
       border-color: var(--secondary-bg) transparent transparent transparent;
     }
-    .icon:hover .tooltip { opacity: 1; }
+    .icon:hover .tooltip {
+      opacity: 1;
+    }
     .icon-discord {
       background: url('discord.png') no-repeat center;
       background-size: cover;
@@ -213,9 +290,16 @@
 
     /* Responsive */
     @media (max-width: 600px) {
-      .footer-container { flex-direction: column; text-align: center; }
-      header h1 { font-size: 2em; }
-      .background .content h2 { font-size: 2em; }
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+      }
+      header h1 {
+        font-size: 2em;
+      }
+      .background .content h2 {
+        font-size: 2em;
+      }
     }
   </style>
 </head>
