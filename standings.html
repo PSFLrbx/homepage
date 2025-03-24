@@ -31,7 +31,6 @@
     a:hover {
       color: #ffb84d;
     }
-
     /* Header */
     header {
       background-color: #222;
@@ -70,7 +69,6 @@
       background-color: #333;
       color: #fff;
     }
-
     /* Main Content */
     .main-content {
       padding: 40px 20px;
@@ -82,7 +80,6 @@
       font-size: 2em;
       margin-bottom: 20px;
     }
-
     /* Pagination Controls */
     .pagination {
       text-align: center;
@@ -113,7 +110,6 @@
     .pagination .dot.active {
       background-color: orange;
     }
-
     /* Table Wrapper */
     .table-wrapper {
       width: 85vw;
@@ -122,7 +118,6 @@
       border-radius: 8px;
       background-color: #111;
     }
-
     /* Standings Table */
     .standings-table {
       width: 100%;
@@ -155,8 +150,7 @@
       font-size: 0.95em;
       word-wrap: break-word;
     }
-
-    /* Rank Cell: Contains the rank badge and team name without extra <br> */
+    /* Rank Cell */
     .rank-cell {
       min-width: 80px;
       min-height: 60px;
@@ -181,7 +175,6 @@
       font-size: 0.85em;
       line-height: 1.2;
     }
-
     /* Glow Effects for Top 3 Ranks */
     .rank-1 {
       border-color: gold;
@@ -210,34 +203,15 @@
       50% { box-shadow: 0 0 15px #cd7f32; }
       100% { box-shadow: 0 0 5px #cd7f32; }
     }
-
     /* Font-scaling for large numeric values */
     .shrink {
       font-size: 0.8em;
     }
-
-    /* Build colgroup for fixed column widths:
-         Rank: 60px, USERS: 200px, others: 120px.
-    */
-    function buildColGroup(filteredHeaders) {
-      let colgroupHTML = "<colgroup>";
-      colgroupHTML += '<col style="width:60px;" />';
-      if (filteredHeaders.length > 0) {
-        colgroupHTML += '<col style="width:200px;" />';
-      }
-      for (let i = 1; i < filteredHeaders.length; i++) {
-        colgroupHTML += '<col style="width:120px;" />';
-      }
-      colgroupHTML += "</colgroup>";
-      return colgroupHTML;
-    }
-
     @media (max-width: 900px) {
       .main-content { padding: 20px; }
       .table-wrapper { width: 100%; }
     }
-
-    /* Footer (exact copy from rulebook.html) */
+    /* Footer */
     footer {
       background-color: #222;
       text-align: center;
@@ -335,7 +309,7 @@
     </div>
   </div>
 
-  <!-- Footer (exact copy from rulebook.html) -->
+  <!-- Footer -->
   <footer>
     <div class="footer-container">
       <div class="footer-col">
@@ -377,19 +351,24 @@
     const dots = document.querySelectorAll(".pagination .dot");
     const tableEl = document.getElementById("standings-table");
     
-    function updateActiveDot() {
-      dots.forEach((dot, idx) => {
-        dot.classList.toggle("active", idx === currentIndex);
-      });
-    }
+    // CSV cache and cache time-to-live (30 seconds)
+    const csvCache = {};
+    const CACHE_TTL = 30000; // in milliseconds
     
-    async function fetchCSV(url) {
-      const fullUrl = `${url}&t=${Date.now()}`; // cache-buster
+    // Fetch CSV with caching mechanism
+    async function getCSVData(url) {
+      const now = Date.now();
+      if (csvCache[url] && (now - csvCache[url].timestamp < CACHE_TTL)) {
+        return csvCache[url].text;
+      }
+      const fullUrl = `${url}&t=${now}`; // cache-buster
       const response = await fetch(fullUrl);
-      return response.text();
+      const text = await response.text();
+      csvCache[url] = { text, timestamp: now };
+      return text;
     }
     
-    // Parse CSV and limit processing to the first 100 lines (1 header + 99 rows)
+    // Parse CSV and limit processing to the first 100 lines (header + 99 rows)
     function parseCSV(text) {
       let lines = text.trim().split("\n");
       const MAX_LINES = 100;
@@ -468,7 +447,8 @@
     
     async function updateTable() {
       try {
-        const csvText = await fetchCSV(csvUrls[currentIndex]);
+        const url = csvUrls[currentIndex];
+        const csvText = await getCSVData(url);
         const { headers, data } = parseCSV(csvText);
         buildTable(headers, data);
         updateActiveDot();
@@ -476,6 +456,12 @@
         console.error("Error updating table:", error);
         tableEl.innerHTML = "<thead><tr><th>Error</th></tr></thead><tbody><tr><td>Failed to load data</td></tr></tbody>";
       }
+    }
+    
+    function updateActiveDot() {
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle("active", idx === currentIndex);
+      });
     }
     
     document.getElementById("prevPage").addEventListener("click", () => {
@@ -493,6 +479,7 @@
       });
     });
     
+    // Automatically update the table every 30 seconds
     setInterval(updateTable, 30000);
     updateActiveDot();
     updateTable();
