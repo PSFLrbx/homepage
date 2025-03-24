@@ -138,13 +138,12 @@
       background-image:
         linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
         var(--bg-img, url('background.png'));
-      /* Less cropping: scale to 100% of card width, auto height to keep ratio */
-      background-size: 100% auto;
-      background-repeat: no-repeat;
-      background-position: center;
+      background-size: contain;       /* This ensures the entire image fits */
+      background-repeat: no-repeat;   /* No repeating of the image */
+      background-position: center;    /* Center the image */
     }
 
-    /* Custom class to shift background horizontally for records card */
+    /* Shift background horizontally for records card if needed */
     .card.left-align {
       background-position: 15% center;
     }
