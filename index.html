@@ -12,76 +12,47 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Base Variables & Resets */
+    /* Base Styles & Variables */
     :root {
-      --primary-color: #111;
-      --secondary-color: #222;
-      --accent-color: orange;
-      --overlay-color: rgba(0,0,0,0.35);
-      --transition-speed: 0.4s;
-      --easing: cubic-bezier(0.23, 1, 0.32, 1);
-      --card-bg: #000;
+      --primary-bg: #111;
+      --secondary-bg: #222;
+      --accent: orange;
+      --overlay: rgba(0,0,0,0.35);
+      --transition: 0.5s ease;
     }
     html { scroll-behavior: smooth; }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'IBM Plex Sans', sans-serif; background: var(--primary-color); color: #fff; line-height: 1.6; }
+    body { font-family: 'IBM Plex Sans', sans-serif; background: var(--primary-bg); color: #fff; line-height: 1.6; }
 
-    /* Header with Animated Gradient Background */
+    /* Header */
     header {
       padding: 20px;
-      background: var(--secondary-color);
+      background: var(--secondary-bg);
       display: flex;
       align-items: center;
       justify-content: space-between;
       position: relative;
-      overflow: hidden;
-    }
-    header::before {
-      content: "";
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(45deg, #ff416c, #ff4b2b, #ff416c);
-      animation: gradientShift 8s linear infinite;
-      z-index: -1;
-      opacity: 0.2;
-    }
-    @keyframes gradientShift {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
     }
     .branding { display: flex; align-items: center; gap: 10px; }
     .logo img { width: 60px; }
-    header h1 { font-size: 2.5em; position: relative; animation: textPulse 3s ease-in-out infinite; }
-    @keyframes textPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
+    header h1 { font-size: 2.5em; }
     nav { }
 
-    /* Top Background Section with Particle-Like Animation */
+    /* Top Background Section */
     .background {
       position: relative;
       height: 120vh;
       background: url('logo.png') no-repeat center top;
       background-size: contain;
       background-color: #000;
-      overflow: hidden;
     }
     .background::after {
       content: "";
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: var(--overlay-color);
+      background: var(--overlay);
       z-index: 0;
-      animation: overlayPulse 10s ease-in-out infinite;
-    }
-    @keyframes overlayPulse {
-      0%, 100% { opacity: 0.35; }
-      50% { opacity: 0.25; }
     }
     .background .content {
       position: absolute;
@@ -89,18 +60,18 @@
       transform: translate(-50%, -50%);
       z-index: 1;
       text-align: center;
-      animation: contentReveal 1s var(--easing) forwards;
       opacity: 0;
+      animation: contentFadeIn 1s forwards;
     }
-    @keyframes contentReveal {
-      0% { transform: translate(-50%, -40%) scale(0.95); opacity: 0; }
-      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    @keyframes contentFadeIn {
+      from { opacity: 0; transform: translate(-50%, -40%) scale(0.95); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
     }
     .background .content h2 { font-size: 2.8em; margin-bottom: 0.5em; }
-    .background .content p a { color: var(--accent-color); text-decoration: none; border-bottom: 1px solid transparent; transition: border-bottom 0.3s; }
-    .background .content p a:hover { border-bottom: 1px solid var(--accent-color); }
+    .background .content p a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-bottom 0.3s; }
+    .background .content p a:hover { border-bottom: 1px solid var(--accent); }
 
-    /* Portfolio Section with Additional Effects */
+    /* Portfolio Section */
     .portfolio {
       background: #131313;
       padding: 100px 20px 80px;
@@ -118,7 +89,7 @@
     .card-grid-space { position: relative; }
     .card-grid-space .num { font-size: 2em; margin-bottom: 0.5rem; }
 
-    /* Card Styling with Layered Animations */
+    /* Card Styling */
     .card {
       position: relative;
       width: 18em;
@@ -127,210 +98,143 @@
       border: 5px solid #ccc;
       box-shadow: 0 0 5em -1em rgba(0,0,0,0.7);
       overflow: hidden;
-      background: var(--card-bg);
-      transform: translateY(40px) scale(0.95);
+      background: var(--secondary-bg);
+      transform: translateY(30px);
       opacity: 0;
-      transition: transform 0.6s var(--easing), opacity 0.6s var(--easing);
+      transition: transform 0.6s ease, opacity 0.6s ease;
     }
-    .card.animate { opacity: 1; transform: translateY(0) scale(1); }
-    /* Card Image */
+    .card.animate {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Card Image Fix */
     .card img {
       width: 100%;
       height: 100%;
       object-fit: contain;
       object-position: center;
       position: absolute;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       z-index: 0;
-      transition: object-position 0.5s var(--easing);
     }
-    /* Overlay Animation */
+    /* Dark Gradient Overlay */
     .card::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, transparent, var(--overlay-color));
+      background: linear-gradient(180deg, transparent, var(--overlay));
       z-index: 1;
-      opacity: 0.8;
-      animation: overlayFloat 6s ease-in-out infinite;
     }
-    @keyframes overlayFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    /* Card Content Animation */
+    /* Card Content */
     .card-content {
       position: relative;
       z-index: 2;
       padding: 1em;
       text-align: left;
-      transition: transform 0.6s var(--easing), opacity 0.6s var(--easing);
       opacity: 0;
       transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
-    .card.animate .card-content { opacity: 1; transform: translateY(0); }
+    .card.animate .card-content {
+      opacity: 1;
+      transform: translateY(0);
+    }
     .card h3 { font-size: 1.6em; margin-bottom: 0.3em; }
     .card p { font-size: 1em; line-height: 1.5; }
-    /* Hover Micro-Interactions */
-    .card:hover { transform: scale(1.06); box-shadow: 0 0 20px rgba(255,255,255,0.25); }
-    .card:hover img { filter: brightness(1.05); }
-    /* For records card: adjust focal point */
+
+    /* Hover Effects */
+    .card:hover { transform: scale(1.04); box-shadow: 0 0 15px rgba(255,255,255,0.2); }
     .card.left-align img { object-position: 15% center; }
 
-    /* Extra Animations for Footer Icons */
-    @keyframes iconPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.15); }
+    /* Footer */
+    .footer {
+      background: var(--secondary-bg);
+      padding: 50px 0;
+      text-align: center;
     }
-    .icon:hover { animation: iconPulse 0.8s ease-in-out infinite; }
-
-    /* Additional Animated Background Elements */
-    .floating-circle {
+    .footer-container {
+      max-width: 1000px;
+      width: 90%;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+    }
+    .footer-col h4 { margin-bottom: 15px; font-size: 1.2em; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col ul li a {
+      color: #ccc; text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .footer-col ul li a:hover { color: var(--accent); }
+    .social-icons { display: flex; gap: 10px; align-items: center; }
+    .icon {
+      width: 40px; height: 40px;
+      background: #444; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 1.2em;
+      transition: background 0.3s ease;
+      position: relative;
+    }
+    .icon:hover { background: #666; }
+    .tooltip {
       position: absolute;
-      border-radius: 50%;
-      opacity: 0.3;
-      background: var(--accent-color);
-      animation: floatCircle 12s ease-in-out infinite;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--secondary-bg);
+      color: #fff;
+      font-size: 0.75em;
+      padding: 6px 10px;
+      border-radius: 4px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
     }
-    @keyframes floatCircle {
-      0% { transform: translateY(0) scale(0.8); opacity: 0.4; }
-      50% { transform: translateY(-50px) scale(1.2); opacity: 0.2; }
-      100% { transform: translateY(0) scale(0.8); opacity: 0.4; }
+    .tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: var(--secondary-bg) transparent transparent transparent;
     }
-    /* Place several circles in header for effect */
-    header .floating-circle:nth-child(1) { width: 100px; height: 100px; top: -30px; left: -30px; }
-    header .floating-circle:nth-child(2) { width: 150px; height: 150px; bottom: -50px; right: -50px; animation-duration: 14s; }
-    header .floating-circle:nth-child(3) { width: 80px; height: 80px; top: 10px; right: -40px; animation-duration: 10s; }
+    .icon:hover .tooltip { opacity: 1; }
+    .icon-discord {
+      background: url('discord.png') no-repeat center;
+      background-size: cover;
+    }
 
-    /* Media Queries for Responsiveness */
+    /* Responsive Adjustments */
     @media (max-width: 600px) {
       .footer-container { flex-direction: column; text-align: center; }
       .card-grid { flex-wrap: wrap; }
       header h1 { font-size: 2em; }
       .background .content h2 { font-size: 2em; }
     }
-
-    /* EXTRA 200+ LINES OF ANIMATION CSS */
-    /* Additional keyframe animations for micro-interactions, delays, and staggered reveals */
-    @keyframes fadeInUp {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes bounceIn {
-      0% { opacity: 0; transform: scale(0.5) translateY(50px); }
-      60% { opacity: 1; transform: scale(1.1) translateY(-10px); }
-      80% { transform: scale(0.95) translateY(5px); }
-      100% { transform: scale(1) translateY(0); }
-    }
-    @keyframes slideLeft {
-      0% { transform: translateX(100px); opacity: 0; }
-      100% { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideRight {
-      0% { transform: translateX(-100px); opacity: 0; }
-      100% { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes rotate360 {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    /* Applying animations to header content */
-    .background .content h2 { animation: fadeInUp 1s var(--easing) forwards; }
-    .background .content p { animation: slideLeft 1s var(--easing) forwards 0.3s; }
-    /* Staggered animation for cards */
-    .card:nth-child(1) { animation-delay: 0.2s; }
-    .card:nth-child(2) { animation-delay: 0.4s; }
-    .card:nth-child(3) { animation-delay: 0.6s; }
-    .card:nth-child(4) { animation-delay: 0.8s; }
-    /* Apply bounce animation on card entrance */
-    .card.animate { animation: bounceIn 0.8s var(--easing) forwards; }
-    /* Extra hover effect for card-content */
-    .card:hover .card-content { animation: fadeInUp 0.4s var(--easing) forwards; }
-    /* Animated borders on cards */
-    .card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      border: 2px solid transparent;
-      background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
-      background-size: 200% 100%;
-      animation: borderGlide 3s linear infinite;
-      z-index: 3;
-    }
-    @keyframes borderGlide {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-    /* Pulsing effect for card images on hover */
-    .card:hover img {
-      animation: pulseImage 1.2s ease-in-out infinite;
-    }
-    @keyframes pulseImage {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.02); }
-    }
-    /* Social Icons extra animation */
-    .social-icons .icon {
-      animation: slideRight 1s var(--easing) forwards;
-    }
-    .social-icons .icon:hover {
-      animation: rotate360 1s linear infinite;
-    }
-    /* Footer text reveal */
-    .footer-col h4 { animation: fadeInUp 0.8s var(--easing) forwards; }
-    .footer-col ul li { animation: slideRight 0.8s var(--easing) forwards; }
-    /* Extra animated text shadows */
-    header h1 {
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-      animation: shadowPulse 2s ease-in-out infinite;
-    }
-    @keyframes shadowPulse {
-      0%, 100% { text-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
-      50% { text-shadow: 4px 4px 10px rgba(0,0,0,0.8); }
-    }
-    /* Particle Animation for header */
-    .particle {
-      position: absolute;
-      border-radius: 50%;
-      background: var(--accent-color);
-      opacity: 0.3;
-      animation: particleMove 8s ease-in-out infinite;
-      pointer-events: none;
-    }
-    @keyframes particleMove {
-      0% { transform: translate(0, 0) scale(0.8); }
-      50% { transform: translate(50px, -50px) scale(1.2); opacity: 0.1; }
-      100% { transform: translate(0, 0) scale(0.8); opacity: 0.3; }
-    }
-    /* Positioning several particles in header */
-    header .particle:nth-child(1) { width: 30px; height: 30px; top: 10%; left: 20%; }
-    header .particle:nth-child(2) { width: 40px; height: 40px; top: 30%; left: 70%; animation-duration: 10s; }
-    header .particle:nth-child(3) { width: 20px; height: 20px; top: 50%; left: 40%; animation-duration: 7s; }
-    header .particle:nth-child(4) { width: 35px; height: 35px; top: 80%; left: 10%; animation-duration: 9s; }
-    header .particle:nth-child(5) { width: 25px; height: 25px; top: 70%; left: 80%; animation-duration: 11s; }
-    /* END EXTRA ANIMATION LINES */
   </style>
 </head>
 <body>
   <header>
     <div class="branding">
-      <div class="logo"><img src="logo.png" alt="PSFL Logo"></div>
+      <div class="logo">
+        <img src="logo.png" alt="PSFL Logo">
+      </div>
       <h1>PSFL</h1>
-      <!-- Floating particles for added effect -->
-      <div class="particle"></div>
-      <div class="particle"></div>
-      <div class="particle"></div>
-      <div class="particle"></div>
-      <div class="particle"></div>
     </div>
     <nav></nav>
   </header>
 
   <!-- Top Background Section -->
   <section class="background">
-    <div class="content page-enter">
-      <h2>Ready to unleash your passion and define the game?</h2>
+    <div class="content">
+      <h2>Unleash Your Passion</h2>
       <p>
         Start your ro-football career today at 
         <a href="https://discord.gg/psfl">discord.gg/psfl</a>
@@ -419,7 +323,7 @@
   </footer>
 
   <script>
-    // Parallax Effect for Top Background Section
+    // Parallax for Top Background
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
@@ -427,12 +331,14 @@
       document.querySelector('.background').style.backgroundPositionY = currentY + "px";
       requestAnimationFrame(updateParallax);
     }
-    window.addEventListener('scroll', () => { targetY = -(window.pageYOffset * parallaxSpeed); });
+    window.addEventListener('scroll', () => {
+      targetY = -(window.pageYOffset * parallaxSpeed);
+    });
     updateParallax();
 
-    // Animate cards on scroll using Intersection Observer
+    // Animate cards on scroll (simple Intersection Observer)
     const cards = document.querySelectorAll('.card');
-    const observerOptions = { threshold: 0.2 };
+    const observerOptions = { threshold: 0.3 };
     const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if(entry.isIntersecting) {
