@@ -77,16 +77,17 @@
       padding: 100px 20px 80px;
       text-align: center;
     }
+    /* Force cards in one horizontal row */
     .card-grid {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      flex-wrap: nowrap;
+      overflow-x: auto;
       gap: 40px;
-      max-width: 1200px;
+      max-width: 100%;
       margin: 0 auto;
       padding: 0 20px;
     }
-    .card-grid-space { position: relative; }
+    .card-grid-space { position: relative; flex: 0 0 auto; }
     .card-grid-space .num { font-size: 2em; margin-bottom: 0.5rem; }
 
     /* Card Styling */
@@ -107,11 +108,11 @@
       opacity: 1;
       transform: translateY(0);
     }
-    /* Card Image Fix */
+    /* Card Image: scale (object-fit: cover fills the card) */
     .card img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
       object-position: center;
       position: absolute;
       top: 0;
@@ -142,7 +143,6 @@
     }
     .card h3 { font-size: 1.6em; margin-bottom: 0.3em; }
     .card p { font-size: 1em; line-height: 1.5; }
-
     /* Hover Effects */
     .card:hover { transform: scale(1.04); box-shadow: 0 0 15px rgba(255,255,255,0.2); }
     .card.left-align img { object-position: 15% center; }
@@ -211,10 +211,9 @@
       background-size: cover;
     }
 
-    /* Responsive Adjustments */
+    /* Responsive */
     @media (max-width: 600px) {
       .footer-container { flex-direction: column; text-align: center; }
-      .card-grid { flex-wrap: wrap; }
       header h1 { font-size: 2em; }
       .background .content h2 { font-size: 2em; }
     }
@@ -323,7 +322,7 @@
   </footer>
 
   <script>
-    // Parallax for Top Background
+    // Parallax Effect for Top Background
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
@@ -336,7 +335,7 @@
     });
     updateParallax();
 
-    // Animate cards on scroll (simple Intersection Observer)
+    // Animate cards on scroll using Intersection Observer
     const cards = document.querySelectorAll('.card');
     const observerOptions = { threshold: 0.3 };
     const observer = new IntersectionObserver((entries, obs) => {
