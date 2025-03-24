@@ -134,30 +134,30 @@
       border: 5px solid #ccc;
       box-shadow: 0 0 5em -1em rgba(0,0,0,0.7);
       background: var(--secondary-bg);
-      /* So it doesn’t get clipped when scaled */
-      overflow: visible;
+      /* Overflow hidden so the scaled image is clipped at edges */
+      overflow: hidden;
       /* Fade/slide effect */
       transform: translateY(30px);
       opacity: 0;
       transition: transform 0.6s ease, opacity 0.6s ease;
-      transform-origin: center bottom;
     }
     .card.animate {
       opacity: 1;
       transform: translateY(0);
     }
-    /* Card Image - scaled down pre-hover */
+    /* Card Image - smaller pre-hover, object-fit cover */
     .card img {
       width: 100%;
       height: 100%;
-      object-fit: cover;   /* fill the card */
+      object-fit: cover;
       object-position: center;
       position: absolute;
       top: 0; left: 0;
       z-index: 0;
-      /* scale down images slightly before hover */
-      transform: scale(0.9);
-      transition: transform 0.5s ease;
+      /* Start slightly smaller */
+      transform: scale(0.95);
+      transform-origin: center center;
+      transition: transform 0.4s ease;
     }
     /* Dark Gradient Overlay */
     .card::before {
@@ -191,7 +191,8 @@
     }
     /* Hover Effects */
     .card:hover img {
-      transform: scale(1.0); /* scale to full size on hover */
+      /* Slightly larger than 1.0 so it extends beyond the border a bit */
+      transform: scale(1.03);
     }
     .card:hover {
       box-shadow: 0 0 15px rgba(255,255,255,0.2);
