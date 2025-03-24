@@ -19,9 +19,7 @@
       --overlay: rgba(0,0,0,0.35);
       --transition: 0.5s ease;
     }
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
     *, *::before, *::after {
       margin: 0; 
       padding: 0; 
@@ -101,7 +99,7 @@
     /* Portfolio Section */
     .portfolio {
       background: #131313;
-      /* Reduced top padding to move cards “up” */
+      /* Slightly reduced top padding to move cards “up” */
       padding: 60px 20px 80px;
       text-align: center;
     }
@@ -145,7 +143,7 @@
       opacity: 1;
       transform: translateY(0);
     }
-    /* Card Image - smaller pre-hover, object-fit cover */
+    /* Card Image - slightly overextended by default */
     .card img {
       width: 100%;
       height: 100%;
@@ -154,8 +152,8 @@
       position: absolute;
       top: 0; left: 0;
       z-index: 0;
-      /* Start slightly smaller */
-      transform: scale(0.95);
+      /* Start at 1.02 scale to be slightly bigger than the card */
+      transform: scale(1.02);
       transform-origin: center center;
       transition: transform 0.4s ease;
     }
@@ -189,10 +187,9 @@
       font-size: 1em;
       line-height: 1.5;
     }
-    /* Hover Effects */
+    /* Hover Effects: scale up slightly more */
     .card:hover img {
-      /* Slightly larger than 1.0 so it extends beyond the border a bit */
-      transform: scale(1.03);
+      transform: scale(1.05);
     }
     .card:hover {
       box-shadow: 0 0 15px rgba(255,255,255,0.2);
