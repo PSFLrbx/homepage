@@ -22,7 +22,7 @@
     }
     /*
       We enable smooth vertical scrolling with snap,
-      but we also keep horizontal scrolling for the .card-grid.
+      but we also keep horizontal scrolling for the card grid.
     */
     html {
       scroll-behavior: smooth;
@@ -59,7 +59,7 @@
       background: rgba(255,255,255,0.1);
       border-radius: 4px;
       z-index: 102;
-      pointer-events: none; /* so clicks pass through to the body unless on the thumb */
+      pointer-events: none;
     }
     .scrollbar-thumb {
       width: 100%;
@@ -67,16 +67,16 @@
       border-radius: 4px;
       position: absolute;
       top: 0;
-      height: 20%; /* Dynamically updated */
+      height: 20%;
       transition: height 0.3s, top 0.3s;
-      pointer-events: auto; /* thumb is draggable */
+      pointer-events: auto;
       cursor: grab;
     }
     .scrollbar-thumb:active {
       cursor: grabbing;
     }
     
-    /* Vertical Pagination Dots (for full-page navigation; redundant code kept) */
+    /* Vertical Full-Page Pagination Dots (redundant code kept) */
     aside.pagination-dots {
       position: fixed;
       right: 20px;
@@ -104,6 +104,37 @@
       background: var(--accent);
     }
     aside.pagination-dots ul li a:hover {
+      background: var(--accent);
+    }
+    
+    /* New Portfolio Navigator Dots */
+    aside.portfolio-dots {
+      position: fixed;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 105;
+    }
+    aside.portfolio-dots ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    aside.portfolio-dots ul li {
+      margin: 8px 0;
+    }
+    aside.portfolio-dots ul li a {
+      display: block;
+      width: 10px;
+      height: 10px;
+      background: #444;
+      border-radius: 50%;
+      transition: background 0.3s ease;
+    }
+    aside.portfolio-dots ul li a.active {
+      background: var(--accent); /* orange when active */
+    }
+    aside.portfolio-dots ul li a:hover {
       background: var(--accent);
     }
     
@@ -154,7 +185,6 @@
       z-index: 1;
       text-align: center;
       opacity: 0;
-      /* Redundant animation lines preserved */
       animation: contentFadeIn 1s forwards;
     }
     @keyframes contentFadeIn {
@@ -175,7 +205,7 @@
       border-bottom: 1px solid var(--accent);
     }
     
-    /* Portfolio Section */
+    /* Portfolio Sections */
     .portfolio {
       background: #131313;
       padding: 60px 20px 80px;
@@ -203,7 +233,6 @@
       font-size: 2em;
       margin-bottom: 0.5rem;
     }
-    /* Make card links block-level */
     .card-grid-space a {
       display: block;
       text-decoration: none;
@@ -220,14 +249,13 @@
       box-shadow: 0 0 5em -1em rgba(0,0,0,0.7);
       background: var(--secondary-bg);
       overflow: hidden;
-      opacity: 1; /* always visible now */
+      opacity: 1;
       transform: none;
       transition: transform 0.6s ease, opacity 0.6s ease;
     }
     .card:hover {
       transform: translateY(-5px);
     }
-    /* Card Image */
     .card img {
       width: 100%;
       height: 100%;
@@ -244,10 +272,7 @@
     .card:hover img {
       transform: scale(1.05);
     }
-    /* For card 2: bg-up adjustment (cropping from bottom to 75%) */
-    .card.bg-up img {
-      object-position: center 75%;
-    }
+    .card.bg-up img,
     .card.left-align.bg-up img {
       object-position: center 75%;
     }
@@ -271,7 +296,7 @@
       background: rgba(0, 0, 0, 0.5);
       box-sizing: border-box;
       color: #fff;
-      min-height: 80px; /* Uniform overlay height */
+      min-height: 80px;
     }
     .card h3 {
       font-size: 1.6em;
@@ -283,33 +308,6 @@
     }
     .card.left-align img {
       object-position: 15% center;
-    }
-    
-    /* Horizontal Pagination Dots for Portfolio Cards */
-    .portfolio-pagination-dots {
-      margin-top: 20px;
-      text-align: center;
-    }
-    .portfolio-pagination-dots ul {
-      list-style: none;
-      display: inline-flex;
-      gap: 10px;
-      padding: 0;
-      margin: 0;
-    }
-    .portfolio-pagination-dots ul li a {
-      display: block;
-      width: 12px;
-      height: 12px;
-      background: #444;
-      border-radius: 50%;
-      transition: background 0.3s ease;
-    }
-    .portfolio-pagination-dots ul li a.active {
-      background: var(--accent); /* Active dot is orange */
-    }
-    .portfolio-pagination-dots ul li a:hover {
-      background: var(--accent);
     }
     
     /* Footer Section */
@@ -438,8 +436,17 @@
   <aside class="pagination-dots">
     <ul>
       <li><a href="#top" class="dot" data-target="top"></a></li>
-      <li><a href="#portfolio" class="dot" data-target="portfolio"></a></li>
+      <li><a href="#portfolio1" class="dot" data-target="portfolio1"></a></li>
+      <li><a href="#portfolio2" class="dot" data-target="portfolio2"></a></li>
       <li><a href="#footer" class="dot" data-target="footer"></a></li>
+    </ul>
+  </aside>
+  
+  <!-- New Portfolio Navigator (Vertical) -->
+  <aside class="portfolio-dots">
+    <ul>
+      <li><a href="#portfolio1" class="dot" data-target="portfolio1"></a></li>
+      <li><a href="#portfolio2" class="dot" data-target="portfolio2"></a></li>
     </ul>
   </aside>
   
@@ -454,10 +461,10 @@
     </div>
   </section>
   
-  <!-- PORTFOLIO SECTION -->
-  <section class="portfolio" id="portfolio">
-    <h2>Our Portfolio</h2>
-    <div class="card-grid" id="cardGrid">
+  <!-- PORTFOLIO SECTION 1 -->
+  <section class="portfolio" id="portfolio1">
+    <h2>Our Portfolio – Part 1</h2>
+    <div class="card-grid" id="cardGrid1">
       <!-- Card 1: Stats -->
       <div class="card-grid-space" data-index="0">
         <div class="num">1</div>
@@ -471,7 +478,7 @@
           </div>
         </a>
       </div>
-      <!-- Card 2: Standings (with bg-up for bottom-crop) -->
+      <!-- Card 2: Standings -->
       <div class="card-grid-space" data-index="1">
         <div class="num">2</div>
         <a href="standings.html">
@@ -511,15 +518,65 @@
         </a>
       </div>
     </div>
-    
-    <!-- Horizontal Pagination Dots for Portfolio Cards -->
-    <div class="portfolio-pagination-dots" id="portfolioDots">
-      <ul>
-        <li><a href="#" class="dot" data-card="0"></a></li>
-        <li><a href="#" class="dot" data-card="1"></a></li>
-        <li><a href="#" class="dot" data-card="2"></a></li>
-        <li><a href="#" class="dot" data-card="3"></a></li>
-      </ul>
+  </section>
+  
+  <!-- PORTFOLIO SECTION 2 -->
+  <section class="portfolio" id="portfolio2">
+    <h2>Our Portfolio – Part 2</h2>
+    <div class="card-grid" id="cardGrid2">
+      <!-- You can reuse the same cards or add new ones -->
+      <!-- Card 1: Stats -->
+      <div class="card-grid-space" data-index="0">
+        <div class="num">1</div>
+        <a href="stats.html">
+          <div class="card desc-bottom">
+            <img src="background.png" alt="Stats">
+            <div class="card-content">
+              <h3>Stats</h3>
+              <p>View your stats from games here.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <!-- Card 2: Standings -->
+      <div class="card-grid-space" data-index="1">
+        <div class="num">2</div>
+        <a href="standings.html">
+          <div class="card left-align bg-up desc-bottom">
+            <img src="standings.png" alt="Standings">
+            <div class="card-content">
+              <h3>Standings</h3>
+              <p>Check your team's standing here.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <!-- Card 3: Rulebook -->
+      <div class="card-grid-space" data-index="2">
+        <div class="num">3</div>
+        <a href="rulebook.html">
+          <div class="card desc-bottom">
+            <img src="background.png" alt="Rulebook">
+            <div class="card-content">
+              <h3>Rulebook</h3>
+              <p>Read the league game rules here.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <!-- Card 4: Credits -->
+      <div class="card-grid-space" data-index="3">
+        <div class="num">4</div>
+        <a href="credits.html">
+          <div class="card desc-bottom">
+            <img src="credits.png" alt="Credits">
+            <div class="card-content">
+              <h3>Credits</h3>
+              <p>Meet the team behind PSFL website.</p>
+            </div>
+          </div>
+        </a>
+      </div>
     </div>
   </section>
   
@@ -601,7 +658,7 @@
         isDragging = true;
         startY = e.clientY;
         startScrollTop = window.pageYOffset;
-        document.body.style.userSelect = 'none'; // prevent text selection
+        document.body.style.userSelect = 'none';
       });
       document.addEventListener('mousemove', e => {
         if(!isDragging) return;
@@ -620,17 +677,19 @@
       });
     }
     
-    // Update active vertical pagination dot based on full-page scroll
+    // Update active vertical pagination dot (full-page navigation, redundant)
     function updateActiveDot() {
       const dots = document.querySelectorAll('.pagination-dots a');
       dots.forEach(dot => dot.classList.remove('active'));
       const scrollY = window.pageYOffset;
-      if (scrollY < document.getElementById('portfolio').offsetTop - 50) {
+      if (scrollY < document.getElementById('portfolio1').offsetTop - 50) {
         dots[0].classList.add('active');
-      } else if (scrollY < document.getElementById('footer').offsetTop - 50) {
+      } else if (scrollY < document.getElementById('portfolio2').offsetTop - 50) {
         dots[1].classList.add('active');
-      } else {
+      } else if (scrollY < document.getElementById('footer').offsetTop - 50) {
         dots[2].classList.add('active');
+      } else {
+        dots[3].classList.add('active');
       }
     }
     
@@ -652,7 +711,7 @@
       requestAnimationFrame(animation);
     }
     
-    // Update active portfolio dot based on horizontal scroll position
+    // Update active portfolio card dot (horizontal card grid, redundant)
     function updateActiveCardDot() {
       const container = document.getElementById('cardGrid');
       const cardSpaces = Array.from(container.querySelectorAll('.card-grid-space'));
@@ -669,15 +728,28 @@
           bestIndex = i;
         }
       });
-      const dots = document.querySelectorAll('#portfolioDots .dot');
+      // (This function is kept for redundancy)
+    }
+    
+    // Update active portfolio page dot based on vertical scroll
+    function updatePortfolioPageDot() {
+      const portfolioSections = document.querySelectorAll('section.portfolio');
+      let activeIndex = 0;
+      portfolioSections.forEach((section, i) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+          activeIndex = i;
+        }
+      });
+      const dots = document.querySelectorAll('aside.portfolio-dots .dot');
       dots.forEach(dot => dot.classList.remove('active'));
-      const activeDot = document.querySelector(`#portfolioDots .dot[data-card="${bestIndex}"]`);
+      const activeDot = document.querySelector(`aside.portfolio-dots .dot[data-target="portfolio${activeIndex+1}"]`);
       if (activeDot) {
         activeDot.classList.add('active');
       }
     }
     
-    // Initialization function for vertical behaviors
+    // Initialization for vertical behaviors
     function initializeAll() {
       updateCustomScrollbar();
       makeScrollbarDraggable();
@@ -692,7 +764,9 @@
       window.addEventListener('scroll', function() {
         updateCustomScrollbar();
         updateActiveDot();
+        updatePortfolioPageDot();
       });
+      
       const verticalDots = document.querySelectorAll('.pagination-dots a');
       verticalDots.forEach(dot => {
         dot.addEventListener('click', function(e) {
@@ -706,24 +780,45 @@
         });
       });
       
-      // Horizontal portfolio pagination dots
+      // Horizontal portfolio card grid (redundant)
       const container = document.getElementById('cardGrid');
-      const portfolioDots = document.querySelectorAll('#portfolioDots .dot');
       container.addEventListener('scroll', updateActiveCardDot);
+      
+      // Portfolio page dots: clicking navigates to the respective portfolio section
+      const portfolioDots = document.querySelectorAll('aside.portfolio-dots .dot');
       portfolioDots.forEach(dot => {
         dot.addEventListener('click', function(e) {
           e.preventDefault();
-          const cardIndex = parseInt(this.getAttribute('data-card'), 10);
-          const cardSpaces = container.querySelectorAll('.card-grid-space');
-          const targetSpace = cardSpaces[cardIndex];
-          if (targetSpace) {
-            const targetX = targetSpace.offsetLeft;
-            smoothHorizontalScrollTo(container, targetX);
+          const targetId = this.getAttribute('data-target');
+          const targetElem = document.getElementById(targetId);
+          if (targetElem) {
+            const targetY = targetElem.offsetTop;
+            smoothScrollTo(targetY);
           }
         });
       });
+      
       updateActiveCardDot();
+      updatePortfolioPageDot();
     });
+    
+    // For vertical smooth scroll (redundant)
+    function smoothScrollTo(targetY, duration = 800) {
+      const startY = window.pageYOffset;
+      const distance = targetY - startY;
+      let startTime = null;
+      function animation(currentTime) {
+        if (!startTime) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        const ease = easeInOutQuad(progress);
+        window.scrollTo(0, startY + (distance * ease));
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
+        }
+      }
+      requestAnimationFrame(animation);
+    }
   </script>
 </body>
 </html>
