@@ -306,7 +306,7 @@
       transition: background 0.3s ease;
     }
     .portfolio-pagination-dots ul li a.active {
-      background: var(--accent);
+      background: var(--accent); /* Active dot is orange */
     }
     .portfolio-pagination-dots ul li a:hover {
       background: var(--accent);
@@ -559,7 +559,6 @@
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
     }
-    
     // Vertical smooth scroll (for full-page navigation)
     function smoothScrollTo(targetY, duration = 800) {
       const startY = window.pageYOffset;
