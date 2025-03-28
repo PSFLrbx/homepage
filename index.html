@@ -129,6 +129,12 @@
       font-size: 2em;
       margin-bottom: 0.5rem;
     }
+    /* Make card links block-level and remove default styles */
+    .card-grid-space a {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
     
     /* Card Styling */
     .card {
@@ -204,6 +210,17 @@
     /* Specific card adjustment for records card */
     .card.left-align img {
       object-position: 15% center;
+    }
+    
+    /* New style: Move description to the bottom for cards with .desc-bottom */
+    .card.desc-bottom .card-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 1em;
+      background: rgba(0, 0, 0, 0.5);
+      box-sizing: border-box;
     }
     
     /* Footer Section */
@@ -333,49 +350,57 @@
   <!-- PORTFOLIO SECTION -->
   <section class="portfolio">
     <div class="card-grid">
-      <!-- Card 1 -->
+      <!-- Card 1: Stats (Keep as is) -->
       <div class="card-grid-space">
         <div class="num">1</div>
-        <div class="card">
-          <img src="background.png" alt="Stats">
-          <div class="card-content">
-            <h3>Stats</h3>
-            <p>View your stats from games here.</p>
+        <a href="stats.html">
+          <div class="card">
+            <img src="background.png" alt="Stats">
+            <div class="card-content">
+              <h3>Stats</h3>
+              <p>View your stats from games here.</p>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
-      <!-- Card 2 -->
+      <!-- Card 2: Standings (Change background and move description to bottom) -->
       <div class="card-grid-space">
         <div class="num">2</div>
-        <div class="card left-align">
-          <img src="records.jpg" alt="Standings">
-          <div class="card-content">
-            <h3>Standings</h3>
-            <p>Check your team's standing here.</p>
+        <a href="standings.html">
+          <div class="card left-align desc-bottom">
+            <img src="standings.png" alt="Standings">
+            <div class="card-content">
+              <h3>Standings</h3>
+              <p>Check your team's standing here.</p>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
-      <!-- Card 3 -->
+      <!-- Card 3: Rulebook (Keep as is) -->
       <div class="card-grid-space">
         <div class="num">3</div>
-        <div class="card">
-          <img src="background.png" alt="Rulebook">
-          <div class="card-content">
-            <h3>Rulebook</h3>
-            <p>Read the league game rules here.</p>
+        <a href="rulebook.html">
+          <div class="card">
+            <img src="background.png" alt="Rulebook">
+            <div class="card-content">
+              <h3>Rulebook</h3>
+              <p>Read the league game rules here.</p>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
-      <!-- Card 4 -->
+      <!-- Card 4: Credits (Change background and move description to bottom) -->
       <div class="card-grid-space">
         <div class="num">4</div>
-        <div class="card">
-          <img src="background.png" alt="Credits">
-          <div class="card-content">
-            <h3>Credits</h3>
-            <p>Meet the team behind PSFL website.</p>
+        <a href="credits.html">
+          <div class="card desc-bottom">
+            <img src="credits.png" alt="Credits">
+            <div class="card-content">
+              <h3>Credits</h3>
+              <p>Meet the team behind PSFL website.</p>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   </section>
