@@ -35,6 +35,34 @@
       line-height: 1.6;
     }
     
+    /* Sidebar for Vertical Pagination */
+    .sidebar {
+      position: fixed;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+      background: var(--secondary-bg);
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      z-index: 100;
+    }
+    .sidebar nav ul {
+      list-style: none;
+    }
+    .sidebar nav ul li {
+      margin: 10px 0;
+    }
+    .sidebar nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1em;
+      transition: color 0.3s ease;
+    }
+    .sidebar nav ul li a:hover {
+      color: var(--accent);
+    }
+    
     /* Header Section */
     header {
       padding: 20px;
@@ -82,6 +110,7 @@
       z-index: 1;
       text-align: center;
       opacity: 0;
+      /* Original redundant animation lines kept */
       animation: contentFadeIn 1s forwards;
     }
     @keyframes contentFadeIn {
@@ -105,6 +134,7 @@
     /* Portfolio Section */
     .portfolio {
       background: #131313;
+      /* Reduced top padding to move cards up */
       padding: 60px 20px 80px;
       text-align: center;
     }
@@ -143,7 +173,8 @@
       border: 5px solid #ccc;
       box-shadow: 0 0 5em -1em rgba(0,0,0,0.7);
       background: var(--secondary-bg);
-      overflow: hidden;
+      overflow: hidden; /* ensures image parts beyond the border are cut */
+      /* Redundant transform and opacity declarations preserved */
       transform: translateY(30px);
       opacity: 0;
       transition: transform 0.6s ease, opacity 0.6s ease;
@@ -153,7 +184,7 @@
       transform: translateY(0);
     }
     
-    /* Card Image – adjusted to be overextended by default */
+    /* Card Image – now adjusted to be overextended by default and less cropped */
     .card img {
       width: 100%;
       height: 100%;
@@ -163,20 +194,21 @@
       top: 0;
       left: 0;
       z-index: 0;
+      /* New default scale: slightly larger than the card */
       transform: scale(1.02);
       transform-origin: center center;
       transition: transform 0.4s ease;
     }
-    /* For cards with background.png adjustment */
+    /* For card 2 with the background adjustment */
     .card.bg-up img {
-      object-position: 50% 170%;
+      object-position: 50% 75%;
     }
     /* Hover effect: increased scale */
     .card:hover img {
       transform: scale(1.05);
     }
     
-    /* Dark Gradient Overlay */
+    /* Dark Gradient Overlay – redundant lines preserved */
     .card::before {
       content: "";
       position: absolute;
@@ -336,8 +368,19 @@
     <nav></nav>
   </header>
   
+  <!-- SIDEBAR FOR VERTICAL PAGINATION -->
+  <aside class="sidebar">
+    <nav>
+      <ul class="pagination">
+        <li><a href="#top">Top</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#footer">Footer</a></li>
+      </ul>
+    </nav>
+  </aside>
+  
   <!-- TOP BACKGROUND SECTION -->
-  <section class="background">
+  <section class="background" id="top">
     <div class="content">
       <h2>Unleash Your Passion</h2>
       <p>
@@ -348,13 +391,13 @@
   </section>
   
   <!-- PORTFOLIO SECTION -->
-  <section class="portfolio">
+  <section class="portfolio" id="portfolio">
     <div class="card-grid">
-      <!-- Card 1: Stats (Move text down and adjust image focal point) -->
+      <!-- Card 1: Stats (text at bottom; no bg-up) -->
       <div class="card-grid-space">
         <div class="num">1</div>
         <a href="stats.html">
-          <div class="card bg-up desc-bottom">
+          <div class="card desc-bottom">
             <img src="background.png" alt="Stats">
             <div class="card-content">
               <h3>Stats</h3>
@@ -363,11 +406,11 @@
           </div>
         </a>
       </div>
-      <!-- Card 2: Standings (Already has text at bottom with left align) -->
+      <!-- Card 2: Standings (bg-up applied only here to move the image up) -->
       <div class="card-grid-space">
         <div class="num">2</div>
         <a href="standings.html">
-          <div class="card left-align desc-bottom">
+          <div class="card left-align bg-up desc-bottom">
             <img src="standings.png" alt="Standings">
             <div class="card-content">
               <h3>Standings</h3>
@@ -376,11 +419,11 @@
           </div>
         </a>
       </div>
-      <!-- Card 3: Rulebook (Move text down and adjust image focal point) -->
+      <!-- Card 3: Rulebook (text at bottom; no bg-up) -->
       <div class="card-grid-space">
         <div class="num">3</div>
         <a href="rulebook.html">
-          <div class="card bg-up desc-bottom">
+          <div class="card desc-bottom">
             <img src="background.png" alt="Rulebook">
             <div class="card-content">
               <h3>Rulebook</h3>
@@ -389,7 +432,7 @@
           </div>
         </a>
       </div>
-      <!-- Card 4: Credits (Already has text at bottom) -->
+      <!-- Card 4: Credits (text at bottom) -->
       <div class="card-grid-space">
         <div class="num">4</div>
         <a href="credits.html">
@@ -406,7 +449,7 @@
   </section>
   
   <!-- FOOTER SECTION -->
-  <footer class="footer">
+  <footer class="footer" id="footer">
     <div class="footer-container">
       <div class="footer-col">
         <h4>Quicklinks</h4>
@@ -435,7 +478,7 @@
     </div>
   </footer>
   
-  <!-- JAVASCRIPT FUNCTIONS -->
+  <!-- JAVASCRIPT FUNCTIONS (redundant functions kept as separate declarations) -->
   <script>
     // Function to initialize the parallax effect
     function initParallax() {
@@ -469,7 +512,7 @@
       });
     }
     
-    // Redundant initialization function
+    // Redundant initialization function (kept separately)
     function initializeAll() {
       initParallax();
       initCardAnimations();
