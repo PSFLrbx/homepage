@@ -20,10 +20,16 @@
       --overlay: rgba(0,0,0,0.35);
       --transition: 0.5s ease;
     }
-    /* Custom Scrolling Snap */
+    /* Custom Scrolling Snap with smooth behavior */
     html {
       scroll-behavior: smooth;
       scroll-snap-type: y mandatory;
+      /* Hide native scrollbar */
+      scrollbar-width: none; /* Firefox */
+    }
+    /* Hide native scrollbar for Webkit browsers */
+    ::-webkit-scrollbar {
+      display: none;
     }
     section {
       scroll-snap-align: start;
@@ -40,13 +46,35 @@
       line-height: 1.6;
     }
     
-    /* Floating Pagination Dots */
-    .pagination-dots {
+    /* Custom Embedded Scrollbar */
+    .custom-scrollbar {
+      position: fixed;
+      right: 5px;
+      top: 0;
+      width: 8px;
+      height: 100vh;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      z-index: 102;
+      pointer-events: none; /* so it doesn't interfere with clicks */
+    }
+    .custom-scrollbar .scrollbar-thumb {
+      width: 100%;
+      background: var(--accent);
+      border-radius: 4px;
       position: absolute;
+      top: 0;
+      height: 20%; /* Will be updated dynamically */
+      transition: height 0.3s, top 0.3s;
+    }
+    
+    /* Pagination Dots (Modern vertical dots) */
+    .pagination-dots {
+      position: fixed;
       right: 20px;
-      /* top value will be set dynamically via JS */
+      top: 50%;
+      transform: translateY(-50%);
       z-index: 101;
-      transition: top 0.3s ease;
     }
     .pagination-dots ul {
       list-style: none;
@@ -205,7 +233,7 @@
       transform-origin: center center;
       transition: transform 0.4s ease;
     }
-    /* For card 2: bg-up adjustment */
+    /* For card 2: bg-up adjustment (crop from bottom to 75% then center) */
     .card.bg-up img {
       object-position: center 75%;
     }
@@ -378,14 +406,19 @@
     <nav></nav>
   </header>
   
-  <!-- PAGINATION DOTS (Floating: position adjusted via JS) -->
+  <!-- PAGINATION DOTS (Fixed in position, no auto-parallax repositioning) -->
   <aside class="pagination-dots">
     <ul>
-      <li><a href="#top" class="active"></a></li>
-      <li><a href="#portfolio"></a></li>
-      <li><a href="#footer"></a></li>
+      <li><a href="#top" class="dot" data-target="top"></a></li>
+      <li><a href="#portfolio" class="dot" data-target="portfolio"></a></li>
+      <li><a href="#footer" class="dot" data-target="footer"></a></li>
     </ul>
   </aside>
+  
+  <!-- Custom Scrollbar (overlaid, does not affect layout) -->
+  <div class="custom-scrollbar">
+    <div class="scrollbar-thumb"></div>
+  </div>
   
   <!-- TOP BACKGROUND SECTION -->
   <section class="background" id="top">
@@ -414,7 +447,7 @@
           </div>
         </a>
       </div>
-      <!-- Card 2: Standings (bg-up applied only here to move the image up/crop from bottom to 75%) -->
+      <!-- Card 2: Standings (bg-up applied only here) -->
       <div class="card-grid-space">
         <div class="num">2</div>
         <a href="standings.html">
@@ -488,56 +521,89 @@
   
   <!-- JAVASCRIPT FUNCTIONS (redundant functions kept as separate declarations) -->
   <script>
-    // Function to initialize the parallax effect
-    function initParallax() {
-      let targetY = 0, currentY = 0;
-      const parallaxSpeed = 0.3;
-      function updateParallax() {
-        currentY += (targetY - currentY) * 0.1;
-        document.querySelector('.background').style.backgroundPositionY = currentY + "px";
-        requestAnimationFrame(updateParallax);
+    // Easing function for smooth scrolling (easeInOutQuad)
+    function easeInOutQuad(t) { 
+      return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+    }
+    
+    // Custom smooth scroll function using requestAnimationFrame
+    function smoothScrollTo(targetY, duration = 800) {
+      const startY = window.pageYOffset;
+      const distance = targetY - startY;
+      let startTime = null;
+      
+      function animation(currentTime) {
+        if (!startTime) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        const ease = easeInOutQuad(progress);
+        window.scrollTo(0, startY + (distance * ease));
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
+        }
       }
-      window.addEventListener('scroll', function() {
-        targetY = -(window.pageYOffset * parallaxSpeed);
-      });
-      updateParallax();
+      requestAnimationFrame(animation);
     }
     
-    // Function to initialize card animations using Intersection Observer
-    function initCardAnimations() {
-      const cards = document.querySelectorAll('.card');
-      const observerOptions = { threshold: 0.3 };
-      const observer = new IntersectionObserver(function(entries, obs) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate');
-            obs.unobserve(entry.target);
-          }
-        });
-      }, observerOptions);
-      cards.forEach(function(card) {
-        observer.observe(card);
-      });
+    // Update custom scrollbar thumb position and height based on scroll
+    function updateCustomScrollbar() {
+      const docHeight = document.documentElement.scrollHeight;
+      const winHeight = window.innerHeight;
+      const scrollTop = window.pageYOffset;
+      const thumb = document.querySelector('.scrollbar-thumb');
+      // Thumb height as ratio of visible height to total height
+      const thumbHeight = winHeight / docHeight * winHeight;
+      thumb.style.height = thumbHeight + 'px';
+      // Calculate thumb top position as percentage of scroll progress
+      const maxThumbTop = winHeight - thumbHeight;
+      const thumbTop = (scrollTop / (docHeight - winHeight)) * maxThumbTop;
+      thumb.style.top = thumbTop + 'px';
     }
     
-    // Function for floating pagination dots (updates vertical position based on scroll)
-    function updatePaginationDots() {
-      const dots = document.querySelector('.pagination-dots');
-      // Set the top position to be at 50% of viewport + current scroll offset
-      dots.style.top = (window.pageYOffset + window.innerHeight / 2) + 'px';
+    // Remove the auto update for pagination dot position (no parallax on them)
+    // Instead, update active dot when page is scrolled
+    function updateActiveDot() {
+      const dots = document.querySelectorAll('.pagination-dots a');
+      dots.forEach(dot => dot.classList.remove('active'));
+      // Simple logic: if scrollY < halfway of portfolio then top dot is active, etc.
+      const scrollY = window.pageYOffset;
+      if(scrollY < document.getElementById('portfolio').offsetTop - 50) {
+        dots[0].classList.add('active');
+      } else if(scrollY < document.getElementById('footer').offsetTop - 50) {
+        dots[1].classList.add('active');
+      } else {
+        dots[2].classList.add('active');
+      }
     }
     
     // Redundant initialization function (kept separately)
     function initializeAll() {
-      initParallax();
-      initCardAnimations();
-      updatePaginationDots();
+      updateCustomScrollbar();
+      updateActiveDot();
     }
     
-    // Initialize functions on DOMContentLoaded and update dots on scroll
+    // Event listeners
     document.addEventListener('DOMContentLoaded', function() {
       initializeAll();
-      window.addEventListener('scroll', updatePaginationDots);
+      // Update scrollbar and active dot on scroll
+      window.addEventListener('scroll', function() {
+        updateCustomScrollbar();
+        updateActiveDot();
+      });
+      
+      // Attach click event to pagination dots for custom smooth scroll
+      const dots = document.querySelectorAll('.pagination-dots a');
+      dots.forEach(dot => {
+        dot.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('data-target');
+          const targetElem = document.getElementById(targetId);
+          if(targetElem) {
+            const targetY = targetElem.offsetTop;
+            smoothScrollTo(targetY);
+          }
+        });
+      });
     });
   </script>
 </body>
