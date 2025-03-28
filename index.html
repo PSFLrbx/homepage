@@ -35,32 +35,33 @@
       line-height: 1.6;
     }
     
-    /* Sidebar for Vertical Pagination */
-    .sidebar {
+    /* Pagination Dots (Modern vertical dots) */
+    .pagination-dots {
       position: fixed;
       top: 50%;
-      left: 20px;
+      right: 20px;
       transform: translateY(-50%);
-      background: var(--secondary-bg);
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      z-index: 100;
+      z-index: 101;
     }
-    .sidebar nav ul {
+    .pagination-dots ul {
       list-style: none;
+      padding: 0;
+      margin: 0;
     }
-    .sidebar nav ul li {
+    .pagination-dots ul li {
       margin: 10px 0;
     }
-    .sidebar nav ul li a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 1em;
-      transition: color 0.3s ease;
+    .pagination-dots ul li a {
+      display: block;
+      width: 12px;
+      height: 12px;
+      background: #444;
+      border-radius: 50%;
+      transition: background 0.3s ease;
     }
-    .sidebar nav ul li a:hover {
-      color: var(--accent);
+    .pagination-dots ul li a.active,
+    .pagination-dots ul li a:hover {
+      background: var(--accent);
     }
     
     /* Header Section */
@@ -199,8 +200,12 @@
       transform-origin: center center;
       transition: transform 0.4s ease;
     }
-    /* For card 2 with the background adjustment */
+    /* For card 2: bg-up adjustment */
     .card.bg-up img {
+      object-position: 50% 75%;
+    }
+    /* Override left-align for card 2 when combined with bg-up */
+    .card.left-align.bg-up img {
       object-position: 50% 75%;
     }
     /* Hover effect: increased scale */
@@ -368,15 +373,13 @@
     <nav></nav>
   </header>
   
-  <!-- SIDEBAR FOR VERTICAL PAGINATION -->
-  <aside class="sidebar">
-    <nav>
-      <ul class="pagination">
-        <li><a href="#top">Top</a></li>
-        <li><a href="#portfolio">Portfolio</a></li>
-        <li><a href="#footer">Footer</a></li>
-      </ul>
-    </nav>
+  <!-- PAGINATION DOTS -->
+  <aside class="pagination-dots">
+    <ul>
+      <li><a href="#top" class="active"></a></li>
+      <li><a href="#portfolio"></a></li>
+      <li><a href="#footer"></a></li>
+    </ul>
   </aside>
   
   <!-- TOP BACKGROUND SECTION -->
