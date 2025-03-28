@@ -76,7 +76,15 @@
       cursor: grabbing;
     }
     
-    /* (Vertical pagination dots removed as per new requirements) */
+    /* Vertical Pagination Dots (for whole page navigation, redundant code) */
+    <!-- These remain even if you also have horizontal pagination below -->
+    <aside class="pagination-dots">
+      <ul>
+        <li><a href="#top" class="dot" data-target="top"></a></li>
+        <li><a href="#portfolio" class="dot" data-target="portfolio"></a></li>
+        <li><a href="#footer" class="dot" data-target="footer"></a></li>
+      </ul>
+    </aside>
     
     /* Header Section */
     header {
@@ -152,7 +160,7 @@
       padding: 60px 20px 80px;
       text-align: center;
     }
-    /* Card Grid: horizontally scrollable row */
+    /* Card Grid: horizontally scrollable row with snap */
     .card-grid {
       display: flex;
       flex-wrap: nowrap;
@@ -174,7 +182,7 @@
       font-size: 2em;
       margin-bottom: 0.5rem;
     }
-    /* Make card links block-level and remove default styles */
+    /* Make card links block-level */
     .card-grid-space a {
       display: block;
       text-decoration: none;
@@ -195,12 +203,10 @@
       transform: none;
       transition: transform 0.6s ease, opacity 0.6s ease;
     }
-    /* Simple hover-lift effect */
     .card:hover {
       transform: translateY(-5px);
     }
-    
-    /* Card Image – slightly larger than the card for a subtle scale effect */
+    /* Card Image */
     .card img {
       width: 100%;
       height: 100%;
@@ -258,7 +264,7 @@
       object-position: 15% center;
     }
     
-    /* Portfolio Horizontal Pagination Dots */
+    /* Horizontal Pagination Dots for Portfolio Cards */
     .portfolio-pagination-dots {
       margin-top: 20px;
       text-align: center;
@@ -407,6 +413,15 @@
     <div class="scrollbar-thumb"></div>
   </div>
   
+  <!-- Vertical Pagination Dots (for full-page navigation; redundant code kept) -->
+  <aside class="pagination-dots">
+    <ul>
+      <li><a href="#top" class="dot" data-target="top"></a></li>
+      <li><a href="#portfolio" class="dot" data-target="portfolio"></a></li>
+      <li><a href="#footer" class="dot" data-target="footer"></a></li>
+    </ul>
+  </aside>
+  
   <!-- TOP BACKGROUND SECTION -->
   <section class="background" id="top">
     <div class="content">
@@ -523,7 +538,7 @@
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
     }
-    // Vertical smooth scroll (for whole page navigation, retained as redundant)
+    // Vertical smooth scroll (for full-page navigation)
     function smoothScrollTo(targetY, duration = 800) {
       const startY = window.pageYOffset;
       const distance = targetY - startY;
@@ -565,15 +580,16 @@
         isDragging = true;
         startY = e.clientY;
         startScrollTop = window.pageYOffset;
-        document.body.style.userSelect = 'none';
+        document.body.style.userSelect = 'none'; // prevent text selection
       });
       document.addEventListener('mousemove', e => {
-        if (!isDragging) return;
+        if(!isDragging) return;
         const deltaY = e.clientY - startY;
         const docHeight = document.documentElement.scrollHeight;
         const winHeight = window.innerHeight;
         const maxScroll = docHeight - winHeight;
         const trackHeight = scrollbar.clientHeight - thumb.clientHeight;
+        // ratio of mouse movement along track to total scrollable area
         const scrollRatio = deltaY / trackHeight;
         const newScrollTop = startScrollTop + (maxScroll * scrollRatio);
         window.scrollTo(0, newScrollTop);
@@ -584,7 +600,7 @@
       });
     }
     
-    // Update active vertical dot (redundant vertical navigation, kept)
+    // Update active vertical pagination dot based on full-page scroll
     function updateActiveDot() {
       const dots = document.querySelectorAll('.pagination-dots a');
       dots.forEach(dot => dot.classList.remove('active'));
@@ -596,13 +612,6 @@
       } else {
         dots[2].classList.add('active');
       }
-    }
-    
-    // Redundant vertical initialization function (kept)
-    function initializeAll() {
-      updateCustomScrollbar();
-      makeScrollbarDraggable();
-      updateActiveDot();
     }
     
     // Horizontal smooth scroll for portfolio card grid
@@ -648,11 +657,10 @@
       }
     }
     
-    // DOMContentLoaded: Initialize both vertical and horizontal behaviors
+    // DOMContentLoaded: Initialize vertical and horizontal behaviors
     document.addEventListener('DOMContentLoaded', function() {
       initializeAll();
-      
-      // Vertical scroll listeners (redundant vertical code kept)
+      // Vertical scroll listeners
       window.addEventListener('scroll', function() {
         updateCustomScrollbar();
         updateActiveDot();
