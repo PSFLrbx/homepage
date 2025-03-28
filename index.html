@@ -56,7 +56,7 @@
       background: rgba(255,255,255,0.1);
       border-radius: 4px;
       z-index: 102;
-      pointer-events: none; /* so it doesn't interfere with clicks */
+      pointer-events: none;
     }
     .custom-scrollbar .scrollbar-thumb {
       width: 100%;
@@ -64,7 +64,7 @@
       border-radius: 4px;
       position: absolute;
       top: 0;
-      height: 20%; /* Will be updated dynamically */
+      height: 20%; /* Dynamically updated */
       transition: height 0.3s, top 0.3s;
     }
     
@@ -144,7 +144,6 @@
       z-index: 1;
       text-align: center;
       opacity: 0;
-      /* Original redundant animation lines kept */
       animation: contentFadeIn 1s forwards;
     }
     @keyframes contentFadeIn {
@@ -168,11 +167,10 @@
     /* Portfolio Section */
     .portfolio {
       background: #131313;
-      /* Reduced top padding to move cards up */
       padding: 60px 20px 80px;
       text-align: center;
     }
-    /* Card Grid: one horizontal row, with horizontal scroll */
+    /* Card Grid: horizontal row with horizontal scroll */
     .card-grid {
       display: flex;
       flex-wrap: nowrap;
@@ -207,8 +205,7 @@
       border: 5px solid #ccc;
       box-shadow: 0 0 5em -1em rgba(0,0,0,0.7);
       background: var(--secondary-bg);
-      overflow: hidden; /* ensures image parts beyond the border are cut */
-      /* Redundant transform and opacity declarations preserved */
+      overflow: hidden;
       transform: translateY(30px);
       opacity: 0;
       transition: transform 0.6s ease, opacity 0.6s ease;
@@ -218,7 +215,7 @@
       transform: translateY(0);
     }
     
-    /* Card Image – now adjusted to be overextended by default and less cropped */
+    /* Card Image – adjusted for cropping and scale */
     .card img {
       width: 100%;
       height: 100%;
@@ -228,7 +225,6 @@
       top: 0;
       left: 0;
       z-index: 0;
-      /* New default scale: slightly larger than the card */
       transform: scale(1.02);
       transform-origin: center center;
       transition: transform 0.4s ease;
@@ -237,7 +233,7 @@
     .card.bg-up img {
       object-position: center 75%;
     }
-    /* Override left-align for card 2 when combined with bg-up */
+    /* Ensure left-align combined with bg-up uses the same adjustment */
     .card.left-align.bg-up img {
       object-position: center 75%;
     }
@@ -246,7 +242,7 @@
       transform: scale(1.05);
     }
     
-    /* Dark Gradient Overlay – redundant lines preserved */
+    /* Dark Gradient Overlay */
     .card::before {
       content: "";
       position: absolute;
@@ -277,12 +273,11 @@
       font-size: 1em;
       line-height: 1.5;
     }
-    /* Specific card adjustment for records card */
     .card.left-align img {
       object-position: 15% center;
     }
     
-    /* New style: Move description to the bottom for cards with .desc-bottom */
+    /* Move description to the bottom for cards with .desc-bottom */
     .card.desc-bottom .card-content {
       position: absolute;
       bottom: 0;
@@ -406,7 +401,7 @@
     <nav></nav>
   </header>
   
-  <!-- PAGINATION DOTS (Fixed in position, no auto-parallax repositioning) -->
+  <!-- PAGINATION DOTS -->
   <aside class="pagination-dots">
     <ul>
       <li><a href="#top" class="dot" data-target="top"></a></li>
@@ -415,7 +410,7 @@
     </ul>
   </aside>
   
-  <!-- Custom Scrollbar (overlaid, does not affect layout) -->
+  <!-- Custom Scrollbar -->
   <div class="custom-scrollbar">
     <div class="scrollbar-thumb"></div>
   </div>
@@ -431,7 +426,7 @@
     </div>
   </section>
   
-  <!-- PORTFOLIO SECTION -->
+  <!-- PORTFOLIO SECTION (with restored cards) -->
   <section class="portfolio" id="portfolio">
     <div class="card-grid">
       <!-- Card 1: Stats (text at bottom; no bg-up) -->
@@ -447,7 +442,7 @@
           </div>
         </a>
       </div>
-      <!-- Card 2: Standings (bg-up applied only here) -->
+      <!-- Card 2: Standings (bg-up applied) -->
       <div class="card-grid-space">
         <div class="num">2</div>
         <a href="standings.html">
@@ -551,25 +546,21 @@
       const winHeight = window.innerHeight;
       const scrollTop = window.pageYOffset;
       const thumb = document.querySelector('.scrollbar-thumb');
-      // Thumb height as ratio of visible height to total height
       const thumbHeight = winHeight / docHeight * winHeight;
       thumb.style.height = thumbHeight + 'px';
-      // Calculate thumb top position as percentage of scroll progress
       const maxThumbTop = winHeight - thumbHeight;
       const thumbTop = (scrollTop / (docHeight - winHeight)) * maxThumbTop;
       thumb.style.top = thumbTop + 'px';
     }
     
-    // Remove the auto update for pagination dot position (no parallax on them)
-    // Instead, update active dot when page is scrolled
+    // Update active pagination dot on scroll
     function updateActiveDot() {
       const dots = document.querySelectorAll('.pagination-dots a');
       dots.forEach(dot => dot.classList.remove('active'));
-      // Simple logic: if scrollY < halfway of portfolio then top dot is active, etc.
       const scrollY = window.pageYOffset;
-      if(scrollY < document.getElementById('portfolio').offsetTop - 50) {
+      if (scrollY < document.getElementById('portfolio').offsetTop - 50) {
         dots[0].classList.add('active');
-      } else if(scrollY < document.getElementById('footer').offsetTop - 50) {
+      } else if (scrollY < document.getElementById('footer').offsetTop - 50) {
         dots[1].classList.add('active');
       } else {
         dots[2].classList.add('active');
@@ -582,16 +573,13 @@
       updateActiveDot();
     }
     
-    // Event listeners
     document.addEventListener('DOMContentLoaded', function() {
       initializeAll();
-      // Update scrollbar and active dot on scroll
       window.addEventListener('scroll', function() {
         updateCustomScrollbar();
         updateActiveDot();
       });
       
-      // Attach click event to pagination dots for custom smooth scroll
       const dots = document.querySelectorAll('.pagination-dots a');
       dots.forEach(dot => {
         dot.addEventListener('click', function(e) {
