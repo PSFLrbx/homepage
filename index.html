@@ -20,14 +20,17 @@
       --overlay: rgba(0,0,0,0.35);
       --transition: 0.5s ease;
     }
-    /* Custom Scrolling Snap with smooth behavior */
+    /*
+      We enable smooth vertical scrolling with snap,
+      but we also keep horizontal scrolling for the .card-grid.
+    */
     html {
       scroll-behavior: smooth;
       scroll-snap-type: y mandatory;
-      /* Hide native scrollbar */
-      scrollbar-width: none; /* Firefox */
+      /* Hide the native scrollbar (Firefox) */
+      scrollbar-width: none;
     }
-    /* Hide native scrollbar for Webkit browsers */
+    /* Hide the native scrollbar for WebKit browsers */
     ::-webkit-scrollbar {
       display: none;
     }
@@ -44,9 +47,10 @@
       background: var(--primary-bg);
       color: #fff;
       line-height: 1.6;
+      /* No code blocking mouse wheel, so vertical scrolling works as normal. */
     }
     
-    /* Custom Embedded Scrollbar */
+    /* Custom Overlaid Draggable Scrollbar */
     .custom-scrollbar {
       position: fixed;
       right: 5px;
@@ -56,9 +60,9 @@
       background: rgba(255,255,255,0.1);
       border-radius: 4px;
       z-index: 102;
-      pointer-events: none;
+      pointer-events: none; /* so clicks pass through to the body unless on the thumb */
     }
-    .custom-scrollbar .scrollbar-thumb {
+    .scrollbar-thumb {
       width: 100%;
       background: var(--accent);
       border-radius: 4px;
@@ -66,9 +70,14 @@
       top: 0;
       height: 20%; /* Dynamically updated */
       transition: height 0.3s, top 0.3s;
+      pointer-events: auto; /* thumb is draggable */
+      cursor: grab;
+    }
+    .scrollbar-thumb:active {
+      cursor: grabbing;
     }
     
-    /* Pagination Dots (Modern vertical dots) */
+    /* Pagination Dots (fixed on the right, no parallax) */
     .pagination-dots {
       position: fixed;
       right: 20px;
@@ -144,6 +153,7 @@
       z-index: 1;
       text-align: center;
       opacity: 0;
+      /* Redundant animation lines preserved */
       animation: contentFadeIn 1s forwards;
     }
     @keyframes contentFadeIn {
@@ -170,7 +180,7 @@
       padding: 60px 20px 80px;
       text-align: center;
     }
-    /* Card Grid: horizontal row with horizontal scroll */
+    /* Card Grid: horizontally scrollable row */
     .card-grid {
       display: flex;
       flex-wrap: nowrap;
@@ -206,16 +216,17 @@
       box-shadow: 0 0 5em -1em rgba(0,0,0,0.7);
       background: var(--secondary-bg);
       overflow: hidden;
-      transform: translateY(30px);
-      opacity: 0;
+      /* Force them visible immediately, no IntersectionObserver needed */
+      opacity: 1;
+      transform: none;
       transition: transform 0.6s ease, opacity 0.6s ease;
     }
-    .card.animate {
-      opacity: 1;
-      transform: translateY(0);
+    /* For optional "hover-lift" effect, re-enable transform on hover */
+    .card:hover {
+      transform: translateY(-5px);
     }
     
-    /* Card Image – adjusted for cropping and scale */
+    /* Card Image – slightly larger than the card for a subtle scale effect */
     .card img {
       width: 100%;
       height: 100%;
@@ -229,15 +240,13 @@
       transform-origin: center center;
       transition: transform 0.4s ease;
     }
-    /* For card 2: bg-up adjustment (crop from bottom to 75% then center) */
+    /* For card 2: bg-up adjustment (cropping from bottom to 75%) */
     .card.bg-up img {
       object-position: center 75%;
     }
-    /* Ensure left-align combined with bg-up uses the same adjustment */
     .card.left-align.bg-up img {
       object-position: center 75%;
     }
-    /* Hover effect: increased scale */
     .card:hover img {
       transform: scale(1.05);
     }
@@ -251,19 +260,14 @@
       z-index: 1;
     }
     
-    /* Card Content */
+    /* Card Content at the bottom if .desc-bottom is used */
     .card-content {
       position: relative;
       z-index: 2;
       padding: 1em;
       text-align: left;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .card.animate .card-content {
-      opacity: 1;
-      transform: translateY(0);
+      opacity: 1; /* always visible */
+      transform: none;
     }
     .card h3 {
       font-size: 1.6em;
@@ -276,8 +280,6 @@
     .card.left-align img {
       object-position: 15% center;
     }
-    
-    /* Move description to the bottom for cards with .desc-bottom */
     .card.desc-bottom .card-content {
       position: absolute;
       bottom: 0;
@@ -410,7 +412,7 @@
     </ul>
   </aside>
   
-  <!-- Custom Scrollbar -->
+  <!-- Custom Scrollbar (Draggable) -->
   <div class="custom-scrollbar">
     <div class="scrollbar-thumb"></div>
   </div>
@@ -426,10 +428,10 @@
     </div>
   </section>
   
-  <!-- PORTFOLIO SECTION (with restored cards) -->
+  <!-- PORTFOLIO SECTION (4 Cards) -->
   <section class="portfolio" id="portfolio">
     <div class="card-grid">
-      <!-- Card 1: Stats (text at bottom; no bg-up) -->
+      <!-- Card 1: Stats -->
       <div class="card-grid-space">
         <div class="num">1</div>
         <a href="stats.html">
@@ -442,7 +444,7 @@
           </div>
         </a>
       </div>
-      <!-- Card 2: Standings (bg-up applied) -->
+      <!-- Card 2: Standings (bg-up for bottom-crop) -->
       <div class="card-grid-space">
         <div class="num">2</div>
         <a href="standings.html">
@@ -455,7 +457,7 @@
           </div>
         </a>
       </div>
-      <!-- Card 3: Rulebook (text at bottom; no bg-up) -->
+      <!-- Card 3: Rulebook -->
       <div class="card-grid-space">
         <div class="num">3</div>
         <a href="rulebook.html">
@@ -468,7 +470,7 @@
           </div>
         </a>
       </div>
-      <!-- Card 4: Credits (text at bottom) -->
+      <!-- Card 4: Credits -->
       <div class="card-grid-space">
         <div class="num">4</div>
         <a href="credits.html">
@@ -514,14 +516,13 @@
     </div>
   </footer>
   
-  <!-- JAVASCRIPT FUNCTIONS (redundant functions kept as separate declarations) -->
+  <!-- JAVASCRIPT FUNCTIONS (redundant code kept) -->
   <script>
-    // Easing function for smooth scrolling (easeInOutQuad)
+    // Easing function for smooth scrolling
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
     }
-    
-    // Custom smooth scroll function using requestAnimationFrame
+    // Custom smooth scroll with acceleration/deceleration
     function smoothScrollTo(targetY, duration = 800) {
       const startY = window.pageYOffset;
       const distance = targetY - startY;
@@ -540,17 +541,51 @@
       requestAnimationFrame(animation);
     }
     
-    // Update custom scrollbar thumb position and height based on scroll
+    // Update custom scrollbar thumb position and height
     function updateCustomScrollbar() {
       const docHeight = document.documentElement.scrollHeight;
       const winHeight = window.innerHeight;
       const scrollTop = window.pageYOffset;
       const thumb = document.querySelector('.scrollbar-thumb');
-      const thumbHeight = winHeight / docHeight * winHeight;
+      const thumbHeight = (winHeight / docHeight) * winHeight;
       thumb.style.height = thumbHeight + 'px';
       const maxThumbTop = winHeight - thumbHeight;
       const thumbTop = (scrollTop / (docHeight - winHeight)) * maxThumbTop;
       thumb.style.top = thumbTop + 'px';
+    }
+    
+    // Draggable custom scrollbar
+    function makeScrollbarDraggable() {
+      const scrollbar = document.querySelector('.custom-scrollbar');
+      const thumb = document.querySelector('.scrollbar-thumb');
+      let isDragging = false;
+      let startY = 0;
+      let startScrollTop = 0;
+      
+      thumb.addEventListener('mousedown', e => {
+        isDragging = true;
+        startY = e.clientY;
+        startScrollTop = window.pageYOffset;
+        document.body.style.userSelect = 'none'; // prevent text selection
+      });
+      
+      document.addEventListener('mousemove', e => {
+        if(!isDragging) return;
+        const deltaY = e.clientY - startY;
+        const docHeight = document.documentElement.scrollHeight;
+        const winHeight = window.innerHeight;
+        const maxScroll = docHeight - winHeight;
+        const trackHeight = scrollbar.clientHeight - thumb.clientHeight;
+        // ratio of mouse movement along track to total scrollable area
+        const scrollRatio = deltaY / trackHeight;
+        const newScrollTop = startScrollTop + (maxScroll * scrollRatio);
+        window.scrollTo(0, newScrollTop);
+      });
+      
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+        document.body.style.userSelect = '';
+      });
     }
     
     // Update active pagination dot on scroll
@@ -567,19 +602,21 @@
       }
     }
     
-    // Redundant initialization function (kept separately)
+    // Redundant init function
     function initializeAll() {
       updateCustomScrollbar();
+      makeScrollbarDraggable();
       updateActiveDot();
     }
     
     document.addEventListener('DOMContentLoaded', function() {
       initializeAll();
+      // Listen for scroll updates
       window.addEventListener('scroll', function() {
         updateCustomScrollbar();
         updateActiveDot();
       });
-      
+      // Hook up pagination dot clicks to custom smooth scroll
       const dots = document.querySelectorAll('.pagination-dots a');
       dots.forEach(dot => {
         dot.addEventListener('click', function(e) {
