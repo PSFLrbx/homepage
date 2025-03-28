@@ -20,8 +20,13 @@
       --overlay: rgba(0,0,0,0.35);
       --transition: 0.5s ease;
     }
+    /* Custom Scrolling Snap */
     html {
       scroll-behavior: smooth;
+      scroll-snap-type: y mandatory;
+    }
+    section {
+      scroll-snap-align: start;
     }
     *, *::before, *::after {
       margin: 0;
@@ -35,13 +40,13 @@
       line-height: 1.6;
     }
     
-    /* Pagination Dots (Modern vertical dots) */
+    /* Floating Pagination Dots */
     .pagination-dots {
-      position: fixed;
-      top: 50%;
+      position: absolute;
       right: 20px;
-      transform: translateY(-50%);
+      /* top value will be set dynamically via JS */
       z-index: 101;
+      transition: top 0.3s ease;
     }
     .pagination-dots ul {
       list-style: none;
@@ -202,11 +207,11 @@
     }
     /* For card 2: bg-up adjustment */
     .card.bg-up img {
-      object-position: 50% 75%;
+      object-position: center 75%;
     }
     /* Override left-align for card 2 when combined with bg-up */
     .card.left-align.bg-up img {
-      object-position: 50% 75%;
+      object-position: center 75%;
     }
     /* Hover effect: increased scale */
     .card:hover img {
@@ -373,7 +378,7 @@
     <nav></nav>
   </header>
   
-  <!-- PAGINATION DOTS -->
+  <!-- PAGINATION DOTS (Floating: position adjusted via JS) -->
   <aside class="pagination-dots">
     <ul>
       <li><a href="#top" class="active"></a></li>
@@ -409,7 +414,7 @@
           </div>
         </a>
       </div>
-      <!-- Card 2: Standings (bg-up applied only here to move the image up) -->
+      <!-- Card 2: Standings (bg-up applied only here to move the image up/crop from bottom to 75%) -->
       <div class="card-grid-space">
         <div class="num">2</div>
         <a href="standings.html">
@@ -515,15 +520,24 @@
       });
     }
     
+    // Function for floating pagination dots (updates vertical position based on scroll)
+    function updatePaginationDots() {
+      const dots = document.querySelector('.pagination-dots');
+      // Set the top position to be at 50% of viewport + current scroll offset
+      dots.style.top = (window.pageYOffset + window.innerHeight / 2) + 'px';
+    }
+    
     // Redundant initialization function (kept separately)
     function initializeAll() {
       initParallax();
       initCardAnimations();
+      updatePaginationDots();
     }
     
-    // Initialize functions on DOMContentLoaded
+    // Initialize functions on DOMContentLoaded and update dots on scroll
     document.addEventListener('DOMContentLoaded', function() {
       initializeAll();
+      window.addEventListener('scroll', updatePaginationDots);
     });
   </script>
 </body>
