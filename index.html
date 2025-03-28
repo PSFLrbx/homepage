@@ -12,6 +12,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    /* Base Variables and Resets */
     :root {
       --primary-bg: #111;
       --secondary-bg: #222;
@@ -19,10 +20,12 @@
       --overlay: rgba(0,0,0,0.35);
       --transition: 0.5s ease;
     }
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
     *, *::before, *::after {
-      margin: 0; 
-      padding: 0; 
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
     body {
@@ -31,8 +34,8 @@
       color: #fff;
       line-height: 1.6;
     }
-
-    /* Header */
+    
+    /* Header Section */
     header {
       padding: 20px;
       background: var(--secondary-bg);
@@ -52,7 +55,7 @@
       font-size: 2.5em;
     }
     nav { }
-
+    
     /* Top Background Section */
     .background {
       position: relative;
@@ -64,23 +67,27 @@
     .background::after {
       content: "";
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: var(--overlay);
       z-index: 0;
     }
     .background .content {
       position: absolute;
-      top: 50%; left: 50%;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
       z-index: 1;
       text-align: center;
       opacity: 0;
+      /* Original redundant animation lines kept */
       animation: contentFadeIn 1s forwards;
     }
     @keyframes contentFadeIn {
       from { opacity: 0; transform: translate(-50%, -40%) scale(0.95); }
-      to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
     }
     .background .content h2 {
       font-size: 2.8em;
@@ -95,19 +102,19 @@
     .background .content p a:hover {
       border-bottom: 1px solid var(--accent);
     }
-
+    
     /* Portfolio Section */
     .portfolio {
       background: #131313;
-      /* Slightly reduced top padding to move cards “up” */
+      /* Reduced top padding to move cards up */
       padding: 60px 20px 80px;
       text-align: center;
     }
-    /* Force a single horizontal row, centered, with horizontal scrolling */
+    /* Card Grid: one horizontal row, with horizontal scroll */
     .card-grid {
       display: flex;
       flex-wrap: nowrap;
-      justify-content: center;  /* center the row */
+      justify-content: center;
       overflow-x: auto;
       gap: 40px;
       max-width: 100%;
@@ -116,13 +123,13 @@
     }
     .card-grid-space {
       position: relative;
-      flex: 0 0 auto; /* do not shrink or grow */
+      flex: 0 0 auto;
     }
     .card-grid-space .num {
       font-size: 2em;
       margin-bottom: 0.5rem;
     }
-
+    
     /* Card Styling */
     .card {
       position: relative;
@@ -132,9 +139,8 @@
       border: 5px solid #ccc;
       box-shadow: 0 0 5em -1em rgba(0,0,0,0.7);
       background: var(--secondary-bg);
-      /* Overflow hidden so the scaled image is clipped at edges */
-      overflow: hidden;
-      /* Fade/slide effect */
+      overflow: hidden; /* ensures image parts beyond the border are cut */
+      /* Redundant transform and opacity declarations preserved */
       transform: translateY(30px);
       opacity: 0;
       transition: transform 0.6s ease, opacity 0.6s ease;
@@ -143,21 +149,28 @@
       opacity: 1;
       transform: translateY(0);
     }
-    /* Card Image - slightly overextended by default */
+    
+    /* Card Image – now adjusted to be overextended by default and less cropped */
     .card img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: center;
       position: absolute;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       z-index: 0;
-      /* Start at 1.02 scale to be slightly bigger than the card */
+      /* New default scale: slightly larger than the card */
       transform: scale(1.02);
       transform-origin: center center;
       transition: transform 0.4s ease;
     }
-    /* Dark Gradient Overlay */
+    /* Hover effect: increased scale */
+    .card:hover img {
+      transform: scale(1.05);
+    }
+    
+    /* Dark Gradient Overlay – redundant lines preserved */
     .card::before {
       content: "";
       position: absolute;
@@ -165,6 +178,7 @@
       background: linear-gradient(180deg, transparent, var(--overlay));
       z-index: 1;
     }
+    
     /* Card Content */
     .card-content {
       position: relative;
@@ -187,19 +201,12 @@
       font-size: 1em;
       line-height: 1.5;
     }
-    /* Hover Effects: scale up slightly more */
-    .card:hover img {
-      transform: scale(1.05);
-    }
-    .card:hover {
-      box-shadow: 0 0 15px rgba(255,255,255,0.2);
-    }
-    /* For the second card */
+    /* Specific card adjustment for records card */
     .card.left-align img {
       object-position: 15% center;
     }
-
-    /* Footer */
+    
+    /* Footer Section */
     .footer {
       background: var(--secondary-bg);
       padding: 50px 0;
@@ -285,8 +292,8 @@
       background: url('discord.png') no-repeat center;
       background-size: cover;
     }
-
-    /* Responsive */
+    
+    /* Responsive Styles */
     @media (max-width: 600px) {
       .footer-container {
         flex-direction: column;
@@ -311,8 +318,8 @@
     </div>
     <nav></nav>
   </header>
-
-  <!-- Top Background Section -->
+  
+  <!-- TOP BACKGROUND SECTION -->
   <section class="background">
     <div class="content">
       <h2>Unleash Your Passion</h2>
@@ -322,8 +329,8 @@
       </p>
     </div>
   </section>
-
-  <!-- Portfolio Section -->
+  
+  <!-- PORTFOLIO SECTION -->
   <section class="portfolio">
     <div class="card-grid">
       <!-- Card 1 -->
@@ -372,8 +379,8 @@
       </div>
     </div>
   </section>
-
-  <!-- Footer Section -->
+  
+  <!-- FOOTER SECTION -->
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-col">
@@ -402,33 +409,51 @@
       </div>
     </div>
   </footer>
-
+  
+  <!-- JAVASCRIPT FUNCTIONS (redundant functions kept as separate declarations) -->
   <script>
-    // Parallax Effect for Top Background
-    let targetY = 0, currentY = 0;
-    const parallaxSpeed = 0.3;
-    function updateParallax() {
-      currentY += (targetY - currentY) * 0.1;
-      document.querySelector('.background').style.backgroundPositionY = currentY + "px";
-      requestAnimationFrame(updateParallax);
-    }
-    window.addEventListener('scroll', () => {
-      targetY = -(window.pageYOffset * parallaxSpeed);
-    });
-    updateParallax();
-
-    // Animate cards on scroll using Intersection Observer
-    const cards = document.querySelectorAll('.card');
-    const observerOptions = { threshold: 0.3 };
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting) {
-          entry.target.classList.add('animate');
-          obs.unobserve(entry.target);
-        }
+    // Function to initialize the parallax effect
+    function initParallax() {
+      let targetY = 0, currentY = 0;
+      const parallaxSpeed = 0.3;
+      function updateParallax() {
+        currentY += (targetY - currentY) * 0.1;
+        document.querySelector('.background').style.backgroundPositionY = currentY + "px";
+        requestAnimationFrame(updateParallax);
+      }
+      window.addEventListener('scroll', function() {
+        targetY = -(window.pageYOffset * parallaxSpeed);
       });
-    }, observerOptions);
-    cards.forEach(card => observer.observe(card));
+      updateParallax();
+    }
+    
+    // Function to initialize card animations using Intersection Observer
+    function initCardAnimations() {
+      const cards = document.querySelectorAll('.card');
+      const observerOptions = { threshold: 0.3 };
+      const observer = new IntersectionObserver(function(entries, obs) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+      cards.forEach(function(card) {
+        observer.observe(card);
+      });
+    }
+    
+    // Redundant initialization function (kept separately)
+    function initializeAll() {
+      initParallax();
+      initCardAnimations();
+    }
+    
+    // Initialize functions on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeAll();
+    });
   </script>
 </body>
 </html>
