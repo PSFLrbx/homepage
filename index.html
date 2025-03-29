@@ -164,6 +164,7 @@
     .card-grid-space .num {
       font-size: 2em;
       margin-bottom: 0.5rem;
+      text-align: center;
     }
     .card-grid-space a {
       display: block;
@@ -216,15 +217,15 @@
       inset: 0;
       background: linear-gradient(180deg, transparent, var(--overlay));
       z-index: 1;
+      pointer-events: none;
     }
     
-    /* Card Content Overlay – Reduced height to 25% and using flex for alignment */
+    /* Card Content Overlay – auto-height behind text */
     .card-content {
       position: absolute;
-      bottom: 0;
       left: 0;
-      width: 100%;
-      height: 25%; /* Reduced from 30% to 25% */
+      right: 0;
+      bottom: 0;
       padding: 0.8em;
       background: rgba(0, 0, 0, 0.6);
       box-sizing: border-box;
@@ -233,6 +234,7 @@
       flex-direction: column;
       justify-content: flex-end;
       transition: background 0.3s ease, transform 0.3s ease;
+      z-index: 2;
     }
     .card-content:hover {
       transform: translateY(-3px);
@@ -245,9 +247,12 @@
     .card p {
       font-size: 1em;
       line-height: 1.5;
+      margin: 0;
     }
-    .card.left-align img {
-      object-position: 15% center;
+    
+    /* Specific override for Credits card's text background */
+    .card.credits-card .card-content {
+      padding: 0.5em 0.8em;
     }
     
     /* Footer Section */
@@ -354,6 +359,12 @@
         height: 24em;
       }
     }
+    
+    @media (min-width: 1600px) {
+      .card {
+        width: 18em;
+      }
+    }
   </style>
 </head>
 <body>
@@ -372,8 +383,6 @@
     <div class="scrollbar-thumb"></div>
   </div>
   
-  <!-- Removed vertical pagination dots -->
-  
   <!-- TOP BACKGROUND SECTION -->
   <section class="background" id="top">
     <div class="content">
@@ -385,7 +394,7 @@
     </div>
   </section>
   
-  <!-- PORTFOLIO SECTION (One section with 4 cards) -->
+  <!-- PORTFOLIO SECTION -->
   <section class="portfolio" id="portfolio">
     <h2>Our Portfolio</h2>
     <div class="card-grid" id="cardGrid">
@@ -428,11 +437,11 @@
           </div>
         </a>
       </div>
-      <!-- Card 4: Credits -->
+      <!-- Card 4: Credits with extra class for adjustment -->
       <div class="card-grid-space" data-index="3">
         <div class="num">4</div>
         <a href="credits.html">
-          <div class="card desc-bottom">
+          <div class="card desc-bottom credits-card">
             <img src="credits.png" alt="Credits">
             <div class="card-content">
               <h3>Credits</h3>
@@ -476,7 +485,7 @@
   
   <!-- JAVASCRIPT FUNCTIONS (redundant code kept) -->
   <script>
-    // Easing function for smooth scrolling (easeInOutQuad)
+    // Easing function for smooth scrolling
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
     }
@@ -504,6 +513,13 @@
       const winHeight = window.innerHeight;
       const scrollTop = window.pageYOffset;
       const thumb = document.querySelector('.scrollbar-thumb');
+      if (!thumb) return;
+      
+      if (docHeight <= winHeight) {
+        thumb.style.height = '0';
+        return;
+      }
+      
       const thumbHeight = (winHeight / docHeight) * winHeight;
       thumb.style.height = thumbHeight + 'px';
       const maxThumbTop = winHeight - thumbHeight;
@@ -515,15 +531,19 @@
     function makeScrollbarDraggable() {
       const scrollbar = document.querySelector('.custom-scrollbar');
       const thumb = document.querySelector('.scrollbar-thumb');
+      if (!scrollbar || !thumb) return;
+      
       let isDragging = false;
       let startY = 0;
       let startScrollTop = 0;
+      
       thumb.addEventListener('mousedown', e => {
         isDragging = true;
         startY = e.clientY;
         startScrollTop = window.pageYOffset;
         document.body.style.userSelect = 'none';
       });
+      
       document.addEventListener('mousemove', e => {
         if (!isDragging) return;
         const deltaY = e.clientY - startY;
@@ -535,72 +555,25 @@
         const newScrollTop = startScrollTop + (maxScroll * scrollRatio);
         window.scrollTo(0, newScrollTop);
       });
+      
       document.addEventListener('mouseup', () => {
         isDragging = false;
         document.body.style.userSelect = '';
       });
     }
     
-    // Update active vertical pagination dot (redundant full-page navigation)
-    function updateActiveDot() {
-      const dots = document.querySelectorAll('.pagination-dots a');
-      dots.forEach(dot => dot.classList.remove('active'));
-      const scrollY = window.pageYOffset;
-      if (scrollY < document.getElementById('portfolio').offsetTop - 50) {
-        dots[0].classList.add('active');
-      } else if (scrollY < document.getElementById('footer').offsetTop - 50) {
-        dots[1].classList.add('active');
-      } else {
-        dots[2].classList.add('active');
-      }
-    }
-    
-    // Initialization for vertical behaviors
     function initializeAll() {
       updateCustomScrollbar();
       makeScrollbarDraggable();
-      updateActiveDot();
     }
     
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', () => {
       initializeAll();
       
-      // Vertical scroll listeners
-      window.addEventListener('scroll', function() {
-        updateCustomScrollbar();
-        updateActiveDot();
-      });
-      const verticalDots = document.querySelectorAll('.pagination-dots a');
-      verticalDots.forEach(dot => {
-        dot.addEventListener('click', function(e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('data-target');
-          const targetElem = document.getElementById(targetId);
-          if(targetElem) {
-            const targetY = targetElem.offsetTop;
-            smoothScrollTo(targetY);
-          }
-        });
-      });
+      // Update scrollbar on scroll and on window resize
+      window.addEventListener('scroll', updateCustomScrollbar);
+      window.addEventListener('resize', updateCustomScrollbar);
     });
-    
-    // Vertical smooth scroll helper (redundant)
-    function smoothScrollTo(targetY, duration = 800) {
-      const startY = window.pageYOffset;
-      const distance = targetY - startY;
-      let startTime = null;
-      function animation(currentTime) {
-        if (!startTime) startTime = currentTime;
-        const timeElapsed = currentTime - startTime;
-        const progress = Math.min(timeElapsed / duration, 1);
-        const ease = easeInOutQuad(progress);
-        window.scrollTo(0, startY + (distance * ease));
-        if (timeElapsed < duration) {
-          requestAnimationFrame(animation);
-        }
-      }
-      requestAnimationFrame(animation);
-    }
   </script>
 </body>
 </html>
