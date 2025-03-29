@@ -12,7 +12,6 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Base Variables and Resets */
     :root {
       --primary-bg: #111;
       --secondary-bg: #222;
@@ -20,18 +19,14 @@
       --overlay: rgba(0,0,0,0.35);
       --transition: 0.5s ease;
     }
-    /* Enable smooth vertical scrolling; remove scroll-snap properties so no auto-centering */
     html {
       scroll-behavior: smooth;
-      /* Removed scroll-snap-type */
       scrollbar-width: none;
     }
     ::-webkit-scrollbar {
       display: none;
     }
-    section {
-      /* Removed scroll-snap-align */
-    }
+    section { }
     *, *::before, *::after {
       margin: 0;
       padding: 0;
@@ -43,8 +38,6 @@
       color: #fff;
       line-height: 1.6;
     }
-    
-    /* Custom Overlaid Draggable Scrollbar – container now accepts pointer events */
     .custom-scrollbar {
       position: fixed;
       right: 5px;
@@ -70,10 +63,6 @@
     .scrollbar-thumb:active {
       cursor: grabbing;
     }
-    
-    /* Removed vertical homepage pagination dots as requested */
-    
-    /* Header Section */
     header {
       padding: 20px;
       background: var(--secondary-bg);
@@ -93,8 +82,6 @@
       font-size: 2.5em;
     }
     nav { }
-    
-    /* Top Background Section with subtle gradient overlay */
     .background {
       position: relative;
       height: 120vh;
@@ -139,14 +126,11 @@
     .background .content p a:hover {
       border-bottom: 1px solid var(--accent);
     }
-    
-    /* Portfolio Section */
     .portfolio {
       background: #131313;
       padding: 60px 20px 80px;
       text-align: center;
     }
-    /* Card Grid: horizontally scrollable row (no scroll-snap) */
     .card-grid {
       display: flex;
       flex-wrap: nowrap;
@@ -171,8 +155,6 @@
       text-decoration: none;
       color: inherit;
     }
-    
-    /* Card Styling */
     .card {
       position: relative;
       width: 18em;
@@ -209,8 +191,6 @@
     .card.left-align.bg-up img {
       object-position: center 75%;
     }
-    
-    /* Dark Gradient Overlay */
     .card::before {
       content: "";
       position: absolute;
@@ -219,8 +199,6 @@
       z-index: 1;
       pointer-events: none;
     }
-    
-    /* Card Content Overlay – auto-height behind text */
     .card-content {
       position: absolute;
       left: 0;
@@ -235,6 +213,8 @@
       justify-content: flex-end;
       transition: background 0.3s ease, transform 0.3s ease;
       z-index: 2;
+      /* Add a min-height so all black overlays match in size: */
+      min-height: 4em; /* <--- This is the key line */
     }
     .card-content:hover {
       transform: translateY(-3px);
@@ -249,13 +229,11 @@
       line-height: 1.5;
       margin: 0;
     }
-    
-    /* Specific override for Credits card's text background */
+    /* If you want the Credits card smaller, you can override it here:
     .card.credits-card .card-content {
-      padding: 0.5em 0.8em;
+      min-height: 3em;
     }
-    
-    /* Footer Section */
+    */
     .footer {
       background: var(--secondary-bg);
       padding: 50px 0;
@@ -341,8 +319,6 @@
       background: url('discord.png') no-repeat center;
       background-size: cover;
     }
-    
-    /* Responsive Styles */
     @media (max-width: 600px) {
       .footer-container {
         flex-direction: column;
@@ -359,11 +335,14 @@
         height: 24em;
       }
     }
-    
     @media (min-width: 1600px) {
       .card {
         width: 18em;
       }
+    }
+    @keyframes contentFadeIn {
+      from { opacity: 0; transform: translate(-50%, -40%) scale(0.95); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
     }
   </style>
 </head>
@@ -437,11 +416,11 @@
           </div>
         </a>
       </div>
-      <!-- Card 4: Credits with extra class for adjustment -->
+      <!-- Card 4: Credits (no extra class here, but you could if you want to tweak further) -->
       <div class="card-grid-space" data-index="3">
         <div class="num">4</div>
         <a href="credits.html">
-          <div class="card desc-bottom credits-card">
+          <div class="card desc-bottom">
             <img src="credits.png" alt="Credits">
             <div class="card-content">
               <h3>Credits</h3>
@@ -483,13 +462,11 @@
     </div>
   </footer>
   
-  <!-- JAVASCRIPT FUNCTIONS (redundant code kept) -->
+  <!-- JAVASCRIPT (redundant code kept) -->
   <script>
-    // Easing function for smooth scrolling
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
     }
-    // Vertical smooth scroll (for full-page navigation)
     function smoothScrollTo(targetY, duration = 800) {
       const startY = window.pageYOffset;
       const distance = targetY - startY;
@@ -506,8 +483,6 @@
       }
       requestAnimationFrame(animation);
     }
-    
-    // Update custom vertical scrollbar thumb position and height
     function updateCustomScrollbar() {
       const docHeight = document.documentElement.scrollHeight;
       const winHeight = window.innerHeight;
@@ -519,31 +494,25 @@
         thumb.style.height = '0';
         return;
       }
-      
       const thumbHeight = (winHeight / docHeight) * winHeight;
       thumb.style.height = thumbHeight + 'px';
       const maxThumbTop = winHeight - thumbHeight;
       const thumbTop = (scrollTop / (docHeight - winHeight)) * maxThumbTop;
       thumb.style.top = thumbTop + 'px';
     }
-    
-    // Draggable custom vertical scrollbar
     function makeScrollbarDraggable() {
       const scrollbar = document.querySelector('.custom-scrollbar');
       const thumb = document.querySelector('.scrollbar-thumb');
       if (!scrollbar || !thumb) return;
-      
       let isDragging = false;
       let startY = 0;
       let startScrollTop = 0;
-      
       thumb.addEventListener('mousedown', e => {
         isDragging = true;
         startY = e.clientY;
         startScrollTop = window.pageYOffset;
         document.body.style.userSelect = 'none';
       });
-      
       document.addEventListener('mousemove', e => {
         if (!isDragging) return;
         const deltaY = e.clientY - startY;
@@ -551,26 +520,22 @@
         const winHeight = window.innerHeight;
         const maxScroll = docHeight - winHeight;
         const trackHeight = scrollbar.clientHeight - thumb.clientHeight;
+        if (trackHeight <= 0) return;
         const scrollRatio = deltaY / trackHeight;
         const newScrollTop = startScrollTop + (maxScroll * scrollRatio);
         window.scrollTo(0, newScrollTop);
       });
-      
       document.addEventListener('mouseup', () => {
         isDragging = false;
         document.body.style.userSelect = '';
       });
     }
-    
     function initializeAll() {
       updateCustomScrollbar();
       makeScrollbarDraggable();
     }
-    
     document.addEventListener('DOMContentLoaded', () => {
       initializeAll();
-      
-      // Update scrollbar on scroll and on window resize
       window.addEventListener('scroll', updateCustomScrollbar);
       window.addEventListener('resize', updateCustomScrollbar);
     });
