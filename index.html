@@ -20,14 +20,10 @@
       --overlay: rgba(0,0,0,0.35);
       --transition: 0.5s ease;
     }
-    /*
-      Enable smooth vertical scrolling with snap,
-      while allowing horizontal scrolling for the card grid.
-    */
+    /* Smooth vertical scrolling with snap; horizontal scrolling for card grid */
     html {
       scroll-behavior: smooth;
       scroll-snap-type: y mandatory;
-      /* Hide native scrollbar (Firefox) */
       scrollbar-width: none;
     }
     ::-webkit-scrollbar {
@@ -66,13 +62,43 @@
       border-radius: 4px;
       position: absolute;
       top: 0;
-      height: 20%; /* Dynamically updated */
+      height: 20%;
       transition: height 0.3s, top 0.3s;
       pointer-events: auto;
       cursor: grab;
     }
     .scrollbar-thumb:active {
       cursor: grabbing;
+    }
+    
+    /* Removed extra vertical portfolio dots */
+    /* Vertical Pagination Dots (redundant full-page navigation) */
+    aside.pagination-dots {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 101;
+    }
+    aside.pagination-dots ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    aside.pagination-dots ul li {
+      margin: 10px 0;
+    }
+    aside.pagination-dots ul li a {
+      display: block;
+      width: 12px;
+      height: 12px;
+      background: #444;
+      border-radius: 50%;
+      transition: background 0.3s ease;
+    }
+    aside.pagination-dots ul li a.active,
+    aside.pagination-dots ul li a:hover {
+      background: var(--accent);
     }
     
     /* Header Section */
@@ -96,11 +122,11 @@
     }
     nav { }
     
-    /* Top Background Section */
+    /* Top Background Section with subtle gradient overlay */
     .background {
       position: relative;
       height: 120vh;
-      background: url('logo.png') no-repeat center top;
+      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('logo.png') no-repeat center top;
       background-size: contain;
       background-color: #000;
     }
@@ -122,7 +148,6 @@
       z-index: 1;
       text-align: center;
       opacity: 0;
-      /* Redundant animation preserved */
       animation: contentFadeIn 1s forwards;
     }
     @keyframes contentFadeIn {
@@ -230,11 +255,19 @@
       bottom: 0;
       left: 0;
       width: 100%;
+      height: 30%; /* Fixed height for consistency */
       padding: 1em;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.6);
       box-sizing: border-box;
       color: #fff;
-      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .card-content:hover {
+      transform: translateY(-3px);
+      background: rgba(0, 0, 0, 0.7);
     }
     .card h3 {
       font-size: 1.6em;
@@ -379,6 +412,24 @@
         height: 24em;
       }
     }
+    
+    /* Back-to-Top Button */
+    #backToTop {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: var(--accent);
+      color: #fff;
+      padding: 0.5em 0.8em;
+      border-radius: 4px;
+      text-decoration: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 110;
+    }
+    #backToTop.show {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -397,7 +448,14 @@
     <div class="scrollbar-thumb"></div>
   </div>
   
-  <!-- Removed vertical pagination dots on the left side -->
+  <!-- Vertical Pagination Dots (redundant full-page navigation) -->
+  <aside class="pagination-dots">
+    <ul>
+      <li><a href="#top" class="dot" data-target="top"></a></li>
+      <li><a href="#portfolio" class="dot" data-target="portfolio"></a></li>
+      <li><a href="#footer" class="dot" data-target="footer"></a></li>
+    </ul>
+  </aside>
   
   <!-- TOP BACKGROUND SECTION -->
   <section class="background" id="top">
@@ -410,7 +468,7 @@
     </div>
   </section>
   
-  <!-- PORTFOLIO SECTION (Only one with 4 cards) -->
+  <!-- PORTFOLIO SECTION -->
   <section class="portfolio" id="portfolio">
     <h2>Our Portfolio</h2>
     <div class="card-grid" id="cardGrid">
@@ -427,7 +485,7 @@
           </div>
         </a>
       </div>
-      <!-- Card 2: Standings (with bg-up for bottom-crop) -->
+      <!-- Card 2: Standings -->
       <div class="card-grid-space" data-index="1">
         <div class="num">2</div>
         <a href="standings.html">
@@ -509,6 +567,9 @@
     </div>
   </footer>
   
+  <!-- Back to Top Button -->
+  <a href="#top" id="backToTop">Top</a>
+  
   <!-- JAVASCRIPT FUNCTIONS (redundant code kept) -->
   <script>
     // Easing function for smooth scrolling (easeInOutQuad)
@@ -560,7 +621,7 @@
         document.body.style.userSelect = 'none';
       });
       document.addEventListener('mousemove', e => {
-        if (!isDragging) return;
+        if(!isDragging) return;
         const deltaY = e.clientY - startY;
         const docHeight = document.documentElement.scrollHeight;
         const winHeight = window.innerHeight;
@@ -640,6 +701,7 @@
       updateActiveDot();
     }
     
+    // DOMContentLoaded: Initialize vertical and horizontal behaviors
     document.addEventListener('DOMContentLoaded', function() {
       initializeAll();
       
@@ -678,6 +740,16 @@
         });
       });
       updateActiveCardDot();
+      
+      // Back-to-Top button behavior
+      const backToTop = document.getElementById('backToTop');
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+          backToTop.classList.add('show');
+        } else {
+          backToTop.classList.remove('show');
+        }
+      });
     });
     
     // Vertical smooth scroll helper (redundant)
