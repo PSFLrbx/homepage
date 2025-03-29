@@ -20,13 +20,13 @@
       --overlay: rgba(0,0,0,0.35);
       --transition: 0.5s ease;
     }
+    /* Enable smooth vertical scrolling; no scroll-snap */
     html {
-      /* Normal scrolling, no scroll-snap */
       scroll-behavior: smooth;
-      scrollbar-width: none; /* Hide native scrollbar in Firefox */
+      scrollbar-width: none;
     }
     ::-webkit-scrollbar {
-      display: none; /* Hide native scrollbar in WebKit */
+      display: none;
     }
     *, *::before, *::after {
       margin: 0;
@@ -50,7 +50,7 @@
       background: rgba(255,255,255,0.1);
       border-radius: 4px;
       z-index: 102;
-      pointer-events: auto; /* Let user click & drag */
+      pointer-events: auto;
     }
     .scrollbar-thumb {
       width: 100%;
@@ -66,7 +66,7 @@
       cursor: grabbing;
     }
     
-    /* Header */
+    /* Header Section */
     header {
       padding: 20px;
       background: var(--secondary-bg);
@@ -87,7 +87,7 @@
     }
     nav { }
     
-    /* Top Background Section */
+    /* Top Background Section with subtle gradient overlay */
     .background {
       position: relative;
       height: 120vh;
@@ -159,15 +159,12 @@
       text-align: center;
     }
     .card-grid-space a {
+      display: block;
       text-decoration: none;
       color: inherit;
-      display: block;
     }
     
-    /* Card Sizing:
-       - fixed width for consistent sizing
-       - auto height so the image dictates the aspect ratio 
-    */
+    /* Card Styling */
     .card {
       position: relative;
       width: 16em;
@@ -183,7 +180,6 @@
     .card:hover {
       transform: translateY(-5px);
     }
-    /* The image will auto-size the card’s height; keep consistent ratio if possible */
     .card img {
       width: 100%;
       height: auto;
@@ -195,7 +191,6 @@
     .card:hover img {
       transform: scale(1.05);
     }
-    /* Optionally “bg-up” for certain images: object-position: center 75% */
     .card.bg-up img {
       object-position: 50% 75%;
     }
@@ -213,11 +208,7 @@
       pointer-events: none;
     }
     
-    /*
-      Card Content Overlay – 
-      "auto-height" behind the text:
-      Let it expand only as needed for title & description
-    */
+    /* Card Content Overlay – auto-height behind text */
     .card-content {
       position: absolute;
       left: 0;
@@ -231,20 +222,26 @@
       flex-direction: column;
       justify-content: flex-end;
       transition: background 0.3s ease, transform 0.3s ease;
-      z-index: 2; /* above the ::before overlay */
+      z-index: 2;
     }
     .card-content:hover {
       transform: translateY(-3px);
       background: rgba(0, 0, 0, 0.7);
     }
     .card h3 {
-      font-size: 1.3em;
+      font-size: 1.6em;
       margin-bottom: 0.3em;
     }
     .card p {
-      font-size: 0.95em;
-      line-height: 1.4;
+      font-size: 1em;
+      line-height: 1.5;
       margin: 0;
+    }
+    
+    /* Specific override for Credits card: reduce overlay height */
+    .card.credits .card-content {
+      padding: 0.4em 0.8em; /* Reduced padding */
+      font-size: 1.5em; /* Adjust font if needed */
     }
     
     /* Footer Section */
@@ -334,7 +331,7 @@
       background-size: cover;
     }
     
-    /* Responsive */
+    /* Responsive Styles */
     @media (max-width: 600px) {
       .footer-container {
         flex-direction: column;
@@ -352,15 +349,9 @@
     }
     
     @media (min-width: 1600px) {
-      /* For very large screens, you can optionally increase card width */
       .card {
         width: 18em;
       }
-    }
-    
-    @keyframes contentFadeIn {
-      from { opacity: 0; transform: translate(-50%, -40%) scale(0.95); }
-      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
     }
   </style>
 </head>
@@ -434,11 +425,11 @@
           </div>
         </a>
       </div>
-      <!-- Card 4: Credits -->
+      <!-- Card 4: Credits (with custom class "credits") -->
       <div class="card-grid-space" data-index="3">
         <div class="num">4</div>
         <a href="credits.html">
-          <div class="card desc-bottom">
+          <div class="card desc-bottom credits">
             <img src="credits.png" alt="Credits">
             <div class="card-content">
               <h3>Credits</h3>
@@ -480,14 +471,13 @@
     </div>
   </footer>
   
-  <!-- JAVASCRIPT (redundant code kept) -->
+  <!-- JAVASCRIPT FUNCTIONS (redundant code kept) -->
   <script>
-    // Easing function
+    // Easing function for smooth scrolling (easeInOutQuad)
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
     }
-    
-    // Vertical smooth scroll (kept for redundancy if needed)
+    // Vertical smooth scroll (for full-page navigation)
     function smoothScrollTo(targetY, duration = 800) {
       const startY = window.pageYOffset;
       const distance = targetY - startY;
@@ -496,8 +486,8 @@
         if (!startTime) startTime = currentTime;
         const timeElapsed = currentTime - startTime;
         const progress = Math.min(timeElapsed / duration, 1);
-        const eased = easeInOutQuad(progress);
-        window.scrollTo(0, startY + (distance * eased));
+        const ease = easeInOutQuad(progress);
+        window.scrollTo(0, startY + (distance * ease));
         if (timeElapsed < duration) {
           requestAnimationFrame(animation);
         }
@@ -505,7 +495,7 @@
       requestAnimationFrame(animation);
     }
     
-    // Update the custom scrollbar thumb based on scroll
+    // Update custom vertical scrollbar thumb position and height
     function updateCustomScrollbar() {
       const docHeight = document.documentElement.scrollHeight;
       const winHeight = window.innerHeight;
@@ -513,7 +503,6 @@
       const thumb = document.querySelector('.scrollbar-thumb');
       if (!thumb) return;
       
-      // If page is shorter than the viewport, hide the thumb
       if (docHeight <= winHeight) {
         thumb.style.height = '0';
         return;
@@ -526,7 +515,7 @@
       thumb.style.top = thumbTop + 'px';
     }
     
-    // Draggable custom scrollbar
+    // Draggable custom vertical scrollbar
     function makeScrollbarDraggable() {
       const scrollbar = document.querySelector('.custom-scrollbar');
       const thumb = document.querySelector('.scrollbar-thumb');
@@ -571,8 +560,6 @@
     
     document.addEventListener('DOMContentLoaded', () => {
       initializeAll();
-      
-      // Update scrollbar on scroll and on window resize
       window.addEventListener('scroll', updateCustomScrollbar);
       window.addEventListener('resize', updateCustomScrollbar);
     });
