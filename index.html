@@ -20,17 +20,13 @@
       --overlay: rgba(0,0,0,0.35);
       --transition: 0.5s ease;
     }
-    /* Enable smooth vertical scrolling; remove scroll-snap properties so no auto-centering */
     html {
+      /* No scroll-snap; normal scrolling. */
       scroll-behavior: smooth;
-      /* Removed scroll-snap-type */
-      scrollbar-width: none;
+      scrollbar-width: none; /* Hide native scrollbar in Firefox */
     }
     ::-webkit-scrollbar {
-      display: none;
-    }
-    section {
-      /* Removed scroll-snap-align */
+      display: none; /* Hide native scrollbar in WebKit */
     }
     *, *::before, *::after {
       margin: 0;
@@ -44,7 +40,7 @@
       line-height: 1.6;
     }
     
-    /* Custom Overlaid Draggable Scrollbar – container now accepts pointer events */
+    /* Custom Draggable Scrollbar */
     .custom-scrollbar {
       position: fixed;
       right: 5px;
@@ -54,7 +50,7 @@
       background: rgba(255,255,255,0.1);
       border-radius: 4px;
       z-index: 102;
-      pointer-events: auto;
+      pointer-events: auto; /* Let user click & drag */
     }
     .scrollbar-thumb {
       width: 100%;
@@ -62,18 +58,15 @@
       border-radius: 4px;
       position: absolute;
       top: 0;
-      height: 20%;
+      height: 20%; /* updated on scroll & resize */
       transition: height 0.3s, top 0.3s;
-      pointer-events: auto;
       cursor: grab;
     }
     .scrollbar-thumb:active {
       cursor: grabbing;
     }
     
-    /* Removed vertical homepage pagination dots as requested */
-    
-    /* Header Section */
+    /* Header */
     header {
       padding: 20px;
       background: var(--secondary-bg);
@@ -94,7 +87,7 @@
     }
     nav { }
     
-    /* Top Background Section with subtle gradient overlay */
+    /* Top Background Section */
     .background {
       position: relative;
       height: 120vh;
@@ -146,36 +139,38 @@
       padding: 60px 20px 80px;
       text-align: center;
     }
-    /* Card Grid: horizontally scrollable row (no scroll-snap) */
     .card-grid {
       display: flex;
       flex-wrap: nowrap;
-      justify-content: center;
       overflow-x: auto;
       gap: 40px;
       max-width: 100%;
       margin: 0 auto;
       padding: 0 20px;
+      justify-content: center;
     }
     .card-grid-space {
-      position: relative;
       flex: 0 0 auto;
+      text-align: left;
     }
     .card-grid-space .num {
       font-size: 2em;
       margin-bottom: 0.5rem;
+      text-align: center;
     }
     .card-grid-space a {
-      display: block;
       text-decoration: none;
       color: inherit;
+      display: block;
     }
     
-    /* Card Styling */
+    /* Card Sizing:
+       - fixed width for consistent sizing
+       - auto height so the image dictates the aspect ratio 
+    */
     .card {
       position: relative;
-      width: 18em;
-      height: 28em;
+      width: 16em;  /* or 250px, etc. */
       border-radius: 1em;
       border: 5px solid #ccc;
       box-shadow: 0 0 5em -1em rgba(0,0,0,0.7);
@@ -188,25 +183,24 @@
     .card:hover {
       transform: translateY(-5px);
     }
+    /* The image will auto-size the card’s height; keep consistent ratio if possible */
     .card img {
       width: 100%;
-      height: 100%;
+      height: auto; 
+      display: block;
       object-fit: cover;
       object-position: center;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 0;
-      transform: scale(1.02);
-      transform-origin: center center;
       transition: transform 0.4s ease;
     }
     .card:hover img {
       transform: scale(1.05);
     }
-    .card.bg-up img,
+    /* Optionally “bg-up” for certain images: object-position: center 75% */
+    .card.bg-up img {
+      object-position: 50% 75%;
+    }
     .card.left-align.bg-up img {
-      object-position: center 75%;
+      object-position: 15% 75%;
     }
     
     /* Dark Gradient Overlay */
@@ -216,15 +210,16 @@
       inset: 0;
       background: linear-gradient(180deg, transparent, var(--overlay));
       z-index: 1;
+      pointer-events: none;
     }
     
-    /* Card Content Overlay – Reduced height to 25% and using flex for alignment */
+    /* Card Content Overlay – fixed partial height at bottom, but let the image set card height */
     .card-content {
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 25%; /* Reduced from 30% to 25% */
+      height: 25%;
       padding: 0.8em;
       background: rgba(0, 0, 0, 0.6);
       box-sizing: border-box;
@@ -233,21 +228,20 @@
       flex-direction: column;
       justify-content: flex-end;
       transition: background 0.3s ease, transform 0.3s ease;
+      z-index: 2; /* above the ::before overlay */
     }
     .card-content:hover {
       transform: translateY(-3px);
       background: rgba(0, 0, 0, 0.7);
     }
     .card h3 {
-      font-size: 1.6em;
+      font-size: 1.3em;
       margin-bottom: 0.3em;
     }
     .card p {
-      font-size: 1em;
-      line-height: 1.5;
-    }
-    .card.left-align img {
-      object-position: 15% center;
+      font-size: 0.95em;
+      line-height: 1.4;
+      margin: 0;
     }
     
     /* Footer Section */
@@ -337,7 +331,7 @@
       background-size: cover;
     }
     
-    /* Responsive Styles */
+    /* Responsive */
     @media (max-width: 600px) {
       .footer-container {
         flex-direction: column;
@@ -350,8 +344,14 @@
         font-size: 2em;
       }
       .card {
-        width: 16em;
-        height: 24em;
+        width: 14em;
+      }
+    }
+    
+    @media (min-width: 1600px) {
+      /* For very large screens, you can increase card width */
+      .card {
+        width: 18em;
       }
     }
   </style>
@@ -372,8 +372,6 @@
     <div class="scrollbar-thumb"></div>
   </div>
   
-  <!-- Removed vertical pagination dots -->
-  
   <!-- TOP BACKGROUND SECTION -->
   <section class="background" id="top">
     <div class="content">
@@ -385,7 +383,7 @@
     </div>
   </section>
   
-  <!-- PORTFOLIO SECTION (One section with 4 cards) -->
+  <!-- PORTFOLIO SECTION -->
   <section class="portfolio" id="portfolio">
     <h2>Our Portfolio</h2>
     <div class="card-grid" id="cardGrid">
@@ -402,7 +400,7 @@
           </div>
         </a>
       </div>
-      <!-- Card 2: Standings -->
+      <!-- Card 2: Standings (bg-up for bottom-crop) -->
       <div class="card-grid-space" data-index="1">
         <div class="num">2</div>
         <a href="standings.html">
@@ -474,13 +472,14 @@
     </div>
   </footer>
   
-  <!-- JAVASCRIPT FUNCTIONS (redundant code kept) -->
+  <!-- JAVASCRIPT (redundant code kept) -->
   <script>
-    // Easing function for smooth scrolling (easeInOutQuad)
+    // Easing function
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
     }
-    // Vertical smooth scroll (for full-page navigation)
+    
+    // Vertical smooth scroll (not used if no dots, but kept for redundancy)
     function smoothScrollTo(targetY, duration = 800) {
       const startY = window.pageYOffset;
       const distance = targetY - startY;
@@ -489,8 +488,8 @@
         if (!startTime) startTime = currentTime;
         const timeElapsed = currentTime - startTime;
         const progress = Math.min(timeElapsed / duration, 1);
-        const ease = easeInOutQuad(progress);
-        window.scrollTo(0, startY + (distance * ease));
+        const eased = easeInOutQuad(progress);
+        window.scrollTo(0, startY + (distance * eased));
         if (timeElapsed < duration) {
           requestAnimationFrame(animation);
         }
@@ -498,12 +497,20 @@
       requestAnimationFrame(animation);
     }
     
-    // Update custom vertical scrollbar thumb position and height
+    // Update the custom scrollbar thumb based on scroll
     function updateCustomScrollbar() {
       const docHeight = document.documentElement.scrollHeight;
       const winHeight = window.innerHeight;
       const scrollTop = window.pageYOffset;
       const thumb = document.querySelector('.scrollbar-thumb');
+      if (!thumb) return;
+      
+      // If page is shorter than the viewport, hide the thumb
+      if (docHeight <= winHeight) {
+        thumb.style.height = '0';
+        return;
+      }
+      
       const thumbHeight = (winHeight / docHeight) * winHeight;
       thumb.style.height = thumbHeight + 'px';
       const maxThumbTop = winHeight - thumbHeight;
@@ -511,19 +518,23 @@
       thumb.style.top = thumbTop + 'px';
     }
     
-    // Draggable custom vertical scrollbar
+    // Draggable custom scrollbar
     function makeScrollbarDraggable() {
       const scrollbar = document.querySelector('.custom-scrollbar');
       const thumb = document.querySelector('.scrollbar-thumb');
+      if (!scrollbar || !thumb) return;
+      
       let isDragging = false;
       let startY = 0;
       let startScrollTop = 0;
+      
       thumb.addEventListener('mousedown', e => {
         isDragging = true;
         startY = e.clientY;
         startScrollTop = window.pageYOffset;
         document.body.style.userSelect = 'none';
       });
+      
       document.addEventListener('mousemove', e => {
         if (!isDragging) return;
         const deltaY = e.clientY - startY;
@@ -531,76 +542,32 @@
         const winHeight = window.innerHeight;
         const maxScroll = docHeight - winHeight;
         const trackHeight = scrollbar.clientHeight - thumb.clientHeight;
+        
+        if (trackHeight <= 0) return;
+        
         const scrollRatio = deltaY / trackHeight;
         const newScrollTop = startScrollTop + (maxScroll * scrollRatio);
         window.scrollTo(0, newScrollTop);
       });
+      
       document.addEventListener('mouseup', () => {
         isDragging = false;
         document.body.style.userSelect = '';
       });
     }
     
-    // Update active vertical pagination dot (redundant full-page navigation)
-    function updateActiveDot() {
-      const dots = document.querySelectorAll('.pagination-dots a');
-      dots.forEach(dot => dot.classList.remove('active'));
-      const scrollY = window.pageYOffset;
-      if (scrollY < document.getElementById('portfolio').offsetTop - 50) {
-        dots[0].classList.add('active');
-      } else if (scrollY < document.getElementById('footer').offsetTop - 50) {
-        dots[1].classList.add('active');
-      } else {
-        dots[2].classList.add('active');
-      }
-    }
-    
-    // Initialization for vertical behaviors
     function initializeAll() {
       updateCustomScrollbar();
       makeScrollbarDraggable();
-      updateActiveDot();
     }
     
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', () => {
       initializeAll();
       
-      // Vertical scroll listeners
-      window.addEventListener('scroll', function() {
-        updateCustomScrollbar();
-        updateActiveDot();
-      });
-      const verticalDots = document.querySelectorAll('.pagination-dots a');
-      verticalDots.forEach(dot => {
-        dot.addEventListener('click', function(e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('data-target');
-          const targetElem = document.getElementById(targetId);
-          if(targetElem) {
-            const targetY = targetElem.offsetTop;
-            smoothScrollTo(targetY);
-          }
-        });
-      });
+      // Update scrollbar on scroll and on window resize
+      window.addEventListener('scroll', updateCustomScrollbar);
+      window.addEventListener('resize', updateCustomScrollbar);
     });
-    
-    // Vertical smooth scroll helper (redundant)
-    function smoothScrollTo(targetY, duration = 800) {
-      const startY = window.pageYOffset;
-      const distance = targetY - startY;
-      let startTime = null;
-      function animation(currentTime) {
-        if (!startTime) startTime = currentTime;
-        const timeElapsed = currentTime - startTime;
-        const progress = Math.min(timeElapsed / duration, 1);
-        const ease = easeInOutQuad(progress);
-        window.scrollTo(0, startY + (distance * ease));
-        if (timeElapsed < duration) {
-          requestAnimationFrame(animation);
-        }
-      }
-      requestAnimationFrame(animation);
-    }
   </script>
 </body>
 </html>
