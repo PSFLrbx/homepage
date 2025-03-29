@@ -20,13 +20,17 @@
       --overlay: rgba(0,0,0,0.35);
       --transition: 0.5s ease;
     }
-    /* Enable smooth vertical scrolling; no scroll-snap */
+    /* Enable smooth vertical scrolling; remove scroll-snap properties so no auto-centering */
     html {
       scroll-behavior: smooth;
+      /* Removed scroll-snap-type */
       scrollbar-width: none;
     }
     ::-webkit-scrollbar {
       display: none;
+    }
+    section {
+      /* Removed scroll-snap-align */
     }
     *, *::before, *::after {
       margin: 0;
@@ -40,7 +44,7 @@
       line-height: 1.6;
     }
     
-    /* Custom Draggable Scrollbar */
+    /* Custom Overlaid Draggable Scrollbar – container now accepts pointer events */
     .custom-scrollbar {
       position: fixed;
       right: 5px;
@@ -60,11 +64,14 @@
       top: 0;
       height: 20%;
       transition: height 0.3s, top 0.3s;
+      pointer-events: auto;
       cursor: grab;
     }
     .scrollbar-thumb:active {
       cursor: grabbing;
     }
+    
+    /* Removed vertical homepage pagination dots as requested */
     
     /* Header Section */
     header {
@@ -139,24 +146,24 @@
       padding: 60px 20px 80px;
       text-align: center;
     }
+    /* Card Grid: horizontally scrollable row (no scroll-snap) */
     .card-grid {
       display: flex;
       flex-wrap: nowrap;
+      justify-content: center;
       overflow-x: auto;
       gap: 40px;
       max-width: 100%;
       margin: 0 auto;
       padding: 0 20px;
-      justify-content: center;
     }
     .card-grid-space {
+      position: relative;
       flex: 0 0 auto;
-      text-align: left;
     }
     .card-grid-space .num {
       font-size: 2em;
       margin-bottom: 0.5rem;
-      text-align: center;
     }
     .card-grid-space a {
       display: block;
@@ -167,7 +174,8 @@
     /* Card Styling */
     .card {
       position: relative;
-      width: 16em;
+      width: 18em;
+      height: 28em;
       border-radius: 1em;
       border: 5px solid #ccc;
       box-shadow: 0 0 5em -1em rgba(0,0,0,0.7);
@@ -182,20 +190,23 @@
     }
     .card img {
       width: 100%;
-      height: auto;
-      display: block;
+      height: 100%;
       object-fit: cover;
       object-position: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      transform: scale(1.02);
+      transform-origin: center center;
       transition: transform 0.4s ease;
     }
     .card:hover img {
       transform: scale(1.05);
     }
-    .card.bg-up img {
-      object-position: 50% 75%;
-    }
+    .card.bg-up img,
     .card.left-align.bg-up img {
-      object-position: 15% 75%;
+      object-position: center 75%;
     }
     
     /* Dark Gradient Overlay */
@@ -205,15 +216,15 @@
       inset: 0;
       background: linear-gradient(180deg, transparent, var(--overlay));
       z-index: 1;
-      pointer-events: none;
     }
     
-    /* Card Content Overlay – auto-height behind text */
+    /* Card Content Overlay – Reduced height to 25% and using flex for alignment */
     .card-content {
       position: absolute;
-      left: 0;
-      right: 0;
       bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 25%; /* Reduced from 30% to 25% */
       padding: 0.8em;
       background: rgba(0, 0, 0, 0.6);
       box-sizing: border-box;
@@ -222,7 +233,6 @@
       flex-direction: column;
       justify-content: flex-end;
       transition: background 0.3s ease, transform 0.3s ease;
-      z-index: 2;
     }
     .card-content:hover {
       transform: translateY(-3px);
@@ -235,13 +245,9 @@
     .card p {
       font-size: 1em;
       line-height: 1.5;
-      margin: 0;
     }
-    
-    /* Specific override for Credits card: reduce overlay height */
-    .card.credits .card-content {
-      padding: 0.4em 0.8em; /* Reduced padding */
-      font-size: 1.5em; /* Adjust font if needed */
+    .card.left-align img {
+      object-position: 15% center;
     }
     
     /* Footer Section */
@@ -344,13 +350,8 @@
         font-size: 2em;
       }
       .card {
-        width: 14em;
-      }
-    }
-    
-    @media (min-width: 1600px) {
-      .card {
-        width: 18em;
+        width: 16em;
+        height: 24em;
       }
     }
   </style>
@@ -371,6 +372,8 @@
     <div class="scrollbar-thumb"></div>
   </div>
   
+  <!-- Removed vertical pagination dots -->
+  
   <!-- TOP BACKGROUND SECTION -->
   <section class="background" id="top">
     <div class="content">
@@ -382,7 +385,7 @@
     </div>
   </section>
   
-  <!-- PORTFOLIO SECTION -->
+  <!-- PORTFOLIO SECTION (One section with 4 cards) -->
   <section class="portfolio" id="portfolio">
     <h2>Our Portfolio</h2>
     <div class="card-grid" id="cardGrid">
@@ -425,11 +428,11 @@
           </div>
         </a>
       </div>
-      <!-- Card 4: Credits (with custom class "credits") -->
+      <!-- Card 4: Credits -->
       <div class="card-grid-space" data-index="3">
         <div class="num">4</div>
         <a href="credits.html">
-          <div class="card desc-bottom credits">
+          <div class="card desc-bottom">
             <img src="credits.png" alt="Credits">
             <div class="card-content">
               <h3>Credits</h3>
@@ -501,13 +504,6 @@
       const winHeight = window.innerHeight;
       const scrollTop = window.pageYOffset;
       const thumb = document.querySelector('.scrollbar-thumb');
-      if (!thumb) return;
-      
-      if (docHeight <= winHeight) {
-        thumb.style.height = '0';
-        return;
-      }
-      
       const thumbHeight = (winHeight / docHeight) * winHeight;
       thumb.style.height = thumbHeight + 'px';
       const maxThumbTop = winHeight - thumbHeight;
@@ -519,19 +515,15 @@
     function makeScrollbarDraggable() {
       const scrollbar = document.querySelector('.custom-scrollbar');
       const thumb = document.querySelector('.scrollbar-thumb');
-      if (!scrollbar || !thumb) return;
-      
       let isDragging = false;
       let startY = 0;
       let startScrollTop = 0;
-      
       thumb.addEventListener('mousedown', e => {
         isDragging = true;
         startY = e.clientY;
         startScrollTop = window.pageYOffset;
         document.body.style.userSelect = 'none';
       });
-      
       document.addEventListener('mousemove', e => {
         if (!isDragging) return;
         const deltaY = e.clientY - startY;
@@ -539,30 +531,76 @@
         const winHeight = window.innerHeight;
         const maxScroll = docHeight - winHeight;
         const trackHeight = scrollbar.clientHeight - thumb.clientHeight;
-        
-        if (trackHeight <= 0) return;
-        
         const scrollRatio = deltaY / trackHeight;
         const newScrollTop = startScrollTop + (maxScroll * scrollRatio);
         window.scrollTo(0, newScrollTop);
       });
-      
       document.addEventListener('mouseup', () => {
         isDragging = false;
         document.body.style.userSelect = '';
       });
     }
     
+    // Update active vertical pagination dot (redundant full-page navigation)
+    function updateActiveDot() {
+      const dots = document.querySelectorAll('.pagination-dots a');
+      dots.forEach(dot => dot.classList.remove('active'));
+      const scrollY = window.pageYOffset;
+      if (scrollY < document.getElementById('portfolio').offsetTop - 50) {
+        dots[0].classList.add('active');
+      } else if (scrollY < document.getElementById('footer').offsetTop - 50) {
+        dots[1].classList.add('active');
+      } else {
+        dots[2].classList.add('active');
+      }
+    }
+    
+    // Initialization for vertical behaviors
     function initializeAll() {
       updateCustomScrollbar();
       makeScrollbarDraggable();
+      updateActiveDot();
     }
     
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', function() {
       initializeAll();
-      window.addEventListener('scroll', updateCustomScrollbar);
-      window.addEventListener('resize', updateCustomScrollbar);
+      
+      // Vertical scroll listeners
+      window.addEventListener('scroll', function() {
+        updateCustomScrollbar();
+        updateActiveDot();
+      });
+      const verticalDots = document.querySelectorAll('.pagination-dots a');
+      verticalDots.forEach(dot => {
+        dot.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('data-target');
+          const targetElem = document.getElementById(targetId);
+          if(targetElem) {
+            const targetY = targetElem.offsetTop;
+            smoothScrollTo(targetY);
+          }
+        });
+      });
     });
+    
+    // Vertical smooth scroll helper (redundant)
+    function smoothScrollTo(targetY, duration = 800) {
+      const startY = window.pageYOffset;
+      const distance = targetY - startY;
+      let startTime = null;
+      function animation(currentTime) {
+        if (!startTime) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        const ease = easeInOutQuad(progress);
+        window.scrollTo(0, startY + (distance * ease));
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
+        }
+      }
+      requestAnimationFrame(animation);
+    }
   </script>
 </body>
 </html>
