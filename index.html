@@ -21,7 +21,7 @@
       --transition: 0.5s ease;
     }
     html {
-      /* No scroll-snap; normal scrolling. */
+      /* Normal scrolling, no scroll-snap */
       scroll-behavior: smooth;
       scrollbar-width: none; /* Hide native scrollbar in Firefox */
     }
@@ -58,7 +58,7 @@
       border-radius: 4px;
       position: absolute;
       top: 0;
-      height: 20%; /* updated on scroll & resize */
+      height: 20%;
       transition: height 0.3s, top 0.3s;
       cursor: grab;
     }
@@ -170,7 +170,7 @@
     */
     .card {
       position: relative;
-      width: 16em;  /* or 250px, etc. */
+      width: 16em;
       border-radius: 1em;
       border: 5px solid #ccc;
       box-shadow: 0 0 5em -1em rgba(0,0,0,0.7);
@@ -186,7 +186,7 @@
     /* The image will auto-size the card’s height; keep consistent ratio if possible */
     .card img {
       width: 100%;
-      height: auto; 
+      height: auto;
       display: block;
       object-fit: cover;
       object-position: center;
@@ -357,6 +357,11 @@
         width: 18em;
       }
     }
+    
+    @keyframes contentFadeIn {
+      from { opacity: 0; transform: translate(-50%, -40%) scale(0.95); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
   </style>
 </head>
 <body>
@@ -397,14 +402,13 @@
           <div class="card desc-bottom">
             <img src="background.png" alt="Stats">
             <div class="card-content">
-              <!-- The black overlay is only as tall as needed for these lines: -->
               <h3>Stats</h3>
               <p>View your stats from games here.</p>
             </div>
           </div>
         </a>
       </div>
-      <!-- Card 2: Standings (bg-up for bottom-crop) -->
+      <!-- Card 2: Standings -->
       <div class="card-grid-space" data-index="1">
         <div class="num">2</div>
         <a href="standings.html">
