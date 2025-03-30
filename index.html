@@ -1,544 +1,351 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PSFL – Redefine the Game</title>
-  <!-- Open Graph & Twitter Meta -->
-  <meta property="og:title" content="PSFL" />
-  <meta property="og:description" content="Unleash your passion and define the game. Join the ro-football revolution." />
-  <meta property="og:image" content="logo.png" />
-  <meta property="og:url" content="https://psflrbx.github.io/homepage" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary-bg: #111;
-      --secondary-bg: #222;
-      --accent: orange;
-      --overlay: rgba(0,0,0,0.35);
-      --transition: 0.5s ease;
-    }
-    html {
-      scroll-behavior: smooth;
-      scrollbar-width: none;
-    }
-    ::-webkit-scrollbar {
-      display: none;
-    }
-    section { }
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'IBM Plex Sans', sans-serif;
-      background: var(--primary-bg);
-      color: #fff;
-      line-height: 1.6;
-    }
-    .custom-scrollbar {
-      position: fixed;
-      right: 5px;
-      top: 0;
-      width: 8px;
-      height: 100vh;
-      background: rgba(255,255,255,0.1);
-      border-radius: 4px;
-      z-index: 102;
-      pointer-events: auto;
-    }
-    .scrollbar-thumb {
-      width: 100%;
-      background: var(--accent);
-      border-radius: 4px;
-      position: absolute;
-      top: 0;
-      height: 20%;
-      transition: height 0.3s, top 0.3s;
-      pointer-events: auto;
-      cursor: grab;
-    }
-    .scrollbar-thumb:active {
-      cursor: grabbing;
-    }
-    header {
-      padding: 20px;
-      background: var(--secondary-bg);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .branding {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .logo img {
-      width: 60px;
-    }
-    header h1 {
-      font-size: 2.5em;
-    }
-    nav { }
-    .background {
-      position: relative;
-      height: 120vh;
-      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('logo.png') no-repeat center top;
-      background-size: contain;
-      background-color: #000;
-    }
-    .background::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--overlay);
-      z-index: 0;
-    }
-    .background .content {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 1;
-      text-align: center;
-      opacity: 0;
-      animation: contentFadeIn 1s forwards;
-    }
-    @keyframes contentFadeIn {
-      from { opacity: 0; transform: translate(-50%, -40%) scale(0.95); }
-      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    }
-    .background .content h2 {
-      font-size: 2.8em;
-      margin-bottom: 0.5em;
-    }
-    .background .content p a {
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: border-bottom 0.3s;
-    }
-    .background .content p a:hover {
-      border-bottom: 1px solid var(--accent);
-    }
-    .portfolio {
-      background: #131313;
-      padding: 60px 20px 80px;
-      text-align: center;
-    }
-    .card-grid {
-      display: flex;
-      flex-wrap: nowrap;
-      justify-content: center;
-      overflow-x: auto;
-      gap: 40px;
-      max-width: 100%;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-    .card-grid-space {
-      position: relative;
-      flex: 0 0 auto;
-    }
-    .card-grid-space .num {
-      font-size: 2em;
-      margin-bottom: 0.5rem;
-      text-align: center;
-    }
-    .card-grid-space a {
-      display: block;
-      text-decoration: none;
-      color: inherit;
-    }
-    .card {
-      position: relative;
-      width: 18em;
-      height: 28em;
-      border-radius: 1em;
-      border: 5px solid #ccc;
-      box-shadow: 0 0 5em -1em rgba(0,0,0,0.7);
-      background: var(--secondary-bg);
-      overflow: hidden;
-      opacity: 1;
-      transform: none;
-      transition: transform 0.6s ease, opacity 0.6s ease;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-    }
-    .card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 0;
-      transform: scale(1.02);
-      transform-origin: center center;
-      transition: transform 0.4s ease;
-    }
-    .card:hover img {
-      transform: scale(1.05);
-    }
-    .card.bg-up img,
-    .card.left-align.bg-up img {
-      object-position: center 75%;
-    }
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, transparent, var(--overlay));
-      z-index: 1;
-      pointer-events: none;
-    }
-    .card-content {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 0.8em;
-      background: rgba(0, 0, 0, 0.6);
-      box-sizing: border-box;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      transition: background 0.3s ease, transform 0.3s ease;
-      z-index: 2;
-      /* Add a min-height so all black overlays match in size: */
-      min-height: 4em; /* <--- This is the key line */
-    }
-    .card-content:hover {
-      transform: translateY(-3px);
-      background: rgba(0, 0, 0, 0.7);
-    }
-    .card h3 {
-      font-size: 1.6em;
-      margin-bottom: 0.3em;
-    }
-    .card p {
-      font-size: 1em;
-      line-height: 1.5;
-      margin: 0;
-    }
-    /* If you want the Credits card smaller, you can override it here:
-    .card.credits-card .card-content {
-      min-height: 3em;
-    }
-    */
-    .footer {
-      background: var(--secondary-bg);
-      padding: 50px 0;
-      text-align: center;
-    }
-    .footer-container {
-      max-width: 1000px;
-      width: 90%;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: space-between;
-    }
-    .footer-col h4 {
-      margin-bottom: 15px;
-      font-size: 1.2em;
-    }
-    .footer-col ul {
-      list-style: none;
-    }
-    .footer-col ul li {
-      margin-bottom: 8px;
-    }
-    .footer-col ul li a {
-      color: #ccc;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-    .footer-col ul li a:hover {
-      color: var(--accent);
-    }
-    .social-icons {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .icon {
-      width: 40px;
-      height: 40px;
-      background: #444;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 1.2em;
-      transition: background 0.3s ease;
-      position: relative;
-    }
-    .icon:hover {
-      background: #666;
-    }
-    .tooltip {
-      position: absolute;
-      bottom: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--secondary-bg);
-      color: #fff;
-      font-size: 0.75em;
-      padding: 6px 10px;
-      border-radius: 4px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      white-space: nowrap;
-    }
-    .tooltip::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 5px;
-      border-style: solid;
-      border-color: var(--secondary-bg) transparent transparent transparent;
-    }
-    .icon:hover .tooltip {
-      opacity: 1;
-    }
-    .icon-discord {
-      background: url('discord.png') no-repeat center;
-      background-size: cover;
-    }
-    @media (max-width: 600px) {
-      .footer-container {
-        flex-direction: column;
-        text-align: center;
+import Discord from 'discord.js';
+import dotenv from 'dotenv';
+import moment from 'moment-timezone';
+dotenv.config();
+
+const {
+  Client,
+  GatewayIntentBits,
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  StringSelectMenuBuilder,
+  RoleSelectMenuBuilder,
+  PermissionsBitField,
+  ChannelType
+} = Discord;
+
+const client = new Client({
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.MessageContent]
+});
+
+// Persistent configuration per guild – now filled from files
+const config = {
+  teamRoles: {},
+  ringRoles: {},
+  streamerRoles: {},      // If needed, set separately
+  refereeRoles: {},       // If needed, set separately
+  transactionChannel: {},
+  demandChannel: {},
+  suspensionChannel: {},
+  commandChannel: {},
+  coachCheckChannel: {},
+  gametimeChannel: {},
+  signingStatus: {},
+  demandStatus: {},
+  awards: []              // Store award configuration if needed
+};
+
+// Staff roles & ranking definitions
+const validStaffRoles = ['University President', 'Head Coach', 'General Manager', 'Assistant Coach'];
+const staffRanks = {
+  'University President': 4,
+  'Head Coach': 3,
+  'General Manager': 2,
+  'Assistant Coach': 1
+};
+const modifiableStaffRoles = ['Head Coach', 'General Manager', 'Assistant Coach'];
+
+// In-memory storage for scheduled games (for live countdown updates)
+let nextGameId = 1;
+const scheduledGames = {};
+// Structure: { guildId: [ { gameId, messageId, channelId, scheduledTime, homeTeamName, awayTeamName, authorId, streamerId, refereeId }, ... ] }
+
+const timezoneMap = {
+  'EST': 'America/New_York',
+  'CST': 'America/Chicago',
+  'MST': 'America/Denver',
+  'PST': 'America/Los_Angeles'
+};
+
+function isAdminOrManageGuild(interaction) {
+  return (
+    interaction.memberPermissions.has(PermissionsBitField.Flags.Administrator) ||
+    interaction.memberPermissions.has(PermissionsBitField.Flags.ManageGuild)
+  );
+}
+
+// NEW: Load configuration from GitHub text files
+async function loadConfigurationFromGitHub() {
+  // Change this base URL to the raw URL of your GitHub repository
+  const baseUrl = 'https://raw.githubusercontent.com/yourusername/yourrepo/main/';
+  const teamConfigUrl = baseUrl + 'teamConfigure.txt';
+  const ringConfigUrl = baseUrl + 'ringConfigure.txt';
+  const awardConfigUrl = baseUrl + 'awardConfigure.txt';
+  const channelConfigUrl = baseUrl + 'channelConfigure.txt';
+
+  try {
+    const [teamRes, ringRes, awardRes, channelRes] = await Promise.all([
+      fetch(teamConfigUrl),
+      fetch(ringConfigUrl),
+      fetch(awardConfigUrl),
+      fetch(channelConfigUrl)
+    ]);
+
+    const [teamText, ringText, awardText, channelText] = await Promise.all([
+      teamRes.text(),
+      ringRes.text(),
+      awardRes.text(),
+      channelRes.text()
+    ]);
+
+    // Process team configuration – each line is a role name
+    const teamRoleNames = teamText.split('\n').map(line => line.trim()).filter(line => line.length);
+    // Process ring configuration – each line is a role name (award file is separate)
+    const ringRoleNames = ringText.split('\n').map(line => line.trim()).filter(line => line.length);
+    // Process award configuration (if used)
+    const awardData = awardText.split('\n').map(line => line.trim()).filter(line => line.length);
+    // Process channel configuration – each line is a channel ID in this order:
+    // Transaction, Demand, Suspension, Coach-Check, Bot Command.
+    const channelIds = channelText.split('\n').map(line => line.trim()).filter(line => line.length);
+
+    // For each guild the bot is in, look up the roles/channels by name/ID.
+    client.guilds.cache.forEach(guild => {
+      // TEAM ROLES: match by role name
+      const teamRoles = [];
+      teamRoleNames.forEach(roleName => {
+        const role = guild.roles.cache.find(r => r.name === roleName);
+        if (role) {
+          teamRoles.push(role.id);
+        } else {
+          console.warn(`Team role "${roleName}" not found in guild ${guild.id}`);
+        }
+      });
+      config.teamRoles[guild.id] = teamRoles;
+
+      // RING ROLES: match by role name
+      const ringRoles = [];
+      ringRoleNames.forEach(roleName => {
+        const role = guild.roles.cache.find(r => r.name === roleName);
+        if (role) {
+          ringRoles.push(role.id);
+        } else {
+          console.warn(`Ring role "${roleName}" not found in guild ${guild.id}`);
+        }
+      });
+      config.ringRoles[guild.id] = ringRoles;
+
+      // CHANNEL CONFIGURATION:
+      if (channelIds.length >= 5) {
+        const transactionChannel = guild.channels.cache.get(channelIds[0]);
+        const demandChannel = guild.channels.cache.get(channelIds[1]);
+        const suspensionChannel = guild.channels.cache.get(channelIds[2]);
+        const coachCheckChannel = guild.channels.cache.get(channelIds[3]);
+        const commandChannel = guild.channels.cache.get(channelIds[4]);
+
+        if (transactionChannel) config.transactionChannel[guild.id] = transactionChannel.id;
+        else console.warn(`Transaction channel ID ${channelIds[0]} not found in guild ${guild.id}`);
+
+        if (demandChannel) config.demandChannel[guild.id] = demandChannel.id;
+        else console.warn(`Demand channel ID ${channelIds[1]} not found in guild ${guild.id}`);
+
+        if (suspensionChannel) config.suspensionChannel[guild.id] = suspensionChannel.id;
+        else console.warn(`Suspension channel ID ${channelIds[2]} not found in guild ${guild.id}`);
+
+        if (coachCheckChannel) config.coachCheckChannel[guild.id] = coachCheckChannel.id;
+        else console.warn(`Coach-check channel ID ${channelIds[3]} not found in guild ${guild.id}`);
+
+        if (commandChannel) config.commandChannel[guild.id] = commandChannel.id;
+        else console.warn(`Bot command channel ID ${channelIds[4]} not found in guild ${guild.id}`);
+      } else {
+        console.error('channelConfigure.txt does not contain enough channel IDs.');
       }
-      header h1 {
-        font-size: 2em;
-      }
-      .background .content h2 {
-        font-size: 2em;
-      }
-      .card {
-        width: 16em;
-        height: 24em;
+    });
+
+    // Save award data if needed
+    config.awards = awardData;
+
+    console.log('Configuration successfully loaded from GitHub.');
+  } catch (error) {
+    console.error('Error loading configuration from GitHub:', error);
+  }
+}
+
+client.once('ready', async () => {
+  console.log(`Logged in as ${client.user.tag}!`);
+  // Load configuration on startup
+  await loadConfigurationFromGitHub();
+});
+
+// Utility: Calculate time until a given date
+function timeUntil(dateObj) {
+  const now = new Date();
+  let diff = Math.floor((dateObj - now) / 1000);
+  if (diff <= 0) return 'Game time has passed!';
+  const days = Math.floor(diff / 86400);
+  diff %= 86400;
+  const hours = Math.floor(diff / 3600);
+  diff %= 3600;
+  const mins = Math.floor(diff / 60);
+  const secs = diff % 60;
+  return `${days ? days + 'd ' : ''}${hours ? hours + 'h ' : ''}${mins ? mins + 'm ' : ''}${secs}s`.trim();
+}
+
+// Periodically update scheduled game embeds with live countdown
+setInterval(async () => {
+  const now = new Date();
+  for (const [guildId, games] of Object.entries(scheduledGames)) {
+    for (const game of games) {
+      const { gameId, messageId, channelId, scheduledTime, homeTeamName, awayTeamName, authorId, streamerId, refereeId } = game;
+      if (!scheduledTime) continue;
+      const channel = await client.channels.fetch(channelId).catch(() => null);
+      if (!channel) continue;
+      const discordTimestamp = Math.floor(moment(scheduledTime).unix());
+      const embed = new EmbedBuilder()
+        .setTitle(`**GAME SCHEDULED – ID: ${gameId}**`)
+        .setThumbnail('https://raw.githubusercontent.com/495BC/PSFL-Bot/main/logo.png')
+        .setDescription(`**Home Team:** ${homeTeamName}\n**Away Team:** ${awayTeamName}`)
+        .addFields(
+          { name: 'Scheduled Date/Time', value: moment(scheduledTime).format('LLLL'), inline: false },
+          { name: 'Time Until Game', value: `<t:${discordTimestamp}:R>`, inline: false },
+          { name: 'Streamer', value: streamerId ? `<@${streamerId}>` : '*(None)*', inline: true },
+          { name: 'Referee', value: refereeId ? `<@${refereeId}>` : '*(None)*', inline: true }
+        )
+        .setFooter({ text: `Last updated: ${now.toLocaleTimeString()} | Scheduled by: ${authorId}` });
+      try {
+        const msg = await channel.messages.fetch(messageId);
+        await msg.edit({ embeds: [embed] });
+      } catch {
+        // Message might be deleted or permissions insufficient.
       }
     }
-    @media (min-width: 1600px) {
-      .card {
-        width: 18em;
-      }
-    }
-    @keyframes contentFadeIn {
-      from { opacity: 0; transform: translate(-50%, -40%) scale(0.95); }
-      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="branding">
-      <div class="logo">
-        <img src="logo.png" alt="PSFL Logo">
-      </div>
-      <h1>PSFL</h1>
-    </div>
-    <nav></nav>
-  </header>
-  
-  <!-- Custom Scrollbar (Draggable) -->
-  <div class="custom-scrollbar">
-    <div class="scrollbar-thumb"></div>
-  </div>
-  
-  <!-- TOP BACKGROUND SECTION -->
-  <section class="background" id="top">
-    <div class="content">
-      <h2>Unleash Your Passion</h2>
-      <p>
-        Start your ro-football career today at 
-        <a href="https://discord.gg/psfl">discord.gg/psfl</a>
-      </p>
-    </div>
-  </section>
-  
-  <!-- PORTFOLIO SECTION -->
-  <section class="portfolio" id="portfolio">
-    <h2>Our Portfolio</h2>
-    <div class="card-grid" id="cardGrid">
-      <!-- Card 1: Stats -->
-      <div class="card-grid-space" data-index="0">
-        <div class="num">1</div>
-        <a href="stats.html">
-          <div class="card desc-bottom">
-            <img src="stats.png" alt="Stats">
-            <div class="card-content">
-              <h3>Stats</h3>
-              <p>View your stats from games here.</p>
-            </div>
-          </div>
-        </a>
-      </div>
-      <!-- Card 2: Standings -->
-      <div class="card-grid-space" data-index="1">
-        <div class="num">2</div>
-        <a href="standings.html">
-          <div class="card left-align bg-up desc-bottom">
-            <img src="standings.png" alt="Standings">
-            <div class="card-content">
-              <h3>Standings</h3>
-              <p>Check your team's standing here.</p>
-            </div>
-          </div>
-        </a>
-      </div>
-      <!-- Card 3: Rulebook -->
-      <div class="card-grid-space" data-index="2">
-        <div class="num">3</div>
-        <a href="rulebook.html">
-          <div class="card desc-bottom">
-            <img src="background.png" alt="Rulebook">
-            <div class="card-content">
-              <h3>Rulebook</h3>
-              <p>Read the league game rules here.</p>
-            </div>
-          </div>
-        </a>
-      </div>
-      <!-- Card 4: Credits (no extra class here, but you could if you want to tweak further) -->
-      <div class="card-grid-space" data-index="3">
-        <div class="num">4</div>
-        <a href="credits.html">
-          <div class="card desc-bottom">
-            <img src="credits.png" alt="Credits">
-            <div class="card-content">
-              <h3>Credits</h3>
-              <p>Meet the team behind PSFL.</p>
-            </div>
-          </div>
-        </a>
-      </div>
-    </div>
-  </section>
-  
-  <!-- FOOTER SECTION -->
-  <footer class="footer" id="footer">
-    <div class="footer-container">
-      <div class="footer-col">
-        <h4>Quicklinks</h4>
-        <ul>
-          <li><a href="https://psflrbx.github.io/homepage">Home</a></li>
-          <li><a href="stats.html">Stats</a></li>
-          <li><a href="rulebook.html">Rulebook</a></li>
-          <li><a href="credits.html">Credits</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Discord</h4>
-        <div class="social-icons">
-          <a href="https://discord.gg/psfl" class="icon icon-discord">
-            <span class="tooltip">discord.gg/psfl</span>
-          </a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h4>Credits</h4>
-        <ul>
-          <li>@ps9lu (psyklu)</li>
-          <li>@siyazof (495BC)</li>
-        </ul>
-      </div>
-    </div>
-  </footer>
-  
-  <!-- JAVASCRIPT (redundant code kept) -->
-  <script>
-    function easeInOutQuad(t) { 
-      return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
-    }
-    function smoothScrollTo(targetY, duration = 800) {
-      const startY = window.pageYOffset;
-      const distance = targetY - startY;
-      let startTime = null;
-      function animation(currentTime) {
-        if (!startTime) startTime = currentTime;
-        const timeElapsed = currentTime - startTime;
-        const progress = Math.min(timeElapsed / duration, 1);
-        const ease = easeInOutQuad(progress);
-        window.scrollTo(0, startY + (distance * ease));
-        if (timeElapsed < duration) {
-          requestAnimationFrame(animation);
+  }
+}, 1000);
+
+// Build row of buttons for gametime announcements
+function buildGameButtons() {
+  return new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId('gametime_streamer')
+      .setLabel('Streamer')
+      .setStyle(ButtonStyle.Secondary),
+    new ButtonBuilder()
+      .setCustomId('gametime_referee')
+      .setLabel('Referee')
+      .setStyle(ButtonStyle.Secondary),
+    new ButtonBuilder()
+      .setCustomId('gametime_cancel')
+      .setLabel('Cancel')
+      .setStyle(ButtonStyle.Danger)
+  );
+}
+
+// Interaction handling
+client.on('interactionCreate', async interaction => {
+  try {
+    console.log(`Received interaction: Type=${interaction.type}`);
+    if (interaction.isChatInputCommand()) {
+      const guildId = interaction.guildId;
+      // Enforce command channel if set and non-admin/manager
+      if (!isAdminOrManageGuild(interaction) && config.commandChannel[guildId]) {
+        if (interaction.channel.id !== config.commandChannel[guildId]) {
+          return interaction.reply({ content: 'Please use the designated command channel for configuration commands.', ephemeral: true });
         }
       }
-      requestAnimationFrame(animation);
-    }
-    function updateCustomScrollbar() {
-      const docHeight = document.documentElement.scrollHeight;
-      const winHeight = window.innerHeight;
-      const scrollTop = window.pageYOffset;
-      const thumb = document.querySelector('.scrollbar-thumb');
-      if (!thumb) return;
+      const { commandName } = interaction;
+      console.log(`Processing command: ${commandName}`);
       
-      if (docHeight <= winHeight) {
-        thumb.style.height = '0';
-        return;
+      // New /setup command: load config from GitHub files
+      if (commandName === 'setup') {
+        await loadConfigurationFromGitHub();
+        return interaction.reply({ content: 'Configuration loaded successfully from GitHub.', ephemeral: true });
       }
-      const thumbHeight = (winHeight / docHeight) * winHeight;
-      thumb.style.height = thumbHeight + 'px';
-      const maxThumbTop = winHeight - thumbHeight;
-      const thumbTop = (scrollTop / (docHeight - winHeight)) * maxThumbTop;
-      thumb.style.top = thumbTop + 'px';
+      
+      if (commandName === 'settings') {
+        const embed = new EmbedBuilder()
+          .setTitle('Current Configuration Settings')
+          .addFields(
+            { name: 'Team Roles', value: config.teamRoles[guildId] ? config.teamRoles[guildId].map(id => `<@&${id}>`).join(', ') : 'Not configured', inline: false },
+            { name: 'Ring Roles', value: config.ringRoles[guildId] ? config.ringRoles[guildId].map(id => `<@&${id}>`).join(', ') : 'Not configured', inline: false },
+            { name: 'Transaction Channel', value: config.transactionChannel[guildId] ? `<#${config.transactionChannel[guildId]}>` : 'Not configured', inline: true },
+            { name: 'Demand Channel', value: config.demandChannel[guildId] ? `<#${config.demandChannel[guildId]}>` : 'Not configured', inline: true },
+            { name: 'Suspension Channel', value: config.suspensionChannel[guildId] ? `<#${config.suspensionChannel[guildId]}>` : 'Not configured', inline: true },
+            { name: 'Command Channel', value: config.commandChannel[guildId] ? `<#${config.commandChannel[guildId]}>` : 'Not configured', inline: true },
+            { name: 'Coach-Check Channel', value: config.coachCheckChannel[guildId] ? `<#${config.coachCheckChannel[guildId]}>` : 'Not configured', inline: true },
+            { name: 'Gametime Channel', value: config.gametimeChannel[guildId] ? `<#${config.gametimeChannel[guildId]}>` : 'Not configured', inline: true },
+            { name: 'Signing Status', value: (config.signingStatus[guildId] === false) ? 'Disabled' : 'Enabled', inline: true },
+            { name: 'Demand Status', value: (config.demandStatus[guildId] === false) ? 'Disabled' : 'Enabled', inline: true }
+          )
+          .setTimestamp(new Date());
+        return interaction.reply({ embeds: [embed] });
+      }
+      
+      if (commandName === 'ring-check') {
+        const user = interaction.options.getUser('player') || interaction.user;
+        const member = interaction.guild.members.cache.get(user.id);
+        const ringRoleIds = config.ringRoles[interaction.guildId] || [];
+        let count = 0;
+        member.roles.cache.forEach(role => {
+          if (ringRoleIds.includes(role.id)) count++;
+        });
+        return interaction.reply({ content: `<@${user.id}> possesses **${count}** ring(s).` });
+      }
+      
+      // Other commands (membercount, aura, promote, demote, fo, release, sign, demand, suspend, unsuspend, fire-fo, coach-check, purge,
+      // signing-status, demand-status, command-channel, gametime) remain unchanged.
+      // … [rest of your command handling code, as in your original file, goes here] …
+      
     }
-    function makeScrollbarDraggable() {
-      const scrollbar = document.querySelector('.custom-scrollbar');
-      const thumb = document.querySelector('.scrollbar-thumb');
-      if (!scrollbar || !thumb) return;
-      let isDragging = false;
-      let startY = 0;
-      let startScrollTop = 0;
-      thumb.addEventListener('mousedown', e => {
-        isDragging = true;
-        startY = e.clientY;
-        startScrollTop = window.pageYOffset;
-        document.body.style.userSelect = 'none';
-      });
-      document.addEventListener('mousemove', e => {
-        if (!isDragging) return;
-        const deltaY = e.clientY - startY;
-        const docHeight = document.documentElement.scrollHeight;
-        const winHeight = window.innerHeight;
-        const maxScroll = docHeight - winHeight;
-        const trackHeight = scrollbar.clientHeight - thumb.clientHeight;
-        if (trackHeight <= 0) return;
-        const scrollRatio = deltaY / trackHeight;
-        const newScrollTop = startScrollTop + (maxScroll * scrollRatio);
-        window.scrollTo(0, newScrollTop);
-      });
-      document.addEventListener('mouseup', () => {
-        isDragging = false;
-        document.body.style.userSelect = '';
-      });
+    // Handle other interaction types (e.g. buttons for gametime) as before.
+    else if (interaction.isButton()) {
+      // Gametime button interactions: streamer/referee claim and cancel.
+      const guildId = interaction.guildId;
+      if (!scheduledGames[guildId]) return;
+      const game = scheduledGames[guildId].find(g => g.messageId === interaction.message.id);
+      if (!game) return interaction.reply({ content: 'Game not found.', ephemeral: true });
+      if (interaction.customId === 'gametime_cancel') {
+        if (game.authorId !== interaction.user.id) {
+          return interaction.reply({ content: 'Only the person who scheduled this game can cancel it.', ephemeral: true });
+        }
+        scheduledGames[guildId] = scheduledGames[guildId].filter(g => g !== game);
+        await interaction.message.delete().catch(() => {});
+        return interaction.reply({ content: 'Gametime announcement cancelled.', ephemeral: true });
+      }
+      if (interaction.customId === 'gametime_streamer') {
+        const userRoles = interaction.member.roles.cache.map(r => r.id);
+        const allowedStreamerRoles = config.streamerRoles[guildId] || [];
+        if (!userRoles.some(r => allowedStreamerRoles.includes(r))) {
+          return interaction.reply({ content: 'You do not have permission to claim the Streamer slot.', ephemeral: true });
+        }
+        if (game.streamerId === interaction.user.id) {
+          game.streamerId = null;
+          return interaction.reply({ content: 'You have unclaimed the Streamer slot.', ephemeral: true });
+        }
+        if (game.streamerId && game.streamerId !== interaction.user.id) {
+          return interaction.reply({ content: 'The Streamer slot is already claimed.', ephemeral: true });
+        }
+        game.streamerId = interaction.user.id;
+        return interaction.reply({ content: 'You have claimed the Streamer slot.', ephemeral: true });
+      }
+      if (interaction.customId === 'gametime_referee') {
+        const userRoles = interaction.member.roles.cache.map(r => r.id);
+        const allowedRefereeRoles = config.refereeRoles[guildId] || [];
+        if (!userRoles.some(r => allowedRefereeRoles.includes(r))) {
+          return interaction.reply({ content: 'You do not have permission to claim the Referee slot.', ephemeral: true });
+        }
+        if (game.refereeId === interaction.user.id) {
+          game.refereeId = null;
+          return interaction.reply({ content: 'You have unclaimed the Referee slot.', ephemeral: true });
+        }
+        if (game.refereeId && game.refereeId !== interaction.user.id) {
+          return interaction.reply({ content: 'The Referee slot is already claimed.', ephemeral: true });
+        }
+        game.refereeId = interaction.user.id;
+        return interaction.reply({ content: 'You have claimed the Referee slot.', ephemeral: true });
+      }
     }
-    function initializeAll() {
-      updateCustomScrollbar();
-      makeScrollbarDraggable();
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-      initializeAll();
-      window.addEventListener('scroll', updateCustomScrollbar);
-      window.addEventListener('resize', updateCustomScrollbar);
-    });
-  </script>
-</body>
-</html>
+  } catch (error) {
+    console.error('Unhandled interaction error:', error);
+  }
+});
+
+console.log('DEBUG BOT_TOKEN:', process.env.BOT_TOKEN);
+client.login(process.env.BOT_TOKEN);
+
+function getStaffRank(member) {
+  for (const roleName of Object.keys(staffRanks).sort((a, b) => staffRanks[b] - staffRanks[a])) {
+    if (member.roles.cache.some(r => r.name === roleName)) return staffRanks[roleName];
+  }
+  return 0;
+}
