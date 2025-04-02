@@ -28,8 +28,7 @@
       display: none; /* Hide native scrollbar in WebKit browsers */
     }
     *, *::before, *::after {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       box-sizing: border-box;
     }
     body {
@@ -63,7 +62,7 @@
     .scrollbar-thumb:active {
       cursor: grabbing;
     }
-    /* Header */
+    /* Header Section */
     header {
       padding: 20px;
       background: var(--secondary-bg);
@@ -83,10 +82,47 @@
       font-size: 2.5em;
     }
     nav {
-      /* Insert your nav items if needed */
+      /* Add your navigation items as needed */
     }
-    /* Footer */
-    footer {
+    /* Standings Section */
+    .standings {
+      background: #131313;
+      padding: 60px 20px 80px;
+      text-align: center;
+    }
+    .standings h2 {
+      font-size: 2em;
+      margin-bottom: 1em;
+    }
+    .standings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .conference {
+      background: var(--secondary-bg);
+      border-radius: 8px;
+      box-shadow: 0 0 2em -0.5em rgba(0,0,0,0.7);
+      padding: 20px;
+      border: 3px solid #444;
+    }
+    .conference h3 {
+      font-size: 1.8em;
+      margin-bottom: 0.5em;
+      color: var(--accent);
+    }
+    .google-sheet {
+      width: 100%;
+      height: 360px; /* Adjust height as needed */
+      border: none;
+      margin-top: 1em;
+      background: #fff;
+    }
+    /* Footer Section */
+    .footer {
       background: var(--secondary-bg);
       padding: 50px 0;
       text-align: center;
@@ -173,47 +209,17 @@
       background: url('discord.png') no-repeat center;
       background-size: cover;
     }
-    /* Standings Section */
-    .standings {
-      background: #131313;
-      padding: 60px 20px 80px;
-      text-align: center;
-    }
-    .standings h2 {
-      font-size: 2em;
-      margin-bottom: 1em;
-    }
-    .standings-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-    .conference {
-      background: var(--secondary-bg);
-      border-radius: 8px;
-      box-shadow: 0 0 2em -0.5em rgba(0,0,0,0.7);
-      padding: 20px;
-      border: 3px solid #444;
-    }
-    .conference h3 {
-      font-size: 1.8em;
-      margin-bottom: 0.5em;
-      color: var(--accent);
-    }
-    .google-sheet {
-      width: 100%;
-      height: 360px; /* Adjust as needed */
-      border: none;
-      margin-top: 1em;
-      background: #fff;
-    }
-    /* Responsive adjustments for standings grid */
+    /* Responsive adjustments */
     @media (max-width: 600px) {
       .standings-grid {
         grid-template-columns: 1fr;
+      }
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+      }
+      header h1 {
+        font-size: 2em;
       }
     }
   </style>
@@ -227,7 +233,7 @@
       <h1>PSFL</h1>
     </div>
     <nav>
-      <!-- Same navigation as your homepage -->
+      <!-- Use the same navigation as your homepage -->
     </nav>
   </header>
   
@@ -245,7 +251,7 @@
         <h3>SEC Conference</h3>
         <iframe 
           class="google-sheet"
-          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pub?output=csv"
+          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"
         ></iframe>
       </div>
       <!-- Top-right: BIG Conference -->
@@ -253,7 +259,7 @@
         <h3>BIG Conference</h3>
         <iframe 
           class="google-sheet"
-          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pub?output=csv"
+          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pubhtml?gid=1441658882&amp;single=true&amp;widget=true&amp;headers=false"
         ></iframe>
       </div>
       <!-- Bottom-left: XII Conference -->
@@ -261,7 +267,7 @@
         <h3>XII Conference</h3>
         <iframe 
           class="google-sheet"
-          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pub?output=csv"
+          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pubhtml?gid=1441658882&amp;single=true&amp;widget=true&amp;headers=false"
         ></iframe>
       </div>
       <!-- Bottom-right: ACC Conference -->
@@ -269,7 +275,7 @@
         <h3>ACC Conference</h3>
         <iframe 
           class="google-sheet"
-          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pub?output=csv"
+          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pubhtml?gid=1441658882&amp;single=true&amp;widget=true&amp;headers=false"
         ></iframe>
       </div>
     </div>
