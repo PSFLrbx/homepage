@@ -22,10 +22,10 @@
     }
     html {
       scroll-behavior: smooth;
-      scrollbar-width: none; /* Hide native scrollbar in Firefox */
+      scrollbar-width: none;
     }
     ::-webkit-scrollbar {
-      display: none; /* Hide native scrollbar in WebKit browsers */
+      display: none;
     }
     *, *::before, *::after {
       margin: 0;
@@ -83,7 +83,7 @@
       font-size: 2.5em;
     }
     nav {
-      /* Insert your navigation items as needed */
+      /* Insert your site's navigation here */
     }
     /* Standings Section */
     .standings {
@@ -95,7 +95,6 @@
       font-size: 2em;
       margin-bottom: 1em;
     }
-    /* 2x2 Grid Layout for Conferences */
     .standings-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -218,7 +217,7 @@
       background: url('discord.png') no-repeat center;
       background-size: cover;
     }
-    /* Responsive Adjustments */
+    /* Responsive */
     @media (max-width: 600px) {
       .standings-grid {
         grid-template-columns: 1fr;
@@ -242,7 +241,7 @@
       <h1>PSFL</h1>
     </div>
     <nav>
-      <!-- Use the same navigation as on your homepage -->
+      <!-- Use your site's navigation here -->
     </nav>
   </header>
   
@@ -258,7 +257,6 @@
       <!-- SEC Conference -->
       <div class="conference">
         <h3>SEC Conference</h3>
-        <!-- Table will be generated from CSV data -->
         <div id="table-sec"></div>
       </div>
       <!-- BIG Conference -->
@@ -311,17 +309,15 @@
   
   <!-- JavaScript: CSV Fetch and Table Generation -->
   <script>
-    // A simple CSV parser: splits on newlines and commas.
-    // This basic parser assumes there are no commas inside fields.
+    // Simple CSV parser (assumes no commas inside fields)
     function parseCSV(text) {
       const lines = text.trim().split("\n");
       return lines.map(line => line.split(","));
     }
-
-    // Generate an HTML table from CSV data (array of arrays).
+    // Generate an HTML table from CSV data
     function createTableFromCSVData(data) {
       const table = document.createElement("table");
-      // Create header row from first row:
+      // Create header row (assumes first row contains headers)
       if (data.length > 0) {
         const thead = table.createTHead();
         const headerRow = thead.insertRow();
@@ -341,8 +337,7 @@
       }
       return table;
     }
-
-    // Fetch CSV data from a given URL and place table in container.
+    // Load CSV data from URL and insert into container
     function loadCSV(url, containerId) {
       fetch(url)
         .then(response => response.text())
@@ -353,15 +348,14 @@
         })
         .catch(err => console.error("Error loading CSV from " + url, err));
     }
-
     // Load the four CSV files (replace with your actual CSV URLs)
-    loadCSV("sec.csv", "table-sec");
-    loadCSV("big.csv", "table-big");
-    loadCSV("xii.csv", "table-xii");
-    loadCSV("acc.csv", "table-acc");
+    loadCSV("https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pub?gid=0&single=true&output=csv", "table-sec");
+    loadCSV("https://docs.google.com/spreadsheets/d/e/2PACX-1vTBYA1JSJfRi4b-2fF0Dt5HJuJ-nRWMGl-ksoMRODmQail38y4UlTCcfT70yuMuzKp9rykfwdvIs3e9/pub?gid=0&single=true&output=csv", "table-big");
+    loadCSV("https://docs.google.com/spreadsheets/d/e/2PACX-1vRp86GK7e4fwNdQ_mkqZJXkbv279LvP4g5s8-bBFqNyZMHfFbK4W_jsg1F41qGfUHpVx-TX31eIjGlc/pub?gid=0&single=true&output=csv", "table-xii");
+    loadCSV("https://docs.google.com/spreadsheets/d/e/2PACX-1vRWmQZvtt3XbDQ64Duy4MKADGrgOkR6Qh50DQfb3vwcWPWijNMl2uRM9HyDMZHwCj8id9zWEejEEnqY/pub?gid=0&single=true&output=csv", "table-acc");
   </script>
   
-  <!-- Custom Scrollbar Script (unchanged) -->
+  <!-- Custom Scrollbar Script -->
   <script>
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
