@@ -284,13 +284,14 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="stats.html">Stats</a></li>
+        <li><a href="standings.html">Standings</a></li>
         <li><a href="rulebook.html">Rulebook</a></li>
         <li><a href="credits.html">Credits</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- Main Content -->
+  <!-- Main Content (Example content for Stats page) -->
   <div class="main-content">
     <h2>Player Stats</h2>
     <div class="pagination">
@@ -317,6 +318,7 @@
         <ul>
           <li><a href="index.html">Home</a></li>
           <li><a href="stats.html">Stats</a></li>
+          <li><a href="standings.html">Standings</a></li>
           <li><a href="rulebook.html">Rulebook</a></li>
           <li><a href="credits.html">Credits</a></li>
         </ul>
@@ -324,7 +326,9 @@
       <div class="footer-col">
         <h4>Discord</h4>
         <div class="social-icons">
-          <a href="https://discord.gg/psfl" class="icon icon-discord"></a>
+          <a href="https://discord.gg/psfl" class="icon icon-discord">
+            <span class="tooltip">discord.gg/psfl</span>
+          </a>
         </div>
       </div>
       <div class="footer-col">
@@ -338,7 +342,7 @@
   </footer>
 
   <script>
-    // CSV links for 5 pages (QB, WR, TE, DB, DE)
+    // CSV links for 5 pages (example for Stats page)
     const csvUrls = [
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
@@ -351,106 +355,57 @@
     const dots = document.querySelectorAll(".pagination .dot");
     const tableEl = document.getElementById("standings-table");
     
-    // CSV cache and cache time-to-live (30 seconds)
+    // CSV cache for 30 seconds
     const csvCache = {};
-    const CACHE_TTL = 30000; // in milliseconds
+    const CACHE_TTL = 30000;
     
-    // Fetch CSV with caching mechanism
     async function getCSVData(url) {
       const now = Date.now();
       if (csvCache[url] && (now - csvCache[url].timestamp < CACHE_TTL)) {
         return csvCache[url].text;
       }
-      const fullUrl = `${url}&t=${now}`; // cache-buster
+      const fullUrl = `${url}&t=${now}`;
       const response = await fetch(fullUrl);
       const text = await response.text();
       csvCache[url] = { text, timestamp: now };
       return text;
     }
     
-    // Parse CSV and limit processing to the first 100 lines (header + 99 rows)
     function parseCSV(text) {
-      let lines = text.trim().split("\n");
-      const MAX_LINES = 100;
-      if (lines.length > MAX_LINES) {
-        lines = lines.slice(0, MAX_LINES);
+      const lines = text.trim().split("\n");
+      return lines.map(line => line.split(","));
+    }
+    
+    // Build table body merging columns 1 and 2 as "Team", with Record and PD
+    function buildTableBody(data) {
+      const tbody = document.createElement("tbody");
+      for (let i = 1; i < data.length; i++) {
+        const row = document.createElement("tr");
+        // Merge first two columns for Team
+        const teamCell = document.createElement("td");
+        teamCell.textContent = data[i][0].trim() + " " + data[i][1].trim();
+        row.appendChild(teamCell);
+        // Next is Record
+        const recordCell = document.createElement("td");
+        recordCell.textContent = data[i][2].trim();
+        row.appendChild(recordCell);
+        // Finally PD
+        const pdCell = document.createElement("td");
+        pdCell.textContent = data[i][3].trim();
+        row.appendChild(pdCell);
+        tbody.appendChild(row);
       }
-      if (lines.length < 2) return { headers: [], data: [] };
-      const header = lines[0].split(",");
-      const headers = header.slice(0, header.length - 1).map(h => h.trim());
-      const data = lines.slice(1).map(line => {
-        const values = line.split(",").slice(0, header.length - 1).map(v => v.trim());
-        const rowObj = {};
-        headers.forEach((h, i) => { rowObj[h] = values[i]; });
-        return rowObj;
-      });
-      return { headers, data };
-    }
-    
-    function buildRankBadge(rank) {
-      if (rank === 1) return `<span class="rank-badge rank-1">1</span>`;
-      if (rank === 2) return `<span class="rank-badge rank-2">2</span>`;
-      if (rank === 3) return `<span class="rank-badge rank-3">3</span>`;
-      return `<span class="rank-badge">${rank}</span>`;
-    }
-    
-    function buildColGroup(filteredHeaders) {
-      let colgroupHTML = "<colgroup>";
-      colgroupHTML += '<col style="width:60px;" />';
-      if (filteredHeaders.length > 0) {
-        colgroupHTML += '<col style="width:200px;" />';
-      }
-      for (let i = 1; i < filteredHeaders.length; i++) {
-        colgroupHTML += '<col style="width:120px;" />';
-      }
-      colgroupHTML += "</colgroup>";
-      return colgroupHTML;
-    }
-    
-    function buildTable(headers, rows) {
-      const filteredHeaders = headers.filter(h => h.toUpperCase() !== "TEAMS");
-      const colgroup = buildColGroup(filteredHeaders);
-      let html = `${colgroup}<thead><tr>`;
-      html += '<th>RANK</th>';
-      filteredHeaders.forEach(h => {
-        html += `<th>${h}</th>`;
-      });
-      html += "</tr></thead><tbody>";
-      rows.forEach((row, idx) => {
-        const rankNum = idx + 1;
-        const teamName = (row["TEAMS"] || row["Team"] || "").trim();
-        html += "<tr>";
-        html += `<td class="rank-cell">
-                   ${buildRankBadge(rankNum)}
-                   <span class="team-name">${teamName}</span>
-                 </td>`;
-        filteredHeaders.forEach(header => {
-          const val = row[header] || "";
-          html += `<td>${val}</td>`;
-        });
-        html += "</tr>";
-      });
-      html += "</tbody>";
-      tableEl.innerHTML = html;
-      fixFontScaling();
-    }
-    
-    function fixFontScaling() {
-      const cells = tableEl.querySelectorAll("td");
-      cells.forEach(cell => {
-        const txt = cell.textContent.trim();
-        if (/^\d+$/.test(txt) && txt.length > 4) {
-          cell.classList.add("shrink");
-        }
-      });
+      return tbody;
     }
     
     async function updateTable() {
       try {
         const url = csvUrls[currentIndex];
         const csvText = await getCSVData(url);
-        const { headers, data } = parseCSV(csvText);
-        buildTable(headers, data);
+        const data = parseCSV(csvText);
+        const tbody = buildTableBody(data);
+        const tableBodyContainer = document.querySelector(`#${tableEl.id} tbody`);
+        tableBodyContainer.replaceWith(tbody);
         updateActiveDot();
       } catch (error) {
         console.error("Error updating table:", error);
@@ -479,10 +434,85 @@
       });
     });
     
-    // Automatically update the table every 30 seconds
     setInterval(updateTable, 30000);
     updateActiveDot();
     updateTable();
+  </script>
+  
+  <script>
+    function easeInOutQuad(t) { 
+      return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+    }
+    function smoothScrollTo(targetY, duration = 800) {
+      const startY = window.pageYOffset;
+      const distance = targetY - startY;
+      let startTime = null;
+      function animation(currentTime) {
+        if (!startTime) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        const ease = easeInOutQuad(progress);
+        window.scrollTo(0, startY + (distance * ease));
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
+        }
+      }
+      requestAnimationFrame(animation);
+    }
+    function updateCustomScrollbar() {
+      const docHeight = document.documentElement.scrollHeight;
+      const winHeight = window.innerHeight;
+      const scrollTop = window.pageYOffset;
+      const thumb = document.querySelector('.scrollbar-thumb');
+      if (!thumb) return;
+      if (docHeight <= winHeight) {
+        thumb.style.height = '0';
+        return;
+      }
+      const thumbHeight = (winHeight / docHeight) * winHeight;
+      thumb.style.height = thumbHeight + 'px';
+      const maxThumbTop = winHeight - thumbHeight;
+      const thumbTop = (scrollTop / (docHeight - winHeight)) * maxThumbTop;
+      thumb.style.top = thumbTop + 'px';
+    }
+    function makeScrollbarDraggable() {
+      const scrollbar = document.querySelector('.custom-scrollbar');
+      const thumb = document.querySelector('.scrollbar-thumb');
+      if (!scrollbar || !thumb) return;
+      let isDragging = false;
+      let startY = 0;
+      let startScrollTop = 0;
+      thumb.addEventListener('mousedown', e => {
+        isDragging = true;
+        startY = e.clientY;
+        startScrollTop = window.pageYOffset;
+        document.body.style.userSelect = 'none';
+      });
+      document.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        const deltaY = e.clientY - startY;
+        const docHeight = document.documentElement.scrollHeight;
+        const winHeight = window.innerHeight;
+        const maxScroll = docHeight - winHeight;
+        const trackHeight = scrollbar.clientHeight - thumb.clientHeight;
+        const scrollRatio = deltaY / trackHeight;
+        const newScrollTop = startScrollTop + (maxScroll * scrollRatio);
+        window.scrollTo(0, newScrollTop);
+      });
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+        document.body.style.userSelect = '';
+      });
+    }
+    function initializeAll() {
+      updateCustomScrollbar();
+      makeScrollbarDraggable();
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeAll();
+      window.addEventListener('scroll', updateCustomScrollbar);
+      window.addEventListener('resize', updateCustomScrollbar);
+    });
   </script>
 </body>
 </html>
