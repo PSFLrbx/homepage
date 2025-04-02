@@ -3,43 +3,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PSFL Rulebook</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+  <title>PSFL – Standings</title>
+  <!-- Open Graph & Twitter Meta -->
+  <meta property="og:title" content="PSFL" />
+  <meta property="og:description" content="Unleash your passion and define the game. Join the ro-football revolution." />
+  <meta property="og:image" content="logo.png" />
+  <meta property="og:url" content="https://psflrbx.github.io/homepage" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Base Variables & Global Resets */
+    /* Base Variables and Resets */
     :root {
       --primary-bg: #111;
       --secondary-bg: #222;
       --accent: orange;
       --light-accent: #ffb84d;
-      --overlay: rgba(0,0,0,0.3);
-      --card-bg: #1a1a1a;
+      --overlay: rgba(0,0,0,0.35);
       --transition: 0.5s ease;
+      --card-bg: #1a1a1a;
     }
     html {
       scroll-behavior: smooth;
+      scrollbar-width: none; /* hide scrollbar in Firefox */
+    }
+    ::-webkit-scrollbar {
+      display: none; /* hide scrollbar in WebKit */
     }
     *, *::before, *::after {
-      margin: 0; padding: 0;
+      margin: 0; 
+      padding: 0;
       box-sizing: border-box;
     }
     body {
       font-family: 'IBM Plex Sans', sans-serif;
-      background-color: var(--primary-bg);
+      background: var(--primary-bg);
       color: #fff;
       line-height: 1.6;
     }
-    a {
-      color: var(--accent);
-      text-decoration: none;
-      transition: color 0.3s ease;
+    /* Custom Draggable Scrollbar */
+    .custom-scrollbar {
+      position: fixed;
+      right: 5px;
+      top: 0;
+      width: 8px;
+      height: 100vh;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      z-index: 102;
+      pointer-events: auto;
     }
-    a:hover { color: var(--light-accent); }
-    
-    /* Header & Navigation – Updated for a modern look */
+    .scrollbar-thumb {
+      width: 100%;
+      background: var(--accent);
+      border-radius: 4px;
+      position: absolute;
+      top: 0;
+      height: 20%;
+      transition: height 0.3s, top 0.3s;
+      cursor: grab;
+    }
+    .scrollbar-thumb:active {
+      cursor: grabbing;
+    }
+    /* Header & Navigation */
     header {
-      background-color: var(--secondary-bg);
       padding: 20px 40px;
+      background: var(--secondary-bg);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -50,8 +79,12 @@
       align-items: center;
       gap: 10px;
     }
-    .logo img { width: 60px; }
-    header h1 { font-size: 2.5em; }
+    .logo img {
+      width: 60px;
+    }
+    header h1 {
+      font-size: 2.5em;
+    }
     nav ul {
       list-style: none;
       display: flex;
@@ -60,6 +93,7 @@
       letter-spacing: 1px;
     }
     nav ul li a {
+      display: inline-block;
       padding: 10px 15px;
       background: var(--card-bg);
       border-radius: 4px;
@@ -72,153 +106,114 @@
       color: #fff;
     }
     
-    /* Glossary Sidebar */
-    .glossary {
-      position: fixed;
-      top: 150px;
-      left: 0;
-      background: linear-gradient(135deg, #222, #333);
-      padding: 20px;
-      border-top-right-radius: 8px;
-      border-bottom-right-radius: 8px;
-      z-index: 2;
-      box-shadow: 2px 2px 8px rgba(0,0,0,0.7);
-      max-width: 200px;
+    /* Standings Section */
+    .standings {
+      background: #131313;
+      padding: 60px 20px 80px;
+      text-align: center;
     }
-    .glossary h2 {
-      font-size: 1.1em;
-      margin-bottom: 10px;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    .standings h2 {
+      font-size: 2em;
+      margin-bottom: 1em;
     }
-    .glossary ul { list-style: none; }
-    .glossary ul li { margin-bottom: 10px; }
-    .glossary ul li a {
-      font-size: 0.9em;
-      color: #ccc;
-      transition: color 0.3s ease;
-    }
-    .glossary ul li a.active {
-      color: var(--accent);
-      font-weight: bold;
-    }
-    .glossary ul li a:hover { color: var(--accent); }
-    
-    /* Background & Content */
-    .background {
-      position: relative;
-      min-height: 150vh;
-      background-color: #000;
-      padding-top: 100px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .background::after {
-      content: "";
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: var(--overlay);
-      z-index: 0;
-    }
-    .content {
-      position: relative;
-      z-index: 1;
-      width: 80%;
-      max-width: 900px;
+    .standings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 30px;
-      background: rgba(0,0,0,0.4);
+      padding: 0 20px;
+    }
+    .conference {
+      background: var(--secondary-bg);
       border-radius: 8px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.7);
-      animation: slideIn 0.5s forwards;
+      box-shadow: 0 0 2em -0.5em rgba(0,0,0,0.7);
+      padding: 20px;
+      border: 3px solid #444;
     }
-    @keyframes slideIn {
-      from { transform: translateX(-200%); opacity: 0; }
-      to   { transform: translateX(0); opacity: 1; }
-    }
-    
-    /* Rulebook Card Sections */
-    .rule-section {
-      background: var(--card-bg);
-      margin-bottom: 30px;
-      padding: 20px 25px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-    }
-    .rule-section h3 {
-      margin-bottom: 15px;
-      font-size: 1.6em;
-      border-bottom: 2px solid var(--accent);
-      padding-bottom: 5px;
+    .conference h3 {
+      font-size: 1.8em;
+      margin-bottom: 0.5em;
       color: var(--accent);
     }
-    .rule-section p { margin-bottom: 15px; }
-    
-    /* Rule Cards: One bullet point per row */
-    .rule-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .rule-card {
-      background: #333;
-      border: 1px solid #444;
-      border-radius: 5px;
-      padding: 10px 15px;
+    /* Table with fixed layout so columns line up */
+    table.standings-table {
       width: 100%;
-      font-size: 0.95em;
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin-top: 10px;
+    }
+    /* Three columns: first is 50%, next two are 25% each */
+    table.standings-table colgroup col:nth-child(1) {
+      width: 50%;
+    }
+    table.standings-table colgroup col:nth-child(2),
+    table.standings-table colgroup col:nth-child(3) {
+      width: 25%;
+    }
+    thead th {
+      background: var(--secondary-bg);
+      border: 1px solid #444;
+      padding: 8px;
+      text-align: center;
+    }
+    tbody td {
+      border: 1px solid #444;
+      padding: 8px;
+    }
+    tbody td:nth-child(2),
+    tbody td:nth-child(3) {
+      text-align: center;
+    }
+    /* Add a hover effect for table rows */
+    tbody tr {
+      transition: background 0.3s ease;
+    }
+    tbody tr:hover {
+      background: #1a1a1a;
     }
     
-    /* Message Header */
-    .message-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .profile-pic {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-      object-fit: cover;
-    }
-    .message-info { display: flex; flex-direction: column; }
-    .message-info .name { font-weight: bold; color: #fff; }
-    .message-info .date { font-size: 0.9em; color: #aaa; }
-    
-    /* Footer */
+    /* Footer Section */
     footer {
-      background-color: var(--secondary-bg);
+      background: var(--secondary-bg);
       padding: 50px 0;
+      text-align: center;
     }
     .footer-container {
-      width: 90%;
       max-width: 1000px;
+      width: 90%;
       margin: 0 auto;
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
       justify-content: space-between;
     }
-    .footer-col h4 { margin-bottom: 15px; font-size: 1.2em; color: #fff; }
-    .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col h4 {
+      margin-bottom: 15px;
+      font-size: 1.2em;
+    }
+    .footer-col ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .footer-col ul li {
+      margin-bottom: 8px;
+    }
     .footer-col ul li a {
       color: #ccc;
       text-decoration: none;
       transition: color 0.3s ease;
     }
-    .footer-col ul li a:hover { color: var(--accent); }
+    .footer-col ul li a:hover {
+      color: var(--accent);
+    }
     .social-icons {
       display: flex;
       gap: 10px;
       align-items: center;
     }
     .icon {
-      position: relative;
       width: 40px;
       height: 40px;
       background: #444;
@@ -226,39 +221,59 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      text-decoration: none;
       color: #fff;
       font-size: 1.2em;
       transition: background 0.3s ease;
-      overflow: hidden;
+      position: relative;
     }
-    .icon:hover { background: #666; }
-    .icon .tooltip {
+    .icon:hover {
+      background: #666;
+    }
+    .tooltip {
       position: absolute;
-      bottom: -30px;
-      background: #222;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--secondary-bg);
       color: #fff;
       font-size: 0.75em;
-      padding: 5px 8px;
+      padding: 6px 10px;
       border-radius: 4px;
       opacity: 0;
       pointer-events: none;
-      transition: all 0.3s ease;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+    }
+    .tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: var(--secondary-bg) transparent transparent transparent;
     }
     .icon:hover .tooltip {
       opacity: 1;
-      bottom: -40px;
     }
     .icon-discord {
       background: url('discord.png') no-repeat center;
       background-size: cover;
-      transition: transform 0.3s ease;
     }
-    .icon-discord:hover { transform: rotate(360deg); }
     
+    /* Responsive Adjustments */
     @media (max-width: 600px) {
-      .footer-container { flex-direction: column; text-align: center; }
-      .glossary { display: none; }
+      .standings-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+      }
+      header h1 {
+        font-size: 2em;
+      }
     }
   </style>
 </head>
@@ -266,7 +281,7 @@
   <header>
     <div class="branding">
       <div class="logo">
-        <img src="logo.png" alt="Logo">
+        <img src="logo.png" alt="PSFL Logo">
       </div>
       <h1>PSFL</h1>
     </div>
@@ -274,150 +289,111 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="stats.html">Stats</a></li>
-        <li><a href="standings.html">Standings</a></li>
-        <li><a href="rulebook.html" class="active">Rulebook</a></li>
+        <li><a href="standings.html" class="active">Standings</a></li>
+        <li><a href="rulebook.html">Rulebook</a></li>
         <li><a href="credits.html">Credits</a></li>
       </ul>
     </nav>
   </header>
-
-  <!-- Updated Glossary Sidebar with Header -->
-  <div class="glossary">
-    <h2>Glossary</h2>
-    <ul>
-      <li><a href="#server-settings">Server Settings</a></li>
-      <li><a href="#game-mechanics">Game Mechanics</a></li>
-      <li><a href="#players-rules">Players &amp; Game Rules</a></li>
-      <li><a href="#challenges">Challenges</a></li>
-      <li><a href="#penalties">Penalties</a></li>
-      <li><a href="#commands">Commands</a></li>
-    </ul>
+  
+  <!-- Custom Scrollbar (Draggable) -->
+  <div class="custom-scrollbar">
+    <div class="scrollbar-thumb"></div>
   </div>
-
-  <section class="background">
-    <div class="content page-enter">
-      <div class="message-header">
-        <img class="profile-pic" src="ps9lu.png" alt="Profile Picture">
-        <div class="message-info">
-          <span class="name">ps9lu</span>
-          <span class="date">March 17, 2025</span>
-        </div>
+  
+  <!-- STANDINGS SECTION -->
+  <section class="standings">
+    <h2>Standings</h2>
+    <div class="standings-grid">
+      <!-- SEC Conference -->
+      <div class="conference">
+        <h3>SEC Conference</h3>
+        <table class="standings-table" id="table-sec">
+          <colgroup>
+            <col />
+            <col />
+            <col />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>Record</th>
+              <th>PD</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
-      
-      <!-- Updated Rulebook Content with Card Sections -->
-      <h2>PSFL Games Rulebook</h2>
-      
-      <div class="rule-section" id="server-settings">
-        <h3>Server Settings</h3>
-        <div class="rule-cards">
-          <div class="rule-card">Public Listing: OFF</div>
-          <div class="rule-card">Fumble Chances: 1</div>
-          <div class="rule-card">Mercy Rule: 40 pts</div>
-          <div class="rule-card">Play Clock: 25 seconds</div>
-          <div class="rule-card">Quarter Length: 4 minutes</div>
-          <div class="rule-card">Replays: ON</div>
-          <div class="rule-card">Time of Day: As Scheduled</div>
-          <div class="rule-card">Weather: As Scheduled</div>
-        </div>
+      <!-- BIG Conference -->
+      <div class="conference">
+        <h3>BIG Conference</h3>
+        <table class="standings-table" id="table-big">
+          <colgroup>
+            <col />
+            <col />
+            <col />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>Record</th>
+              <th>PD</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
-      
-      <div class="rule-section" id="game-mechanics">
-        <h3>Game Mechanics</h3>
-        <div class="rule-cards">
-          <div class="rule-card">Diving: ON</div>
-          <div class="rule-card">Hitstick: ON</div>
-          <div class="rule-card">Sprinting: ON</div>
-          <div class="rule-card">Truck: OFF</div>
-          <div class="rule-card">Pass Break Up: OFF</div>
-          <div class="rule-card">Mercy Rule: OFF</div>
-        </div>
+      <!-- XII Conference -->
+      <div class="conference">
+        <h3>XII Conference</h3>
+        <table class="standings-table" id="table-xii">
+          <colgroup>
+            <col />
+            <col />
+            <col />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>Record</th>
+              <th>PD</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
-      
-      <div class="rule-section" id="players-rules">
-        <h3>Players &amp; Game Rules</h3>
-        <div class="rule-cards">
-          <div class="rule-card">Anyone can fumble.</div>
-          <div class="rule-card">Only one Center/OL per play.</div>
-          <div class="rule-card">Players cannot play while unsigned unless given permission by @lu or @pka.</div>
-          <div class="rule-card">No exploits that provide an unfair advantage.</div>
-          <div class="rule-card">Suspended players cannot play regular season games.</div>
-          <div class="rule-card">Macro usage is allowed.</div>
-          <div class="rule-card">Alt accounts require permission from a (+)Executive (not on the player’s team).</div>
-          <div class="rule-card">After kickoff, set play clock to <code>:pclock 50</code> for setup (including halftime/overtime kickoff).</div>
-          <div class="rule-card">Only 1 fake per half is allowed.</div>
-          <div class="rule-card">A webhook must be added; otherwise, the game won’t count (exceptions apply).</div>
-          <div class="rule-card">If a team owner/coach hosts without a webhook (and no eligible refs), the team gets an FFL.</div>
-          <div class="rule-card">If the webhook is unofficial, the game requires a redo (owner/coach: FFL; ref: fired).</div>
-          <div class="rule-card">If a referee shuts down the server during a game, they are suspended, fired, and the game must be redone.</div>
-          <div class="rule-card">If a team admin shuts down the server, their team receives an FFL.</div>
-          <div class="rule-card">Mercy Rule cannot be denied.</div>
-          <div class="rule-card">Games must be 7v7 - 8v8 (exceptions only in forced cases, e.g. 7v6, 8v7). The referee will use <code>:pclock 100</code> to allow proper player count; otherwise, it’s an FFL.</div>
-          <div class="rule-card">Only 2 QB runs per drive.</div>
-        </div>
+      <!-- ACC Conference -->
+      <div class="conference">
+        <h3>ACC Conference</h3>
+        <table class="standings-table" id="table-acc">
+          <colgroup>
+            <col />
+            <col />
+            <col />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>Record</th>
+              <th>PD</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
-      
-      <div class="rule-section" id="challenges">
-        <h3>Challenges</h3>
-        <p>If the auto-ref call is disputed, coaches (+AC) may challenge. The referee reviews the challenge and issues a verdict. Teams have three challenges per game; a successful challenge returns the challenge without penalty. Challenges may only be issued for:</p>
-        <div class="rule-cards">
-          <div class="rule-card">Infraction of Rules</div>
-          <div class="rule-card">False Incompletions</div>
-          <div class="rule-card">High boost/in-bounds calls</div>
-          <div class="rule-card">Incorrect calls on body contact</div>
-          <div class="rule-card">Ineligible Players (not signed, suspended, alt-account)</div>
-        </div>
-      </div>
-      
-      <div class="rule-section" id="penalties">
-        <h3>Penalties</h3>
-        <div class="rule-cards">
-          <div class="rule-card"><strong>Grounding</strong> — QB throws blatantly out of range. [-15]. Grounding in own endzone or near endzone results in a safety.</div>
-          <div class="rule-card"><strong>Delay of Game</strong> — Automatically called; may be reverted if an NR was called but the ref failed to react. [-5]</div>
-          <div class="rule-card"><strong>Lag Sack</strong> — Penalty for a defensive end’s lag sack (QB lag does not count); results in down replay.</div>
-          <div class="rule-card"><strong>Double Blocking</strong> — Two blockers blocking 5 yards behind the line; negated on run plays or if QB is sacked. [-5]</div>
-          <div class="rule-card"><strong>Triple Blocking</strong> — Three or more blockers forward toward their own TD; only negated if QB is sacked or ball is run (except fakes). [-10]</div>
-          <div class="rule-card"><strong>Milking</strong> — Unreasonable delay unless clock is 00:30 or lower in 2nd/4th quarter. [-10]</div>
-          <div class="rule-card"><strong>Headriding</strong> — Stacking on the head for more than 2 seconds. [-5]</div>
-          <div class="rule-card"><strong>More than one fake per halftime</strong> — Results in a 2-point deduction and skipping the special play.</div>
-        </div>
-      </div>
-      
-      <div class="rule-section" id="commands">
-        <h3>Commands (Refs)</h3>
-        <div class="rule-cards">
-          <div class="rule-card">:Clock "0:00"</div>
-          <div class="rule-card">:startclock</div>
-          <div class="rule-card">:pclock "00"</div>
-          <div class="rule-card">:Pauseclock</div>
-          <div class="rule-card">:Pausepclock</div>
-          <div class="rule-card">:line "-0" / :line "0"</div>
-          <div class="rule-card">:scrimmage "-0" / :scrimmage "0"</div>
-          <div class="rule-card">:flag</div>
-          <div class="rule-card">:challenge</div>
-          <div class="rule-card">:newplay</div>
-          <div class="rule-card">:turnover</div>
-          <div class="rule-card">:down "0"</div>
-          <div class="rule-card">:team "user" (away/home/spec/ref)</div>
-          <div class="rule-card">:serverlock / :unserverlock</div>
-          <div class="rule-card">:changestate "play" / "kickoff" / "punt" / "field goal"</div>
-          <div class="rule-card">:padmin "user"</div>
-        </div>
-      </div>
-      
-      <p style="margin-top: 30px; text-align: center; font-weight: bold;">Signed by 495BC and Lu</p>
     </div>
   </section>
-
+  
+  <!-- FOOTER SECTION -->
   <footer>
     <div class="footer-container">
       <div class="footer-col">
         <h4>Quicklinks</h4>
         <ul>
-          <li><a href="https://psflrbx.github.io/homepage">PSFL Home</a></li>
-          <li><a href="https://psflrbx.github.io/stats">Stats</a></li>
-          <li><a href="https://psflrbx.github.io/standings">Standings</a></li>
-          <li><a href="https://psflrbx.github.io/rulebook">Rulebook</a></li>
-          <li><a href="https://psflrbx.github.io/credits">Credits</a></li>
+          <li><a href="https://psflrbx.github.io/homepage">Home</a></li>
+          <li><a href="standings.html">Standings</a></li>
+          <li><a href="rulebook.html">Rulebook</a></li>
+          <li><a href="credits.html">Credits</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -437,58 +413,131 @@
       </div>
     </div>
   </footer>
-
+  
+  <!-- JavaScript for CSV Parsing and Merged Column Table -->
   <script>
-    // Parallax Effect for Background
-    let targetY = 0, currentY = 0;
-    const parallaxSpeed = 0.3;
-    function updateParallax() {
-      currentY += (targetY - currentY) * 0.1;
-      document.querySelector('.background').style.backgroundPositionY = currentY + "px";
-      requestAnimationFrame(updateParallax);
+    // Basic CSV parser: splits on newlines and commas (assumes no commas within fields).
+    function parseCSV(text) {
+      const lines = text.trim().split("\n");
+      return lines.map(line => line.split(","));
     }
-    window.addEventListener('scroll', function() {
-      targetY = -(window.pageYOffset * parallaxSpeed);
-    });
-    updateParallax();
-
-    // Tween-out on navigation click before navigating
-    const navLinks = document.querySelectorAll('nav ul li a');
-    navLinks.forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetUrl = this.href;
-        const content = document.querySelector('.background .content');
-        content.classList.remove('page-enter');
-        content.classList.add('page-exit');
-        setTimeout(() => { window.location.href = targetUrl; }, 1200);
-      });
-    });
-
-    // Glossary Active Section Handling using IntersectionObserver
-    const glossaryLinks = document.querySelectorAll('.glossary a');
-    const sections = Array.from(document.querySelectorAll('.rule-section'));
+    // Create a <tbody> that merges the first two CSV columns into "Team"
+    // and uses the next columns for "Record" and "PD."
+    function buildTableBody(data) {
+      const tbody = document.createElement("tbody");
+      // Start from row 1 to skip CSV header row
+      for (let i = 1; i < data.length; i++) {
+        const row = document.createElement("tr");
+        // Merge first two columns as "Team"
+        const teamCell = document.createElement("td");
+        teamCell.textContent = data[i][0].trim() + " " + data[i][1].trim();
+        row.appendChild(teamCell);
+        // Next column is "Record"
+        const recordCell = document.createElement("td");
+        recordCell.textContent = data[i][2].trim();
+        row.appendChild(recordCell);
+        // Last column is "PD"
+        const pdCell = document.createElement("td");
+        pdCell.textContent = data[i][3].trim();
+        row.appendChild(pdCell);
+        tbody.appendChild(row);
+      }
+      return tbody;
+    }
+    // Fetch CSV from URL, parse, build table body, append to <table> with given id.
+    function loadCSVandMerge(url, tableId) {
+      fetch(url)
+        .then(resp => resp.text())
+        .then(text => {
+          const data = parseCSV(text);
+          const tbody = buildTableBody(data);
+          const table = document.querySelector(`#${tableId} tbody`);
+          table.replaceWith(tbody);
+        })
+        .catch(err => console.error("Error loading CSV:", err));
+    }
     
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.4
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const id = entry.target.getAttribute('id');
-        const glossaryLink = document.querySelector(`.glossary a[href="#${id}"]`);
-        if (entry.isIntersecting) {
-          glossaryLink.classList.add('active');
-        } else {
-          glossaryLink.classList.remove('active');
+    // Load your four CSV files (replace with your actual CSV URLs)
+    loadCSVandMerge("https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pub?gid=0&single=true&output=csv", "table-sec");
+    loadCSVandMerge("https://docs.google.com/spreadsheets/d/e/2PACX-1vTBYA1JSJfRi4b-2fF0Dt5HJuJ-nRWMGl-ksoMRODmQail38y4UlTCcfT70yuMuzKp9rykfwdvIs3e9/pub?gid=0&single=true&output=csv", "table-big");
+    loadCSVandMerge("https://docs.google.com/spreadsheets/d/e/2PACX-1vRp86GK7e4fwNdQ_mkqZJXkbv279LvP4g5s8-bBFqNyZMHfFbK4W_jsg1F41qGfUHpVx-TX31eIjGlc/pub?gid=0&single=true&output=csv", "table-xii");
+    loadCSVandMerge("https://docs.google.com/spreadsheets/d/e/2PACX-1vRWmQZvtt3XbDQ64Duy4MKADGrgOkR6Qh50DQfb3vwcWPWijNMl2uRM9HyDMZHwCj8id9zWEejEEnqY/pub?gid=0&single=true&output=csv", "table-acc");
+  </script>
+  
+  <!-- Custom Scrollbar Script -->
+  <script>
+    function easeInOutQuad(t) { 
+      return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+    }
+    function smoothScrollTo(targetY, duration = 800) {
+      const startY = window.pageYOffset;
+      const distance = targetY - startY;
+      let startTime = null;
+      function animation(currentTime) {
+        if (!startTime) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        const ease = easeInOutQuad(progress);
+        window.scrollTo(0, startY + (distance * ease));
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
         }
+      }
+      requestAnimationFrame(animation);
+    }
+    function updateCustomScrollbar() {
+      const docHeight = document.documentElement.scrollHeight;
+      const winHeight = window.innerHeight;
+      const scrollTop = window.pageYOffset;
+      const thumb = document.querySelector('.scrollbar-thumb');
+      if (!thumb) return;
+      if (docHeight <= winHeight) {
+        thumb.style.height = '0';
+        return;
+      }
+      const thumbHeight = (winHeight / docHeight) * winHeight;
+      thumb.style.height = thumbHeight + 'px';
+      const maxThumbTop = winHeight - thumbHeight;
+      const thumbTop = (scrollTop / (docHeight - winHeight)) * maxThumbTop;
+      thumb.style.top = thumbTop + 'px';
+    }
+    function makeScrollbarDraggable() {
+      const scrollbar = document.querySelector('.custom-scrollbar');
+      const thumb = document.querySelector('.scrollbar-thumb');
+      if (!scrollbar || !thumb) return;
+      let isDragging = false;
+      let startY = 0;
+      let startScrollTop = 0;
+      thumb.addEventListener('mousedown', e => {
+        isDragging = true;
+        startY = e.clientY;
+        startScrollTop = window.pageYOffset;
+        document.body.style.userSelect = 'none';
       });
-    }, observerOptions);
-    
-    sections.forEach(section => {
-      observer.observe(section);
+      document.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        const deltaY = e.clientY - startY;
+        const docHeight = document.documentElement.scrollHeight;
+        const winHeight = window.innerHeight;
+        const maxScroll = docHeight - winHeight;
+        const trackHeight = scrollbar.clientHeight - thumb.clientHeight;
+        const scrollRatio = deltaY / trackHeight;
+        const newScrollTop = startScrollTop + (maxScroll * scrollRatio);
+        window.scrollTo(0, newScrollTop);
+      });
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+        document.body.style.userSelect = '';
+      });
+    }
+    function initializeAll() {
+      updateCustomScrollbar();
+      makeScrollbarDraggable();
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeAll();
+      window.addEventListener('scroll', updateCustomScrollbar);
+      window.addEventListener('resize', updateCustomScrollbar);
     });
   </script>
 </body>
