@@ -65,7 +65,7 @@
     }
     nav ul li a:hover { background: var(--accent); }
     
-    /* Glossary Sidebar with Active State */
+    /* Glossary Sidebar */
     .glossary {
       position: fixed;
       top: 150px;
@@ -85,12 +85,8 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    .glossary ul {
-      list-style: none;
-    }
-    .glossary ul li {
-      margin-bottom: 10px;
-    }
+    .glossary ul { list-style: none; }
+    .glossary ul li { margin-bottom: 10px; }
     .glossary ul li a {
       font-size: 0.9em;
       color: #ccc;
@@ -282,9 +278,10 @@
   <div class="glossary">
     <h2>Glossary</h2>
     <ul>
-      <li><a href="#game-settings">Game Settings</a></li>
+      <li><a href="#server-settings">Server Settings</a></li>
+      <li><a href="#game-mechanics">Game Mechanics</a></li>
+      <li><a href="#players-rules">Players &amp; Game Rules</a></li>
       <li><a href="#challenges">Challenges</a></li>
-      <li><a href="#penalty-guide">Penalty Guide</a></li>
       <li><a href="#penalties">Penalties</a></li>
       <li><a href="#commands">Commands</a></li>
     </ul>
@@ -300,10 +297,10 @@
         </div>
       </div>
       
-      <!-- Updated Rulebook Content with Card Sections and One Bullet per Row -->
+      <!-- Updated Rulebook Content with Card Sections -->
       <h2>PSFL Games Rulebook</h2>
       
-      <div class="rule-section" id="game-settings">
+      <div class="rule-section" id="server-settings">
         <h3>Server Settings</h3>
         <div class="rule-cards">
           <div class="rule-card">Public Listing: OFF</div>
@@ -317,7 +314,7 @@
         </div>
       </div>
       
-      <div class="rule-section">
+      <div class="rule-section" id="game-mechanics">
         <h3>Game Mechanics</h3>
         <div class="rule-cards">
           <div class="rule-card">Diving: ON</div>
@@ -329,7 +326,7 @@
         </div>
       </div>
       
-      <div class="rule-section">
+      <div class="rule-section" id="players-rules">
         <h3>Players &amp; Game Rules</h3>
         <div class="rule-cards">
           <div class="rule-card">Anyone can fumble.</div>
@@ -364,7 +361,7 @@
         </div>
       </div>
       
-      <div class="rule-section" id="penalty-guide">
+      <div class="rule-section" id="penalties">
         <h3>Penalties</h3>
         <div class="rule-cards">
           <div class="rule-card"><strong>Grounding</strong> — QB throws blatantly out of range. [-15]. Grounding in own endzone or near endzone results in a safety.</div>
