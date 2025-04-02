@@ -65,23 +65,40 @@
     }
     nav ul li a:hover { background: var(--accent); }
     
-    /* Glossary Sidebar */
+    /* Glossary Sidebar with Active State */
     .glossary {
       position: fixed;
       top: 150px;
       left: 0;
-      background: rgba(34,34,34,0.85);
-      padding: 15px 20px;
+      background: linear-gradient(135deg, #222, #333);
+      padding: 20px;
       border-top-right-radius: 8px;
       border-bottom-right-radius: 8px;
       z-index: 2;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+      max-width: 200px;
     }
-    .glossary ul { list-style: none; }
-    .glossary ul li { margin-bottom: 10px; }
+    .glossary h2 {
+      font-size: 1.1em;
+      margin-bottom: 10px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .glossary ul {
+      list-style: none;
+    }
+    .glossary ul li {
+      margin-bottom: 10px;
+    }
     .glossary ul li a {
       font-size: 0.9em;
       color: #ccc;
       transition: color 0.3s ease;
+    }
+    .glossary ul li a.active {
+      color: var(--accent);
+      font-weight: bold;
     }
     .glossary ul li a:hover { color: var(--accent); }
     
@@ -136,7 +153,8 @@
       color: var(--accent);
     }
     .rule-section p { margin-bottom: 15px; }
-    /* Updated: One bullet per row */
+    
+    /* Rule Cards: one bullet point per row */
     .rule-cards {
       display: flex;
       flex-direction: column;
@@ -260,8 +278,9 @@
     </nav>
   </header>
 
-  <!-- Glossary Sidebar -->
+  <!-- Updated Glossary Sidebar with Header -->
   <div class="glossary">
+    <h2>Glossary</h2>
     <ul>
       <li><a href="#game-settings">Game Settings</a></li>
       <li><a href="#challenges">Challenges</a></li>
@@ -440,6 +459,32 @@
         content.classList.add('page-exit');
         setTimeout(() => { window.location.href = targetUrl; }, 1200);
       });
+    });
+
+    // Glossary Active Section Handling using IntersectionObserver
+    const glossaryLinks = document.querySelectorAll('.glossary a');
+    const sections = Array.from(document.querySelectorAll('.rule-section'));
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.4
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const id = entry.target.getAttribute('id');
+        const glossaryLink = document.querySelector(`.glossary a[href="#${id}"]`);
+        if (entry.isIntersecting) {
+          glossaryLink.classList.add('active');
+        } else {
+          glossaryLink.classList.remove('active');
+        }
+      });
+    }, observerOptions);
+    
+    sections.forEach(section => {
+      observer.observe(section);
     });
   </script>
 </body>
