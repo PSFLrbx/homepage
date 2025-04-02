@@ -22,14 +22,13 @@
     }
     html {
       scroll-behavior: smooth;
-      scrollbar-width: none;
+      scrollbar-width: none; /* hide scrollbar in Firefox */
     }
     ::-webkit-scrollbar {
-      display: none;
+      display: none; /* hide scrollbar in WebKit */
     }
     *, *::before, *::after {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       box-sizing: border-box;
     }
     body {
@@ -38,7 +37,7 @@
       color: #fff;
       line-height: 1.6;
     }
-    /* Custom Scrollbar */
+    /* Custom Draggable Scrollbar */
     .custom-scrollbar {
       position: fixed;
       right: 5px;
@@ -83,7 +82,7 @@
       font-size: 2.5em;
     }
     nav {
-      /* Insert navigation items if needed */
+      /* Insert your nav items if needed */
     }
     /* Standings Section */
     .standings {
@@ -95,7 +94,6 @@
       font-size: 2em;
       margin-bottom: 1em;
     }
-    /* Grid layout for four conferences */
     .standings-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -116,32 +114,37 @@
       margin-bottom: 0.5em;
       color: var(--accent);
     }
-    /* Table Header (separate from the table) */
-    .table-header {
-      display: flex;
-      justify-content: space-between;
-      background: var(--secondary-bg);
-      padding: 8px;
-      font-weight: bold;
-      border: 1px solid #444;
-    }
-    .table-header .col {
-      flex: 1;
-      text-align: left;
-      padding: 0 8px;
-    }
-    .table-header .col-team {
-      flex: 2; /* More space for Team column */
-    }
-    /* Table Styles */
-    table {
+    /* Table with fixed layout so columns line up. */
+    table.standings-table {
       width: 100%;
       border-collapse: collapse;
+      table-layout: fixed; /* ensures col widths are respected */
+      margin-top: 10px;
     }
-    table td {
+    /* Three columns: first is 50%, next two are 25%. */
+    table.standings-table colgroup col:nth-child(1) {
+      width: 50%;
+    }
+    table.standings-table colgroup col:nth-child(2) {
+      width: 25%;
+    }
+    table.standings-table colgroup col:nth-child(3) {
+      width: 25%;
+    }
+    thead th {
+      background: var(--secondary-bg);
       border: 1px solid #444;
       padding: 8px;
-      text-align: left;
+      text-align: center; /* center the column headers */
+    }
+    tbody td {
+      border: 1px solid #444;
+      padding: 8px;
+    }
+    /* Center the data in the 2nd and 3rd columns, and optionally the 1st as well. */
+    tbody td:nth-child(2),
+    tbody td:nth-child(3) {
+      text-align: center;
     }
     /* Footer Section */
     footer {
@@ -255,7 +258,7 @@
       <h1>PSFL</h1>
     </div>
     <nav>
-      <!-- Same navigation as your homepage -->
+      <!-- Use your site's nav here -->
     </nav>
   </header>
   
@@ -264,65 +267,91 @@
     <div class="scrollbar-thumb"></div>
   </div>
   
-  <!-- Standings Section -->
+  <!-- STANDINGS SECTION -->
   <section class="standings">
     <h2>Standings</h2>
     <div class="standings-grid">
-      <!-- SEC Conference -->
+      <!-- SEC -->
       <div class="conference">
         <h3>SEC Conference</h3>
-        <div id="table-sec-container">
-          <!-- Table header -->
-          <div class="table-header">
-            <div class="col col-team">Team</div>
-            <div class="col col-record">Record</div>
-            <div class="col col-pd">PD</div>
-          </div>
-          <!-- Table body will be inserted here -->
-          <table id="table-sec"></table>
-        </div>
+        <table class="standings-table" id="table-sec">
+          <colgroup>
+            <col />
+            <col />
+            <col />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>Record</th>
+              <th>PD</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
-      <!-- BIG Conference -->
+      <!-- BIG -->
       <div class="conference">
         <h3>BIG Conference</h3>
-        <div id="table-big-container">
-          <div class="table-header">
-            <div class="col col-team">Team</div>
-            <div class="col col-record">Record</div>
-            <div class="col col-pd">PD</div>
-          </div>
-          <table id="table-big"></table>
-        </div>
+        <table class="standings-table" id="table-big">
+          <colgroup>
+            <col />
+            <col />
+            <col />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>Record</th>
+              <th>PD</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
-      <!-- XII Conference -->
+      <!-- XII -->
       <div class="conference">
         <h3>XII Conference</h3>
-        <div id="table-xii-container">
-          <div class="table-header">
-            <div class="col col-team">Team</div>
-            <div class="col col-record">Record</div>
-            <div class="col col-pd">PD</div>
-          </div>
-          <table id="table-xii"></table>
-        </div>
+        <table class="standings-table" id="table-xii">
+          <colgroup>
+            <col />
+            <col />
+            <col />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>Record</th>
+              <th>PD</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
-      <!-- ACC Conference -->
+      <!-- ACC -->
       <div class="conference">
         <h3>ACC Conference</h3>
-        <div id="table-acc-container">
-          <div class="table-header">
-            <div class="col col-team">Team</div>
-            <div class="col col-record">Record</div>
-            <div class="col col-pd">PD</div>
-          </div>
-          <table id="table-acc"></table>
-        </div>
+        <table class="standings-table" id="table-acc">
+          <colgroup>
+            <col />
+            <col />
+            <col />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>Record</th>
+              <th>PD</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </div>
   </section>
   
-  <!-- Footer Section -->
-  <footer class="footer">
+  <!-- FOOTER SECTION -->
+  <footer>
     <div class="footer-container">
       <div class="footer-col">
         <h4>Quicklinks</h4>
@@ -351,62 +380,57 @@
     </div>
   </footer>
   
-  <!-- JavaScript: CSV Fetch and Merged Table Generation -->
+  <!-- JavaScript for CSV Parsing and Merged Column Table -->
   <script>
-    // Parse CSV text (simple parser; assumes no commas within fields)
+    // Basic CSV parser: splits on newlines and commas (no commas within fields).
     function parseCSV(text) {
       const lines = text.trim().split("\n");
       return lines.map(line => line.split(","));
     }
-    
-    // Create a merged table from CSV data:
-    // The CSV has 4 columns: Column1, Column2, Record, PD.
-    // We merge Column1 and Column2 into one "Team" column.
-    // We then create a table body with rows: Team, Record, PD.
-    function createMergedTableFromCSV(data) {
-      const table = document.createElement("tbody");
-      // Start at row 1 (skip header in CSV, because we're using our own header)
+    // Create a <tbody> that merges the first two CSV columns into "Team"
+    // and uses the next columns for "Record" and "PD."
+    function buildTableBody(data) {
+      const tbody = document.createElement("tbody");
+      // Start from row 1 to skip CSV header row
       for (let i = 1; i < data.length; i++) {
-        const rowData = data[i];
         const row = document.createElement("tr");
-        // Merge columns 0 and 1 for Team
+        // Merge first two columns as "Team"
         const teamCell = document.createElement("td");
-        teamCell.innerText = rowData[0].trim() + " " + rowData[1].trim();
+        teamCell.textContent = data[i][0].trim() + " " + data[i][1].trim();
         row.appendChild(teamCell);
-        // Column 2: Record
+        // Next column is "Record"
         const recordCell = document.createElement("td");
-        recordCell.innerText = rowData[2].trim();
+        recordCell.textContent = data[i][2].trim();
         row.appendChild(recordCell);
-        // Column 3: PD
+        // Last column is "PD"
         const pdCell = document.createElement("td");
-        pdCell.innerText = rowData[3].trim();
+        pdCell.textContent = data[i][3].trim();
         row.appendChild(pdCell);
-        table.appendChild(row);
+        tbody.appendChild(row);
       }
-      return table;
+      return tbody;
     }
-    
-    // Load CSV from a URL and insert merged table into a given table element (by id)
-    function loadCSVMerged(url, tableId) {
+    // Fetch CSV from URL, parse, build table body, append to <table> with given id
+    function loadCSVandMerge(url, tableId) {
       fetch(url)
-        .then(response => response.text())
+        .then(resp => resp.text())
         .then(text => {
           const data = parseCSV(text);
-          const tbody = createMergedTableFromCSV(data);
-          const tableElem = document.getElementById(tableId);
-          tableElem.appendChild(tbody);
+          const tbody = buildTableBody(data);
+          const table = document.querySelector(`#${tableId} tbody`);
+          table.replaceWith(tbody); // or table.appendChild(tbody);
         })
-        .catch(err => console.error("Error loading CSV from " + url, err));
+        .catch(err => console.error("Error loading CSV:", err));
     }
     
-    // Load CSV files for each conference using your provided links
-    loadCSVMerged("https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pub?gid=0&single=true&output=csv", "table-sec");
-    loadCSVMerged("https://docs.google.com/spreadsheets/d/e/2PACX-1vTBYA1JSJfRi4b-2fF0Dt5HJuJ-nRWMGl-ksoMRODmQail38y4UlTCcfT70yuMuzKp9rykfwdvIs3e9/pub?gid=0&single=true&output=csv", "table-big");
-    loadCSVMerged("https://docs.google.com/spreadsheets/d/e/2PACX-1vRp86GK7e4fwNdQ_mkqZJXkbv279LvP4g5s8-bBFqNyZMHfFbK4W_jsg1F41qGfUHpVx-TX31eIjGlc/pub?gid=0&single=true&output=csv", "table-xii");
-    loadCSVMerged("https://docs.google.com/spreadsheets/d/e/2PACX-1vRWmQZvtt3XbDQ64Duy4MKADGrgOkR6Qh50DQfb3vwcWPWijNMl2uRM9HyDMZHwCj8id9zWEejEEnqY/pub?gid=0&single=true&output=csv", "table-acc");
+    // Load your four CSV files (replace with your actual CSV URLs)
+    loadCSVandMerge("https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pub?gid=0&single=true&output=csv", "table-sec");
+    loadCSVandMerge("https://docs.google.com/spreadsheets/d/e/2PACX-1vTBYA1JSJfRi4b-2fF0Dt5HJuJ-nRWMGl-ksoMRODmQail38y4UlTCcfT70yuMuzKp9rykfwdvIs3e9/pub?gid=0&single=true&output=csv", "table-big");
+    loadCSVandMerge("https://docs.google.com/spreadsheets/d/e/2PACX-1vRp86GK7e4fwNdQ_mkqZJXkbv279LvP4g5s8-bBFqNyZMHfFbK4W_jsg1F41qGfUHpVx-TX31eIjGlc/pub?gid=0&single=true&output=csv", "table-xii");
+    loadCSVandMerge("https://docs.google.com/spreadsheets/d/e/2PACX-1vRWmQZvtt3XbDQ64Duy4MKADGrgOkR6Qh50DQfb3vwcWPWijNMl2uRM9HyDMZHwCj8id9zWEejEEnqY/pub?gid=0&single=true&output=csv", "table-acc");
   </script>
   
-  <!-- Custom Scrollbar Script (unchanged) -->
+  <!-- Custom Scrollbar Script -->
   <script>
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
