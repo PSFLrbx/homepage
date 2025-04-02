@@ -12,6 +12,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    /* Base Variables and Resets */
     :root {
       --primary-bg: #111;
       --secondary-bg: #222;
@@ -21,10 +22,10 @@
     }
     html {
       scroll-behavior: smooth;
-      scrollbar-width: none; /* hide scrollbar in Firefox */
+      scrollbar-width: none;
     }
     ::-webkit-scrollbar {
-      display: none; /* hide scrollbar in WebKit browsers */
+      display: none;
     }
     *, *::before, *::after {
       margin: 0; padding: 0;
@@ -36,7 +37,7 @@
       color: #fff;
       line-height: 1.6;
     }
-    /* Draggable Custom Scrollbar */
+    /* Custom Scrollbar */
     .custom-scrollbar {
       position: fixed;
       right: 5px;
@@ -80,50 +81,11 @@
     header h1 {
       font-size: 2.5em;
     }
-    nav { /* fill in nav items if needed */ }
-    /* MAIN STANDINGS SECTION */
-    .standings {
-      background: #131313;
-      padding: 60px 20px 80px;
-      text-align: center;
-      min-height: 100vh; /* optional, ensure page has some height */
+    nav {
+      /* Add your navigation items here if needed */
     }
-    .standings h2 {
-      font-size: 2em;
-      margin-bottom: 1em;
-    }
-    /* 2×2 grid for the four conferences */
-    .standings-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto;
-      gap: 40px;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-    .conference {
-      background: var(--secondary-bg);
-      border-radius: 8px;
-      box-shadow: 0 0 2em -0.5em rgba(0,0,0,0.7);
-      padding: 20px;
-      border: 3px solid #444;
-    }
-    .conference h3 {
-      font-size: 1.8em;
-      margin-bottom: 0.5em;
-      color: var(--accent);
-    }
-    /* Embedded Google Sheets iframe */
-    .google-sheet {
-      width: 100%;
-      height: 360px; /* adjust as needed */
-      border: none; /* remove iframe border */
-      margin-top: 1em;
-      background: #fff; /* optional, so it’s not black behind the sheet */
-    }
-    /* FOOTER */
-    .footer {
+    /* Footer */
+    footer {
       background: var(--secondary-bg);
       padding: 50px 0;
       text-align: center;
@@ -205,18 +167,51 @@
     .icon:hover .tooltip {
       opacity: 1;
     }
-    /* Responsive adjustments */
+    .icon-discord {
+      background: url('discord.png') no-repeat center;
+      background-size: cover;
+    }
+    /* Standings Section */
+    .standings {
+      background: #131313;
+      padding: 60px 20px 80px;
+      text-align: center;
+    }
+    .standings h2 {
+      font-size: 2em;
+      margin-bottom: 1em;
+    }
+    .standings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .conference {
+      background: var(--secondary-bg);
+      border-radius: 8px;
+      box-shadow: 0 0 2em -0.5em rgba(0,0,0,0.7);
+      padding: 20px;
+      border: 3px solid #444;
+    }
+    .conference h3 {
+      font-size: 1.8em;
+      margin-bottom: 0.5em;
+      color: var(--accent);
+    }
+    .google-sheet {
+      width: 100%;
+      height: 360px; /* adjust as needed */
+      border: none;
+      margin-top: 1em;
+      background: #fff;
+    }
+    /* Responsive adjustments for standings grid */
     @media (max-width: 600px) {
-      .footer-container {
-        flex-direction: column;
-        text-align: center;
-      }
-      header h1 {
-        font-size: 2em;
-      }
       .standings-grid {
         grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto auto;
       }
     }
   </style>
@@ -230,7 +225,7 @@
       <h1>PSFL</h1>
     </div>
     <nav>
-      <!-- Same nav bar as your main site, if any -->
+      <!-- Use the same navigation as on your homepage if desired -->
     </nav>
   </header>
   
@@ -239,14 +234,13 @@
     <div class="scrollbar-thumb"></div>
   </div>
   
-  <!-- MAIN STANDINGS SECTION -->
+  <!-- Standings Section -->
   <section class="standings">
     <h2>Standings</h2>
     <div class="standings-grid">
       <!-- Top-left: SEC Conference -->
       <div class="conference">
         <h3>SEC Conference</h3>
-        <!-- Embed or link your SEC Google Sheet here -->
         <iframe 
           class="google-sheet"
           src="https://docs.google.com/spreadsheets/d/EXAMPLE_SEC/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"
@@ -255,7 +249,6 @@
       <!-- Top-right: BIG Conference -->
       <div class="conference">
         <h3>BIG Conference</h3>
-        <!-- Embed or link your BIG Google Sheet here -->
         <iframe 
           class="google-sheet"
           src="https://docs.google.com/spreadsheets/d/EXAMPLE_BIG/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"
@@ -264,7 +257,6 @@
       <!-- Bottom-left: XII Conference -->
       <div class="conference">
         <h3>XII Conference</h3>
-        <!-- Embed or link your XII Google Sheet here -->
         <iframe 
           class="google-sheet"
           src="https://docs.google.com/spreadsheets/d/EXAMPLE_XII/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"
@@ -273,7 +265,6 @@
       <!-- Bottom-right: ACC Conference -->
       <div class="conference">
         <h3>ACC Conference</h3>
-        <!-- Embed or link your ACC Google Sheet here -->
         <iframe 
           class="google-sheet"
           src="https://docs.google.com/spreadsheets/d/EXAMPLE_ACC/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"
@@ -282,7 +273,7 @@
     </div>
   </section>
   
-  <!-- FOOTER SECTION -->
+  <!-- Footer Section -->
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-col">
@@ -312,13 +303,11 @@
     </div>
   </footer>
   
-  <!-- JAVASCRIPT (redundant code kept) -->
+  <!-- JAVASCRIPT (for custom scrollbar functionality) -->
   <script>
-    // Easing function for smooth scrolling (if you have nav links)
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
     }
-    // Vertical smooth scroll if needed
     function smoothScrollTo(targetY, duration = 800) {
       const startY = window.pageYOffset;
       const distance = targetY - startY;
@@ -327,22 +316,20 @@
         if (!startTime) startTime = currentTime;
         const timeElapsed = currentTime - startTime;
         const progress = Math.min(timeElapsed / duration, 1);
-        const eased = easeInOutQuad(progress);
-        window.scrollTo(0, startY + (distance * eased));
+        const ease = easeInOutQuad(progress);
+        window.scrollTo(0, startY + (distance * ease));
         if (timeElapsed < duration) {
           requestAnimationFrame(animation);
         }
       }
       requestAnimationFrame(animation);
     }
-    // Update custom vertical scrollbar thumb position and height
     function updateCustomScrollbar() {
       const docHeight = document.documentElement.scrollHeight;
       const winHeight = window.innerHeight;
       const scrollTop = window.pageYOffset;
       const thumb = document.querySelector('.scrollbar-thumb');
       if (!thumb) return;
-      
       if (docHeight <= winHeight) {
         thumb.style.height = '0';
         return;
@@ -353,14 +340,13 @@
       const thumbTop = (scrollTop / (docHeight - winHeight)) * maxThumbTop;
       thumb.style.top = thumbTop + 'px';
     }
-    // Draggable custom vertical scrollbar
     function makeScrollbarDraggable() {
       const scrollbar = document.querySelector('.custom-scrollbar');
       const thumb = document.querySelector('.scrollbar-thumb');
+      if (!scrollbar || !thumb) return;
       let isDragging = false;
       let startY = 0;
       let startScrollTop = 0;
-      
       thumb.addEventListener('mousedown', e => {
         isDragging = true;
         startY = e.clientY;
@@ -374,7 +360,6 @@
         const winHeight = window.innerHeight;
         const maxScroll = docHeight - winHeight;
         const trackHeight = scrollbar.clientHeight - thumb.clientHeight;
-        if (trackHeight <= 0) return;
         const scrollRatio = deltaY / trackHeight;
         const newScrollTop = startScrollTop + (maxScroll * scrollRatio);
         window.scrollTo(0, newScrollTop);
