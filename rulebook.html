@@ -136,10 +136,10 @@
       color: var(--accent);
     }
     .rule-section p { margin-bottom: 15px; }
-    /* New: Cards for each bullet point */
+    /* Updated: One bullet per row */
     .rule-cards {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 15px;
     }
     .rule-card {
@@ -147,13 +147,8 @@
       border: 1px solid #444;
       border-radius: 5px;
       padding: 10px 15px;
-      flex: 1 1 calc(50% - 15px);
+      width: 100%;
       font-size: 0.95em;
-    }
-    @media (max-width: 600px) {
-      .rule-card {
-        flex: 1 1 100%;
-      }
     }
     
     /* Message Header */
@@ -187,11 +182,7 @@
       gap: 20px;
       justify-content: space-between;
     }
-    .footer-col h4 {
-      margin-bottom: 15px;
-      font-size: 1.2em;
-      color: #fff;
-    }
+    .footer-col h4 { margin-bottom: 15px; font-size: 1.2em; color: #fff; }
     .footer-col ul { list-style: none; }
     .footer-col ul li { margin-bottom: 8px; }
     .footer-col ul li a {
@@ -290,7 +281,7 @@
         </div>
       </div>
       
-      <!-- Updated Rulebook Content with Card Sections and Bullet Cards -->
+      <!-- Updated Rulebook Content with Card Sections and One Bullet per Row -->
       <h2>PSFL Games Rulebook</h2>
       
       <div class="rule-section" id="game-settings">
@@ -329,15 +320,15 @@
           <div class="rule-card">Suspended players cannot play regular season games.</div>
           <div class="rule-card">Macro usage is allowed.</div>
           <div class="rule-card">Alt accounts require permission from a (+)Executive (not on the player’s team).</div>
-          <div class="rule-card">After kickoff, set the play clock to <code>:pclock 50</code> for proper setup (also for halftime/overtime kickoff).</div>
+          <div class="rule-card">After kickoff, set play clock to <code>:pclock 50</code> for setup (including halftime/overtime kickoff).</div>
           <div class="rule-card">Only 1 fake per half is allowed.</div>
-          <div class="rule-card">A webhook must be added; otherwise, the game will not count (exceptions apply).</div>
-          <div class="rule-card">If a team owner/coach hosts without a webhook (and no eligible refs), it results in an FFL.</div>
-          <div class="rule-card">If the webhook is not official, the game requires a redo (owner/coach: FFL; ref: fired).</div>
+          <div class="rule-card">A webhook must be added; otherwise, the game won’t count (exceptions apply).</div>
+          <div class="rule-card">If a team owner/coach hosts without a webhook (and no eligible refs), the team gets an FFL.</div>
+          <div class="rule-card">If the webhook is unofficial, the game requires a redo (owner/coach: FFL; ref: fired).</div>
           <div class="rule-card">If a referee shuts down the server during a game, they are suspended, fired, and the game must be redone.</div>
-          <div class="rule-card">If a team admin shuts down the server, their team gets an FFL.</div>
+          <div class="rule-card">If a team admin shuts down the server, their team receives an FFL.</div>
           <div class="rule-card">Mercy Rule cannot be denied.</div>
-          <div class="rule-card">Games must be 7v7 - 8v8 (exceptions only in forced cases, e.g. 7v6, 8v7). Referee will use <code>:pclock 100</code> to allow proper player count; otherwise, it’s an FFL.</div>
+          <div class="rule-card">Games must be 7v7 - 8v8 (exceptions only in forced cases, e.g. 7v6, 8v7). The referee will use <code>:pclock 100</code> to allow proper player count; otherwise, it’s an FFL.</div>
           <div class="rule-card">Only 2 QB runs per drive.</div>
         </div>
       </div>
@@ -358,11 +349,11 @@
         <h3>Penalties</h3>
         <div class="rule-cards">
           <div class="rule-card"><strong>Grounding</strong> — QB throws blatantly out of range. [-15]. Grounding in own endzone or near endzone results in a safety.</div>
-          <div class="rule-card"><strong>Delay of Game</strong> — Automatically called; may be reverted if an NR was called but the ref failed to react in time. [-5]</div>
+          <div class="rule-card"><strong>Delay of Game</strong> — Automatically called; may be reverted if an NR was called but the ref failed to react. [-5]</div>
           <div class="rule-card"><strong>Lag Sack</strong> — Penalty for a defensive end’s lag sack (QB lag does not count); results in down replay.</div>
-          <div class="rule-card"><strong>Double Blocking</strong> — Two blockers blocking 5 yards behind the line of scrimmage; negated on run plays or if QB is sacked. [-5]</div>
-          <div class="rule-card"><strong>Triple Blocking</strong> — Three or more blockers forward toward their own TD; only negated if the QB is sacked or the ball is run (except fakes). [-10]</div>
-          <div class="rule-card"><strong>Milking</strong> — Unreasonable delay unless clock is 00:30 or lower in the 2nd or 4th quarter. [-10]</div>
+          <div class="rule-card"><strong>Double Blocking</strong> — Two blockers blocking 5 yards behind the line; negated on run plays or if QB is sacked. [-5]</div>
+          <div class="rule-card"><strong>Triple Blocking</strong> — Three or more blockers forward toward their own TD; only negated if QB is sacked or ball is run (except fakes). [-10]</div>
+          <div class="rule-card"><strong>Milking</strong> — Unreasonable delay unless clock is 00:30 or lower in 2nd/4th quarter. [-10]</div>
           <div class="rule-card"><strong>Headriding</strong> — Stacking on the head for more than 2 seconds. [-5]</div>
           <div class="rule-card"><strong>More than one fake per halftime</strong> — Results in a 2-point deduction and skipping the special play.</div>
         </div>
