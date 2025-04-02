@@ -28,7 +28,8 @@
       display: none; /* Hide native scrollbar in WebKit browsers */
     }
     *, *::before, *::after {
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
     body {
@@ -37,7 +38,7 @@
       color: #fff;
       line-height: 1.6;
     }
-    /* Custom Scrollbar */
+    /* Custom Scrollbar (Draggable) */
     .custom-scrollbar {
       position: fixed;
       right: 5px;
@@ -62,7 +63,7 @@
     .scrollbar-thumb:active {
       cursor: grabbing;
     }
-    /* Header Section */
+    /* Header */
     header {
       padding: 20px;
       background: var(--secondary-bg);
@@ -82,7 +83,7 @@
       font-size: 2.5em;
     }
     nav {
-      /* Add your navigation items as needed */
+      /* Insert your navigation items as needed */
     }
     /* Standings Section */
     .standings {
@@ -94,6 +95,7 @@
       font-size: 2em;
       margin-bottom: 1em;
     }
+    /* 2x2 Grid Layout for Conferences */
     .standings-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -114,15 +116,22 @@
       margin-bottom: 0.5em;
       color: var(--accent);
     }
-    .google-sheet {
+    /* Table Styles */
+    table {
       width: 100%;
-      height: 360px; /* Adjust height as needed */
-      border: none;
-      margin-top: 1em;
-      background: #fff;
+      border-collapse: collapse;
+      margin-top: 10px;
     }
-    /* Footer Section */
-    .footer {
+    th, td {
+      border: 1px solid #444;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: var(--secondary-bg);
+    }
+    /* Footer */
+    footer {
       background: var(--secondary-bg);
       padding: 50px 0;
       text-align: center;
@@ -209,7 +218,7 @@
       background: url('discord.png') no-repeat center;
       background-size: cover;
     }
-    /* Responsive adjustments */
+    /* Responsive Adjustments */
     @media (max-width: 600px) {
       .standings-grid {
         grid-template-columns: 1fr;
@@ -233,7 +242,7 @@
       <h1>PSFL</h1>
     </div>
     <nav>
-      <!-- Use the same navigation as your homepage -->
+      <!-- Use the same navigation as on your homepage -->
     </nav>
   </header>
   
@@ -246,37 +255,26 @@
   <section class="standings">
     <h2>Standings</h2>
     <div class="standings-grid">
-      <!-- Top-left: SEC Conference -->
+      <!-- SEC Conference -->
       <div class="conference">
         <h3>SEC Conference</h3>
-        <iframe 
-          class="google-sheet"
-          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"
-        ></iframe>
+        <!-- Table will be generated from CSV data -->
+        <div id="table-sec"></div>
       </div>
-      <!-- Top-right: BIG Conference -->
+      <!-- BIG Conference -->
       <div class="conference">
         <h3>BIG Conference</h3>
-        <iframe 
-          class="google-sheet"
-          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pubhtml?gid=1441658882&amp;single=true&amp;widget=true&amp;headers=false"
-        ></iframe>
+        <div id="table-big"></div>
       </div>
-      <!-- Bottom-left: XII Conference -->
+      <!-- XII Conference -->
       <div class="conference">
         <h3>XII Conference</h3>
-        <iframe 
-          class="google-sheet"
-          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pubhtml?gid=1441658882&amp;single=true&amp;widget=true&amp;headers=false"
-        ></iframe>
+        <div id="table-xii"></div>
       </div>
-      <!-- Bottom-right: ACC Conference -->
+      <!-- ACC Conference -->
       <div class="conference">
         <h3>ACC Conference</h3>
-        <iframe 
-          class="google-sheet"
-          src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pubhtml?gid=1441658882&amp;single=true&amp;widget=true&amp;headers=false"
-        ></iframe>
+        <div id="table-acc"></div>
       </div>
     </div>
   </section>
@@ -311,7 +309,59 @@
     </div>
   </footer>
   
-  <!-- JAVASCRIPT (Custom Scrollbar Functions) -->
+  <!-- JavaScript: CSV Fetch and Table Generation -->
+  <script>
+    // A simple CSV parser: splits on newlines and commas.
+    // This basic parser assumes there are no commas inside fields.
+    function parseCSV(text) {
+      const lines = text.trim().split("\n");
+      return lines.map(line => line.split(","));
+    }
+
+    // Generate an HTML table from CSV data (array of arrays).
+    function createTableFromCSVData(data) {
+      const table = document.createElement("table");
+      // Create header row from first row:
+      if (data.length > 0) {
+        const thead = table.createTHead();
+        const headerRow = thead.insertRow();
+        data[0].forEach(cellText => {
+          const th = document.createElement("th");
+          th.innerText = cellText.trim();
+          headerRow.appendChild(th);
+        });
+      }
+      const tbody = table.createTBody();
+      for (let i = 1; i < data.length; i++) {
+        const row = tbody.insertRow();
+        data[i].forEach(cellText => {
+          const td = row.insertCell();
+          td.innerText = cellText.trim();
+        });
+      }
+      return table;
+    }
+
+    // Fetch CSV data from a given URL and place table in container.
+    function loadCSV(url, containerId) {
+      fetch(url)
+        .then(response => response.text())
+        .then(text => {
+          const data = parseCSV(text);
+          const table = createTableFromCSVData(data);
+          document.getElementById(containerId).appendChild(table);
+        })
+        .catch(err => console.error("Error loading CSV from " + url, err));
+    }
+
+    // Load the four CSV files (replace with your actual CSV URLs)
+    loadCSV("sec.csv", "table-sec");
+    loadCSV("big.csv", "table-big");
+    loadCSV("xii.csv", "table-xii");
+    loadCSV("acc.csv", "table-acc");
+  </script>
+  
+  <!-- Custom Scrollbar Script (unchanged) -->
   <script>
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
