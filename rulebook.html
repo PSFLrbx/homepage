@@ -103,6 +103,7 @@
     }
     .page-enter { animation: slideIn 0.5s forwards; }
     .page-exit { animation: slideOut 0.8s forwards; }
+    
     /* Glossary Sidebar */
     .glossary {
       position: fixed;
@@ -124,6 +125,7 @@
     }
     .glossary ul li a:hover { color: orange; }
     h3[id] { margin-top: 40px; }
+    
     /* Message Header */
     .message-header {
       display: flex;
@@ -144,6 +146,7 @@
     }
     .message-info .name { font-weight: bold; color: #fff; }
     .message-info .date { font-size: 0.9em; color: #aaa; }
+    
     /* Rulebook Content Styling */
     .rule-list, .command-list {
       list-style: disc;
@@ -161,6 +164,7 @@
       margin-bottom: 10px;
       color: orange;
     }
+    
     /* Footer */
     .footer {
       background-color: #222;
@@ -279,117 +283,76 @@
           <span class="date">March 17, 2025</span>
         </div>
       </div>
-      <!-- Updated Rulebook Content as per latest document -->
-      <h2>In-Game Rules (Posted on Discord)</h2>
       
-      <h3 id="game-settings">Game Settings</h3>
+      <!-- Updated Rulebook Content -->
+      <h2>PSFL Games Rulebook</h2>
+      
+      <h3 id="game-settings">Server Settings</h3>
       <ul class="rule-list">
         <li>Public Listing: OFF</li>
-        <li>Max Players: 25</li>
         <li>Fumble Chances: 1</li>
-        <li>Mercy Rule: 40</li>
-        <li>Play Clock: 25</li>
-        <li>Quarter Length: 4 Minutes</li>
+        <li>Mercy Rule: 40 pts</li>
+        <li>Play Clock: 25 seconds</li>
+        <li>Quarter Length: 4 minutes</li>
         <li>Replays: ON</li>
-        <li>Time of Day &amp; Weather: As Scheduled</li>
-        <li>Diving: ON</li>
-        <li>Hit Stick: ON</li>
-        <li>Mercy Rule: OFF</li>
-        <li>Sprinting: ON</li>
-        <li>Truck: ON</li>
-        <li>Pass Break Ups: OFF</li>
+        <li>Time of Day — decided on the schedule</li>
+        <li>Weather — decided on the schedule</li>
       </ul>
-      <p><strong>2 QB Runs Per Drive</strong></p>
+      
+      <h3>Game Mechanics</h3>
+      <ul class="rule-list">
+        <li>Diving: ON</li>
+        <li>Hitstick: ON</li>
+        <li>Sprinting: ON</li>
+        <li>Truck: OFF</li>
+        <li>Pass Break Up: OFF</li>
+        <li>Mercy Rule: OFF</li>
+      </ul>
+      
+      <h3>Players &amp; Game Rules</h3>
+      <ul class="rule-list">
+        <li>Anyone can fumble.</li>
+        <li>There must only be one Center/OL during a play.</li>
+        <li>Players cannot play regular season games while unsigned unless given permission to play by @lu or @pka.</li>
+        <li>Players must not use any form of exploit that will enhance gameplay to the point of gaining an unfair advantage against others.</li>
+        <li>Players cannot play regular season games while suspended. There are no exceptions to this rule.</li>
+        <li>The use of macros is allowed.</li>
+        <li>Players cannot play on an alt account unless given permission by an (+)Executive (who is not on the player’s team).</li>
+        <li>Play clock must be set to :pclock 50 once kickoff has concluded and the drive after that so players can set up their positions and be ready. This applies to halftime and overtime kickoff as well.</li>
+        <li>There can only be 1 fake per half.</li>
+        <li>Webhook must be added in; otherwise the game will not count. There are a few exceptions to this rule.</li>
+        <li>If a team owner/coach is hosting the server and they do not have the webhook set up, their team will result in an FFL (only if no eligible referees are assigned).</li>
+        <li>If the webhook is not the one associated with PSFL’s official webhook, the game will require a redo. (Team owner/coach servers result in FFL; referee servers lead to firing.)</li>
+        <li>If a referee shuts down the server during a game, they will be suspended and fired and the game will require a redo.</li>
+        <li>If a team admin shuts down the server, the game will result in an FFL for that team admin.</li>
+        <li>Mercy Rule cannot be denied.</li>
+        <li>A game must be a 7v7 - 8v8. An exception will be made in forced cases (e.g. 7v6, 8v7); otherwise, it will not be accepted. The referee will :pclock 100 to allow the team with fewer players to field the required number, or it will result in an FFL.</li>
+        <li>There are only 2 QB runs per drive.</li>
+      </ul>
       
       <h3 id="challenges">Challenges</h3>
-      <p>If the auto-ref system fails or a call is disputed, a challenge may be requested by a Head Coach or Assistant. Challenges apply to:</p>
+      <p>Usually, calls will be auto-called by game call. However, in certain cases where the game call is believed to be wrong, coaches (+AC) can challenge; the challenge will be reviewed by the referee, and a verdict will be issued once the review is complete. Teams will receive three challenges per game, and if a challenge is successful, the challenge is returned without reducing their challenge count. Challenges can only be called under specific circumstances, such as issues involving:</p>
       <ul class="rule-list">
-        <li>Receiver inbounds status</li>
-        <li>Questionable lag sacks</li>
-        <li>Excessive blocking</li>
+        <li>Infraction of Rules</li>
+        <li>False Incompletions</li>
+        <li>High boost and in-bounds</li>
+        <li>False call of body contact being in or out</li>
+        <li>Ineligible Players (Not Signed, Suspended, Alt-Account)</li>
       </ul>
       
-      <h3 id="penalty-guide">Penalty Guide</h3>
+      <h3 id="penalty-guide">Penalties</h3>
       <ul class="rule-list">
-        <li>01 - Delay of Game</li>
-        <li>02 - Too Many Men</li>
-        <li>03 - Ineligible Receiver</li>
-        <li>04 - Lag Sack</li>
-        <li>05 - Grounding</li>
-        <li>06 - OL Rollout</li>
-        <li>07 - Illegal Formation</li>
-        <li>08 - Uneven Teams</li>
-        <li>09 - False Start</li>
-        <li>10 - AFK Rule</li>
+        <li><strong>Grounding</strong> — A flag where a quarterback throws blatantly out of any eligible receiver’s range. [-15]. In cases where the QB grounds in their own endzone, this results in a safety; if outside but the line of scrimmage is below 15 yards ahead of the endzone, it is also a safety.</li>
+        <li><strong>Delay of Game</strong> — Automatically called by the game; can be reverted if an NR was called but the referee failed to react in time. [-5]</li>
+        <li><strong>Lag Sack</strong> — A sack due to lag by the defensive end (QB lag does not count). Penalty: replay of downs.</li>
+        <li><strong>Double Blocking</strong> — Occurs when two blockers block 5 yards behind the line of scrimmage; negated on a run play or if the QB is sacked. [-5]</li>
+        <li><strong>Triple Blocking</strong> — Occurs when three or more players on the same team block forward toward their own touchdown. The only negation is if the QB is sacked or the ball is run (with an exception for fakes). [-10]</li>
+        <li><strong>Milking</strong> — Teams cannot delay excessively unless the clock is 00:30 or lower during the 2nd or 4th quarter. [-10]</li>
+        <li><strong>Headriding</strong> — Stacking on the head for more than two seconds. [-5]</li>
+        <li><strong>More than one fake per halftime</strong> — Results in losing 2 points (if scored) and skipping the special play (e.g., fake kick, fake punt, etc.).</li>
       </ul>
       
-      <h3 id="penalties">Penalties</h3>
-      <div class="penalty-box">
-        <h4>Delay of Game</h4>
-        <p>5yd penalty and loss of down when the play clock expires without a snap.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Too Many Men</h4>
-        <p>5yd penalty if the team exceeds the player limit on the field.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Ineligible Receiver</h4>
-        <p>Results in an incomplete pass and a replayed down if a receiver steps out of bounds.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Lag Sack</h4>
-        <p>5yd penalty for the defense and an automatic first down for the offense when a lag sack occurs.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Intentional Grounding</h4>
-        <p>15yd penalty and loss of down for an invalid pass attempt.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>OL Rollout</h4>
-        <p>5yd penalty and loss of down if an offensive lineman crosses the scrimmage line on a pass play.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Trucking &amp; Hit Stick</h4>
-        <p>10yd penalty and replayed down.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Holding</h4>
-        <p>5yd penalty and replayed down if blocking exceeds 5 yards before the snap.</p>
-      </div>
-      <div class="penalty-box">
-        <h4>Block in the Back</h4>
-        <p>10yd penalty and replayed down for initiating a block from behind.</p>
-      </div>
-      <p>Defensive blitz limits:</p>
-      <ul class="rule-list">
-        <li>8v8: Up to 4 players</li>
-        <li>7v7: Up to 3 players</li>
-        <li>6v6: Up to 2 players</li>
-      </ul>
-      <div class="penalty-box">
-        <h4>AFK Rule</h4>
-        <p>A false start penalty is incurred if a player is idle for over 3 minutes.</p>
-      </div>
-      
-      <h3 id="commands">Commands (Refs)</h3>
-      <ul class="command-list">
-        <li>:Clock "0:00"</li>
-        <li>:startclock</li>
-        <li>:pclock "00"</li>
-        <li>:Pauseclock</li>
-        <li>:Pausepclock</li>
-        <li>:line "-0" / :line "0"</li>
-        <li>:scrimmage "-0" / :scrimmage "0"</li>
-        <li>:flag</li>
-        <li>:challenge</li>
-        <li>:newplay</li>
-        <li>:turnover</li>
-        <li>:down "0"</li>
-        <li>:team "user" (away/home/spec/ref)</li>
-        <li>:serverlock / :unserverlock</li>
-        <li>:changestate "play" / "kickoff" / "punt" / "field goal"</li>
-        <li>:padmin "user"</li>
-      </ul>
+      <p><strong>Signed by 495BC and Lu</strong></p>
     </div>
   </section>
 
@@ -424,7 +387,7 @@
   </footer>
 
   <script>
-    // Parallax Effect for Background
+    // Parallax Effect
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
