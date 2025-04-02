@@ -120,7 +120,7 @@
       to   { transform: translateX(0); opacity: 1; }
     }
     
-    /* Card-Style Sections for Rulebook Content */
+    /* Rulebook Card Sections */
     .rule-section {
       background: var(--card-bg);
       margin-bottom: 30px;
@@ -135,22 +135,26 @@
       padding-bottom: 5px;
       color: var(--accent);
     }
-    .rule-section ul {
-      list-style: disc;
-      margin-left: 20px;
-      margin-bottom: 15px;
+    .rule-section p { margin-bottom: 15px; }
+    /* New: Cards for each bullet point */
+    .rule-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
     }
-    .rule-section p {
-      margin-bottom: 15px;
-    }
-    .penalty-box {
-      background: var(--secondary-bg);
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 5px;
+    .rule-card {
+      background: #333;
       border: 1px solid #444;
+      border-radius: 5px;
+      padding: 10px 15px;
+      flex: 1 1 calc(50% - 15px);
+      font-size: 0.95em;
     }
-    .penalty-box h4 { margin-bottom: 10px; color: var(--accent); }
+    @media (max-width: 600px) {
+      .rule-card {
+        flex: 1 1 100%;
+      }
+    }
     
     /* Message Header */
     .message-header {
@@ -183,7 +187,11 @@
       gap: 20px;
       justify-content: space-between;
     }
-    .footer-col h4 { margin-bottom: 15px; font-size: 1.2em; }
+    .footer-col h4 {
+      margin-bottom: 15px;
+      font-size: 1.2em;
+      color: #fff;
+    }
     .footer-col ul { list-style: none; }
     .footer-col ul li { margin-bottom: 8px; }
     .footer-col ul li a {
@@ -198,6 +206,7 @@
       align-items: center;
     }
     .icon {
+      position: relative;
       width: 40px;
       height: 40px;
       background: #444;
@@ -205,10 +214,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      text-decoration: none;
       color: #fff;
       font-size: 1.2em;
       transition: background 0.3s ease;
-      position: relative;
       overflow: hidden;
     }
     .icon:hover { background: #666; }
@@ -281,104 +290,104 @@
         </div>
       </div>
       
-      <!-- Updated Rulebook Content with Card Sections -->
+      <!-- Updated Rulebook Content with Card Sections and Bullet Cards -->
       <h2>PSFL Games Rulebook</h2>
       
       <div class="rule-section" id="game-settings">
         <h3>Server Settings</h3>
-        <ul class="rule-list">
-          <li>Public Listing: OFF</li>
-          <li>Fumble Chances: 1</li>
-          <li>Mercy Rule: 40 pts</li>
-          <li>Play Clock: 25 seconds</li>
-          <li>Quarter Length: 4 minutes</li>
-          <li>Replays: ON</li>
-          <li>Time of Day: As Scheduled</li>
-          <li>Weather: As Scheduled</li>
-        </ul>
+        <div class="rule-cards">
+          <div class="rule-card">Public Listing: OFF</div>
+          <div class="rule-card">Fumble Chances: 1</div>
+          <div class="rule-card">Mercy Rule: 40 pts</div>
+          <div class="rule-card">Play Clock: 25 seconds</div>
+          <div class="rule-card">Quarter Length: 4 minutes</div>
+          <div class="rule-card">Replays: ON</div>
+          <div class="rule-card">Time of Day: As Scheduled</div>
+          <div class="rule-card">Weather: As Scheduled</div>
+        </div>
       </div>
       
       <div class="rule-section">
         <h3>Game Mechanics</h3>
-        <ul class="rule-list">
-          <li>Diving: ON</li>
-          <li>Hitstick: ON</li>
-          <li>Sprinting: ON</li>
-          <li>Truck: OFF</li>
-          <li>Pass Break Up: OFF</li>
-          <li>Mercy Rule: OFF</li>
-        </ul>
+        <div class="rule-cards">
+          <div class="rule-card">Diving: ON</div>
+          <div class="rule-card">Hitstick: ON</div>
+          <div class="rule-card">Sprinting: ON</div>
+          <div class="rule-card">Truck: OFF</div>
+          <div class="rule-card">Pass Break Up: OFF</div>
+          <div class="rule-card">Mercy Rule: OFF</div>
+        </div>
       </div>
       
       <div class="rule-section">
         <h3>Players &amp; Game Rules</h3>
-        <ul class="rule-list">
-          <li>Anyone can fumble.</li>
-          <li>Only one Center/OL is allowed per play.</li>
-          <li>Players cannot participate in regular season games while unsigned unless given permission by @lu or @pka.</li>
-          <li>Exploits that provide an unfair advantage are prohibited.</li>
-          <li>Suspended players are not allowed to play regular season games.</li>
-          <li>Macro usage is allowed.</li>
-          <li>Alt accounts require permission from a (+)Executive (not on the player’s team).</li>
-          <li>Play clock must be set to <code>:pclock 50</code> after kickoff and for subsequent drives (including halftime and overtime kickoff) to allow proper setup.</li>
-          <li>Only 1 fake per half is allowed.</li>
-          <li>A webhook must be added; otherwise, the game will not count. Exceptions exist.</li>
-          <li>If a team owner/coach hosts without a webhook (and no eligible referees are assigned), their team results in an FFL.</li>
-          <li>If the webhook is not the official PSFL webhook, the game requires a redo (team owner/coach servers result in FFL; referee servers lead to firing).</li>
-          <li>If a referee shuts down the server during a game, they will be suspended, fired, and the game must be redone.</li>
-          <li>If a team admin shuts down the server, their team receives an FFL.</li>
-          <li>Mercy Rule cannot be denied.</li>
-          <li>Games must be 7v7 - 8v8 (exceptions only in forced cases, e.g. 7v6, 8v7). The referee will use <code>:pclock 100</code> to allow the team with fewer players to fill the field; otherwise, it results in an FFL.</li>
-          <li>There are only 2 QB runs per drive.</li>
-        </ul>
+        <div class="rule-cards">
+          <div class="rule-card">Anyone can fumble.</div>
+          <div class="rule-card">Only one Center/OL per play.</div>
+          <div class="rule-card">Players cannot play while unsigned unless given permission by @lu or @pka.</div>
+          <div class="rule-card">No exploits that provide an unfair advantage.</div>
+          <div class="rule-card">Suspended players cannot play regular season games.</div>
+          <div class="rule-card">Macro usage is allowed.</div>
+          <div class="rule-card">Alt accounts require permission from a (+)Executive (not on the player’s team).</div>
+          <div class="rule-card">After kickoff, set the play clock to <code>:pclock 50</code> for proper setup (also for halftime/overtime kickoff).</div>
+          <div class="rule-card">Only 1 fake per half is allowed.</div>
+          <div class="rule-card">A webhook must be added; otherwise, the game will not count (exceptions apply).</div>
+          <div class="rule-card">If a team owner/coach hosts without a webhook (and no eligible refs), it results in an FFL.</div>
+          <div class="rule-card">If the webhook is not official, the game requires a redo (owner/coach: FFL; ref: fired).</div>
+          <div class="rule-card">If a referee shuts down the server during a game, they are suspended, fired, and the game must be redone.</div>
+          <div class="rule-card">If a team admin shuts down the server, their team gets an FFL.</div>
+          <div class="rule-card">Mercy Rule cannot be denied.</div>
+          <div class="rule-card">Games must be 7v7 - 8v8 (exceptions only in forced cases, e.g. 7v6, 8v7). Referee will use <code>:pclock 100</code> to allow proper player count; otherwise, it’s an FFL.</div>
+          <div class="rule-card">Only 2 QB runs per drive.</div>
+        </div>
       </div>
       
       <div class="rule-section" id="challenges">
         <h3>Challenges</h3>
-        <p>If the auto-ref call is disputed, coaches (+AC) can challenge. The referee will review the challenge and issue a verdict. Teams have three challenges per game. Successful challenges do not reduce the challenge count. Challenges may only be issued for:</p>
-        <ul class="rule-list">
-          <li>Infraction of Rules</li>
-          <li>False Incompletions</li>
-          <li>High boost and in-bounds calls</li>
-          <li>Incorrect calls on body contact</li>
-          <li>Ineligible Players (not signed, suspended, or alt-account)</li>
-        </ul>
+        <p>If the auto-ref call is disputed, coaches (+AC) may challenge. The referee reviews the challenge and issues a verdict. Teams have three challenges per game; a successful challenge returns the challenge without penalty. Challenges may only be issued for:</p>
+        <div class="rule-cards">
+          <div class="rule-card">Infraction of Rules</div>
+          <div class="rule-card">False Incompletions</div>
+          <div class="rule-card">High boost/in-bounds calls</div>
+          <div class="rule-card">Incorrect calls on body contact</div>
+          <div class="rule-card">Ineligible Players (not signed, suspended, alt-account)</div>
+        </div>
       </div>
       
       <div class="rule-section" id="penalty-guide">
         <h3>Penalties</h3>
-        <ul class="rule-list">
-          <li><strong>Grounding</strong> — QB throws blatantly out of eligible receiver range. [-15]. Grounding in own endzone or near endzone results in a safety.</li>
-          <li><strong>Delay of Game</strong> — Automatically called; may be reverted if an NR was called but the ref failed to react in time. [-5]</li>
-          <li><strong>Lag Sack</strong> — Penalty for a defensive end's lag sack; QB lag doesn’t count. (Down replayed.)</li>
-          <li><strong>Double Blocking</strong> — Two blockers blocking 5 yards behind the line of scrimmage; negated on a run play or if QB is sacked. [-5]</li>
-          <li><strong>Triple Blocking</strong> — Three or more blockers forward toward their own TD; only negated if the QB is sacked or the ball is run (except fakes). [-10]</li>
-          <li><strong>Milking</strong> — Unreasonable delay unless clock is 00:30 or lower in 2nd or 4th quarter. [-10]</li>
-          <li><strong>Headriding</strong> — Stacking on the head for more than 2 seconds. [-5]</li>
-          <li><strong>More than one fake per halftime</strong> — Results in a 2-point deduction (if scored) and skipping the special play.</li>
-        </ul>
+        <div class="rule-cards">
+          <div class="rule-card"><strong>Grounding</strong> — QB throws blatantly out of range. [-15]. Grounding in own endzone or near endzone results in a safety.</div>
+          <div class="rule-card"><strong>Delay of Game</strong> — Automatically called; may be reverted if an NR was called but the ref failed to react in time. [-5]</div>
+          <div class="rule-card"><strong>Lag Sack</strong> — Penalty for a defensive end’s lag sack (QB lag does not count); results in down replay.</div>
+          <div class="rule-card"><strong>Double Blocking</strong> — Two blockers blocking 5 yards behind the line of scrimmage; negated on run plays or if QB is sacked. [-5]</div>
+          <div class="rule-card"><strong>Triple Blocking</strong> — Three or more blockers forward toward their own TD; only negated if the QB is sacked or the ball is run (except fakes). [-10]</div>
+          <div class="rule-card"><strong>Milking</strong> — Unreasonable delay unless clock is 00:30 or lower in the 2nd or 4th quarter. [-10]</div>
+          <div class="rule-card"><strong>Headriding</strong> — Stacking on the head for more than 2 seconds. [-5]</div>
+          <div class="rule-card"><strong>More than one fake per halftime</strong> — Results in a 2-point deduction and skipping the special play.</div>
+        </div>
       </div>
       
       <div class="rule-section" id="commands">
         <h3>Commands (Refs)</h3>
-        <ul class="command-list">
-          <li>:Clock "0:00"</li>
-          <li>:startclock</li>
-          <li>:pclock "00"</li>
-          <li>:Pauseclock</li>
-          <li>:Pausepclock</li>
-          <li>:line "-0" / :line "0"</li>
-          <li>:scrimmage "-0" / :scrimmage "0"</li>
-          <li>:flag</li>
-          <li>:challenge</li>
-          <li>:newplay</li>
-          <li>:turnover</li>
-          <li>:down "0"</li>
-          <li>:team "user" (away/home/spec/ref)</li>
-          <li>:serverlock / :unserverlock</li>
-          <li>:changestate "play" / "kickoff" / "punt" / "field goal"</li>
-          <li>:padmin "user"</li>
-        </ul>
+        <div class="rule-cards">
+          <div class="rule-card">:Clock "0:00"</div>
+          <div class="rule-card">:startclock</div>
+          <div class="rule-card">:pclock "00"</div>
+          <div class="rule-card">:Pauseclock</div>
+          <div class="rule-card">:Pausepclock</div>
+          <div class="rule-card">:line "-0" / :line "0"</div>
+          <div class="rule-card">:scrimmage "-0" / :scrimmage "0"</div>
+          <div class="rule-card">:flag</div>
+          <div class="rule-card">:challenge</div>
+          <div class="rule-card">:newplay</div>
+          <div class="rule-card">:turnover</div>
+          <div class="rule-card">:down "0"</div>
+          <div class="rule-card">:team "user" (away/home/spec/ref)</div>
+          <div class="rule-card">:serverlock / :unserverlock</div>
+          <div class="rule-card">:changestate "play" / "kickoff" / "punt" / "field goal"</div>
+          <div class="rule-card">:padmin "user"</div>
+        </div>
       </div>
       
       <p style="margin-top: 30px; text-align: center; font-weight: bold;">Signed by 495BC and Lu</p>
