@@ -151,65 +151,9 @@
       font-size: 0.95em;
       word-wrap: break-word;
     }
-    .standings-table td:nth-child(2),
-    .standings-table td:nth-child(3) {
+    /* Center the data in columns 2, 3, and 4 */
+    .standings-table td:nth-child(n+2) {
       text-align: center;
-    }
-    /* Rank Cell */
-    .rank-cell {
-      min-width: 80px;
-      min-height: 60px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0;
-    }
-    .rank-badge {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 35px;
-      height: 35px;
-      background: #222;
-      border: 2px solid #444;
-      border-radius: 6px;
-      box-shadow: inset 1px 1px 2px #000;
-    }
-    .team-name {
-      font-size: 0.85em;
-      line-height: 1.2;
-    }
-    /* Glow Effects for Top 3 Ranks */
-    .rank-1 {
-      border-color: gold;
-      animation: glowGold 2s infinite;
-    }
-    @keyframes glowGold {
-      0% { box-shadow: 0 0 5px gold; }
-      50% { box-shadow: 0 0 15px gold; }
-      100% { box-shadow: 0 0 5px gold; }
-    }
-    .rank-2 {
-      border-color: silver;
-      animation: glowSilver 2s infinite;
-    }
-    @keyframes glowSilver {
-      0% { box-shadow: 0 0 5px silver; }
-      50% { box-shadow: 0 0 15px silver; }
-      100% { box-shadow: 0 0 5px silver; }
-    }
-    .rank-3 {
-      border-color: #cd7f32;
-      animation: glowBronze 2s infinite;
-    }
-    @keyframes glowBronze {
-      0% { box-shadow: 0 0 5px #cd7f32; }
-      50% { box-shadow: 0 0 15px #cd7f32; }
-      100% { box-shadow: 0 0 5px #cd7f32; }
-    }
-    .shrink {
-      font-size: 0.8em;
     }
     @media (max-width: 900px) {
       .main-content { padding: 20px; }
@@ -345,9 +289,10 @@
       <table class="standings-table" id="stats-table">
         <thead>
           <tr>
-            <th>Team</th>
-            <th>Record</th>
-            <th>PD</th>
+            <th>Player</th>
+            <th>Games</th>
+            <th>Yards</th>
+            <th>Touchdowns</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -387,7 +332,7 @@
   </footer>
 
   <script>
-    // CSV URLs for 5 pages (example for Stats page)
+    // CSV URLs for 5 pages (replace these with your actual CSV URLs)
     const csvUrls = [
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
@@ -426,20 +371,25 @@
       return lines.map(line => line.split(","));
     }
     
-    // Build table body merging the first two CSV columns into "Team", with Record and PD
+    // Build table body merging first two CSV columns as "Player" and using columns 3, 4, and 5 for stats
     function buildTableBody(data) {
       const tbody = document.createElement("tbody");
+      // Assuming the first row is header, and CSV columns are:
+      // [FirstName, LastName, Games, Yards, Touchdowns]
       for (let i = 1; i < data.length; i++) {
         const row = document.createElement("tr");
-        const teamCell = document.createElement("td");
-        teamCell.textContent = data[i][0].trim() + " " + data[i][1].trim();
-        row.appendChild(teamCell);
-        const recordCell = document.createElement("td");
-        recordCell.textContent = data[i][2].trim();
-        row.appendChild(recordCell);
-        const pdCell = document.createElement("td");
-        pdCell.textContent = data[i][3].trim();
-        row.appendChild(pdCell);
+        const playerCell = document.createElement("td");
+        playerCell.textContent = data[i][0].trim() + " " + data[i][1].trim();
+        row.appendChild(playerCell);
+        const gamesCell = document.createElement("td");
+        gamesCell.textContent = data[i][2].trim();
+        row.appendChild(gamesCell);
+        const yardsCell = document.createElement("td");
+        yardsCell.textContent = data[i][3].trim();
+        row.appendChild(yardsCell);
+        const tdCell = document.createElement("td");
+        tdCell.textContent = data[i][4].trim();
+        row.appendChild(tdCell);
         tbody.appendChild(row);
       }
       return tbody;
