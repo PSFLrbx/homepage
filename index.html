@@ -10,7 +10,7 @@
   <meta property="og:image" content="logo.png" />
   <meta property="og:url" content="https://psflrbx.github.io/homepage" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary-bg: #111;
@@ -214,7 +214,7 @@
       transition: background 0.3s ease, transform 0.3s ease;
       z-index: 2;
       /* Add a min-height so all black overlays match in size: */
-      min-height: 4em; /* <--- This is the key line */
+      min-height: 4em;
     }
     .card-content:hover {
       transform: translateY(-3px);
@@ -229,11 +229,6 @@
       line-height: 1.5;
       margin: 0;
     }
-    /* If you want the Credits card smaller, you can override it here:
-    .card.credits-card .card-content {
-      min-height: 3em;
-    }
-    */
     .footer {
       background: var(--secondary-bg);
       padding: 50px 0;
@@ -354,7 +349,15 @@
       </div>
       <h1>PSFL</h1>
     </div>
-    <nav></nav>
+    <nav>
+      <ul>
+        <li><a href="https://psflrbx.github.io/homepage">Home</a></li>
+        <li><a href="https://psflrbx.github.io/stats">Stats</a></li>
+        <li><a href="https://psflrbx.github.io/standings">Standings</a></li>
+        <li><a href="rulebook.html">Rulebook</a></li>
+        <li><a href="credits.html" class="active">Credits</a></li>
+      </ul>
+    </nav>
   </header>
   
   <!-- Custom Scrollbar (Draggable) -->
@@ -416,7 +419,7 @@
           </div>
         </a>
       </div>
-      <!-- Card 4: Credits (no extra class here, but you could if you want to tweak further) -->
+      <!-- Card 4: Credits -->
       <div class="card-grid-space" data-index="3">
         <div class="num">4</div>
         <a href="credits.html">
@@ -438,10 +441,11 @@
       <div class="footer-col">
         <h4>Quicklinks</h4>
         <ul>
-          <li><a href="https://psflrbx.github.io/homepage">Home</a></li>
-          <li><a href="stats.html">Stats</a></li>
-          <li><a href="rulebook.html">Rulebook</a></li>
-          <li><a href="credits.html">Credits</a></li>
+          <li><a href="https://psflrbx.github.io/homepage">PSFL Home</a></li>
+          <li><a href="https://psflrbx.github.io/stats">Stats</a></li>
+          <li><a href="https://psflrbx.github.io/standings">Standings</a></li>
+          <li><a href="https://psflrbx.github.io/rulebook">Rulebook</a></li>
+          <li><a href="https://psflrbx.github.io/credits">Credits</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -462,7 +466,6 @@
     </div>
   </footer>
   
-  <!-- JAVASCRIPT (redundant code kept) -->
   <script>
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
@@ -520,7 +523,6 @@
         const winHeight = window.innerHeight;
         const maxScroll = docHeight - winHeight;
         const trackHeight = scrollbar.clientHeight - thumb.clientHeight;
-        if (trackHeight <= 0) return;
         const scrollRatio = deltaY / trackHeight;
         const newScrollTop = startScrollTop + (maxScroll * scrollRatio);
         window.scrollTo(0, newScrollTop);
@@ -538,6 +540,21 @@
       initializeAll();
       window.addEventListener('scroll', updateCustomScrollbar);
       window.addEventListener('resize', updateCustomScrollbar);
+    });
+  </script>
+  
+  <script>
+    // Tween-out on navigation click before navigating
+    const navLinks = document.querySelectorAll('nav ul li a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetUrl = this.href;
+        const content = document.querySelector('.background .content');
+        content.classList.remove('page-enter');
+        content.classList.add('page-exit');
+        setTimeout(() => { window.location.href = targetUrl; }, 1200);
+      });
     });
   </script>
 </body>
