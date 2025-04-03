@@ -20,7 +20,8 @@
       scroll-behavior: smooth;
     }
     *, *::before, *::after {
-      margin: 0; padding: 0;
+      margin: 0; 
+      padding: 0;
       box-sizing: border-box;
     }
     body {
@@ -34,36 +35,49 @@
       text-decoration: none;
       transition: color 0.3s ease;
     }
-    a:hover { color: var(--light-accent); }
+    a:hover { 
+      color: var(--light-accent);
+    }
     
-    /* Header */
+    /* Header & Navigation (Updated to match other pages) */
     header {
       background-color: var(--secondary-bg);
-      padding: 20px;
+      padding: 20px 40px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
     .branding {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    .logo img { width: 60px; }
-    header h1 { font-size: 2.5em; }
+    .logo img { 
+      width: 60px; 
+    }
+    header h1 { 
+      font-size: 2.5em; 
+    }
     nav ul {
       list-style: none;
       display: flex;
-      gap: 15px;
+      gap: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
     nav ul li a {
-      display: inline-block;
-      padding: 10px 15px;
-      background: var(--card-bg);
-      border-radius: 5px;
-      transition: background 0.3s ease;
+      padding: 8px 12px;
+      border-radius: 4px;
+      background: var(--secondary-bg);
+      color: #ccc;
+      transition: background 0.3s ease, color 0.3s ease;
     }
-    nav ul li a:hover { background: var(--accent); }
+    nav ul li a:hover,
+    nav ul li a.active {
+      background-color: var(--accent);
+      color: #fff;
+    }
     
     /* Glossary Sidebar */
     .glossary {
@@ -96,7 +110,9 @@
       color: var(--accent);
       font-weight: bold;
     }
-    .glossary ul li a:hover { color: var(--accent); }
+    .glossary ul li a:hover { 
+      color: var(--accent); 
+    }
     
     /* Background & Content */
     .background {
@@ -111,8 +127,10 @@
     .background::after {
       content: "";
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
       background: var(--overlay);
       z-index: 0;
     }
@@ -148,7 +166,9 @@
       padding-bottom: 5px;
       color: var(--accent);
     }
-    .rule-section p { margin-bottom: 15px; }
+    .rule-section p { 
+      margin-bottom: 15px; 
+    }
     
     /* Rule Cards: one bullet point per row */
     .rule-cards {
@@ -178,9 +198,18 @@
       margin-right: 10px;
       object-fit: cover;
     }
-    .message-info { display: flex; flex-direction: column; }
-    .message-info .name { font-weight: bold; color: #fff; }
-    .message-info .date { font-size: 0.9em; color: #aaa; }
+    .message-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .message-info .name {
+      font-weight: bold;
+      color: #fff;
+    }
+    .message-info .date {
+      font-size: 0.9em;
+      color: #aaa;
+    }
     
     /* Footer */
     footer {
@@ -196,19 +225,27 @@
       gap: 20px;
       justify-content: space-between;
     }
-    .footer-col h4 { margin-bottom: 15px; font-size: 1.2em; color: #fff; }
+    .footer-col h4 {
+      margin-bottom: 15px;
+      font-size: 1.2em;
+      color: #fff;
+    }
     .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col ul li {
+      margin-bottom: 8px;
+    }
     .footer-col ul li a {
       color: #ccc;
       text-decoration: none;
       transition: color 0.3s ease;
     }
-    .footer-col ul li a:hover { color: var(--accent); }
+    .footer-col ul li a:hover {
+      color: var(--accent);
+    }
     .social-icons {
       display: flex;
-      gap: 10px;
       align-items: center;
+      gap: 10px;
     }
     .icon {
       position: relative;
@@ -225,7 +262,9 @@
       transition: background 0.3s ease;
       overflow: hidden;
     }
-    .icon:hover { background: #666; }
+    .icon:hover { 
+      background: #666; 
+    }
     .icon .tooltip {
       position: absolute;
       bottom: -30px;
@@ -247,11 +286,18 @@
       background-size: cover;
       transition: transform 0.3s ease;
     }
-    .icon-discord:hover { transform: rotate(360deg); }
+    .icon-discord:hover {
+      transform: rotate(360deg);
+    }
     
     @media (max-width: 600px) {
-      .footer-container { flex-direction: column; text-align: center; }
-      .glossary { display: none; }
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+      }
+      .glossary {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -268,13 +314,13 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="stats.html">Stats</a></li>
         <li><a href="standings.html">Standings</a></li>
-        <li><a href="rulebook.html">Rulebook</a></li>
+        <li><a href="rulebook.html" class="active">Rulebook</a></li>
         <li><a href="credits.html">Credits</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- Updated Glossary Sidebar with Header -->
+  <!-- Glossary Sidebar -->
   <div class="glossary">
     <h2>Glossary</h2>
     <ul>
