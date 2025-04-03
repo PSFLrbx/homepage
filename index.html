@@ -3,12 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PSFL Credits</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+  <title>PSFL – Redefine the Game</title>
+  <!-- Open Graph & Twitter Meta -->
+  <meta property="og:title" content="PSFL" />
+  <meta property="og:description" content="Unleash your passion and define the game. Join the ro-football revolution." />
+  <meta property="og:image" content="logo.png" />
+  <meta property="og:url" content="https://psflrbx.github.io/homepage" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&wght@400;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-bg: #111;
+      --secondary-bg: #222;
+      --accent: orange;
+      --overlay: rgba(0,0,0,0.35);
+      --transition: 0.5s ease;
+    }
     html {
       scroll-behavior: smooth;
+      scrollbar-width: none;
     }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    section { }
     *, *::before, *::after {
       margin: 0;
       padding: 0;
@@ -16,158 +34,209 @@
     }
     body {
       font-family: 'IBM Plex Sans', sans-serif;
-      background-color: #111;
-      color: white;
+      background: var(--primary-bg);
+      color: #fff;
       line-height: 1.6;
     }
-    a {
-      color: var(--accent, orange);
-      text-decoration: none;
-      transition: color 0.3s ease;
+    .custom-scrollbar {
+      position: fixed;
+      right: 5px;
+      top: 0;
+      width: 8px;
+      height: 100vh;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      z-index: 102;
+      pointer-events: auto;
     }
-    a:hover { color: #ffb84d; }
-    
-    /* Header & Navigation */
+    .scrollbar-thumb {
+      width: 100%;
+      background: var(--accent);
+      border-radius: 4px;
+      position: absolute;
+      top: 0;
+      height: 20%;
+      transition: height 0.3s, top 0.3s;
+      pointer-events: auto;
+      cursor: grab;
+    }
+    .scrollbar-thumb:active {
+      cursor: grabbing;
+    }
     header {
       padding: 20px;
-      background-color: #222;
+      background: var(--secondary-bg);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      /* Minimal changes: use same nav style as other pages */
-      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
     .branding {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    .logo img { width: 60px; }
-    header h1 { font-size: 2.5em; }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 15px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    .logo img {
+      width: 60px;
     }
-    nav ul li a {
-      display: inline-block;
-      padding: 10px 15px;
-      background: #444;
-      border-radius: 5px;
-      transition: transform 0.7s ease-out;
+    header h1 {
+      font-size: 2.5em;
     }
-    nav ul li a:hover {
-      animation: oscillate 6s infinite ease-in-out;
-      box-shadow: 0 0 15px 5px orange;
-    }
-    @keyframes oscillate {
-      0% { transform: translateY(-3px); }
-      50% { transform: translateY(3px); }
-      100% { transform: translateY(-3px); }
-    }
-    
-    /* Background & Content */
+    nav { }
     .background {
       position: relative;
-      min-height: 150vh;
-      background: url('logo.png') no-repeat center center;
-      background-size: cover;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding-top: 100px;
-      will-change: background-position;
+      height: 120vh;
+      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('logo.png') no-repeat center top;
+      background-size: contain;
+      background-color: #000;
     }
     .background::after {
       content: "";
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.3);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--overlay);
       z-index: 0;
     }
-    .content {
-      position: relative;
+    .background .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       z-index: 1;
-      width: 80%;
-      max-width: 900px;
-      margin: 0 auto;
-      background: rgba(34, 34, 34, 0.8);
-      padding: 30px;
-      border-radius: 8px;
-      text-align: left;
-      animation: slideIn 0.5s forwards;
+      text-align: center;
+      opacity: 0;
+      animation: contentFadeIn 1s forwards;
     }
-    @keyframes slideIn {
-      from { transform: translateX(-200%); opacity: 0; }
-      to   { transform: translateX(0); opacity: 1; }
+    @keyframes contentFadeIn {
+      from { opacity: 0; transform: translate(-50%, -40%) scale(0.95); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
     }
-    
-    /* Glossary Sidebar */
-    .glossary {
-      position: fixed;
-      top: 150px;
-      left: 0;
-      background: linear-gradient(135deg, #222, #333);
-      padding: 20px;
-      border-top-right-radius: 8px;
-      border-bottom-right-radius: 8px;
-      z-index: 2;
-      box-shadow: 2px 2px 8px rgba(0,0,0,0.7);
-      max-width: 200px;
+    .background .content h2 {
+      font-size: 2.8em;
+      margin-bottom: 0.5em;
     }
-    .glossary h2 {
-      font-size: 1.1em;
-      margin-bottom: 10px;
-      color: orange;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    .background .content p a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-bottom 0.3s;
     }
-    .glossary ul { list-style: none; }
-    .glossary ul li { margin-bottom: 10px; }
-    .glossary ul li a {
-      font-size: 0.9em;
-      color: #ccc;
-      transition: color 0.3s ease;
+    .background .content p a:hover {
+      border-bottom: 1px solid var(--accent);
     }
-    .glossary ul li a.active {
-      color: orange;
-      font-weight: bold;
+    .portfolio {
+      background: #131313;
+      padding: 60px 20px 80px;
+      text-align: center;
     }
-    .glossary ul li a:hover { color: orange; }
-    
-    /* Message Header */
-    .message-header {
+    .card-grid {
       display: flex;
-      align-items: center;
-      margin-bottom: 20px;
+      flex-wrap: nowrap;
+      justify-content: center;
+      overflow-x: auto;
+      gap: 40px;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 0 20px;
     }
-    .profile-pic {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
+    .card-grid-space {
+      position: relative;
+      flex: 0 0 auto;
+    }
+    .card-grid-space .num {
+      font-size: 2em;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .card-grid-space a {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+    .card {
+      position: relative;
+      width: 18em;
+      height: 28em;
+      border-radius: 1em;
+      border: 5px solid #ccc;
+      box-shadow: 0 0 5em -1em rgba(0,0,0,0.7);
+      background: var(--secondary-bg);
+      overflow: hidden;
+      opacity: 1;
+      transform: none;
+      transition: transform 0.6s ease, opacity 0.6s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
+      object-position: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      transform: scale(1.02);
+      transform-origin: center center;
+      transition: transform 0.4s ease;
     }
-    .message-info {
+    .card:hover img {
+      transform: scale(1.05);
+    }
+    .card.bg-up img,
+    .card.left-align.bg-up img {
+      object-position: center 75%;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent, var(--overlay));
+      z-index: 1;
+      pointer-events: none;
+    }
+    .card-content {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 0.8em;
+      background: rgba(0, 0, 0, 0.6);
+      box-sizing: border-box;
+      color: #fff;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-end;
+      transition: background 0.3s ease, transform 0.3s ease;
+      z-index: 2;
+      /* Add a min-height so all black overlays match in size: */
+      min-height: 4em;
     }
-    .message-info .name { font-weight: bold; color: #fff; }
-    .message-info .date { font-size: 0.9em; color: #aaa; }
-    
-    /* Footer */
+    .card-content:hover {
+      transform: translateY(-3px);
+      background: rgba(0, 0, 0, 0.7);
+    }
+    .card h3 {
+      font-size: 1.6em;
+      margin-bottom: 0.3em;
+    }
+    .card p {
+      font-size: 1em;
+      line-height: 1.5;
+      margin: 0;
+    }
     .footer {
-      background-color: #222;
+      background: var(--secondary-bg);
       padding: 50px 0;
       text-align: center;
     }
     .footer-container {
-      width: 90%;
       max-width: 1000px;
+      width: 90%;
       margin: 0 auto;
       display: flex;
       flex-wrap: wrap;
@@ -177,23 +246,27 @@
     .footer-col h4 {
       margin-bottom: 15px;
       font-size: 1.2em;
-      color: #fff;
     }
-    .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col ul {
+      list-style: none;
+    }
+    .footer-col ul li {
+      margin-bottom: 8px;
+    }
     .footer-col ul li a {
       color: #ccc;
       text-decoration: none;
       transition: color 0.3s ease;
     }
-    .footer-col ul li a:hover { color: orange; }
+    .footer-col ul li a:hover {
+      color: var(--accent);
+    }
     .social-icons {
       display: flex;
-      align-items: center;
       gap: 10px;
+      align-items: center;
     }
     .icon {
-      position: relative;
       width: 40px;
       height: 40px;
       background: #444;
@@ -201,39 +274,70 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      text-decoration: none;
       color: #fff;
       font-size: 1.2em;
       transition: background 0.3s ease;
-      overflow: hidden;
+      position: relative;
     }
-    .icon:hover { background: #666; }
-    .icon .tooltip {
+    .icon:hover {
+      background: #666;
+    }
+    .tooltip {
       position: absolute;
-      bottom: -30px;
-      background: #222;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--secondary-bg);
       color: #fff;
       font-size: 0.75em;
-      padding: 5px 8px;
+      padding: 6px 10px;
       border-radius: 4px;
       opacity: 0;
       pointer-events: none;
-      transition: all 0.3s ease;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+    }
+    .tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: var(--secondary-bg) transparent transparent transparent;
     }
     .icon:hover .tooltip {
       opacity: 1;
-      bottom: -40px;
     }
     .icon-discord {
       background: url('discord.png') no-repeat center;
       background-size: cover;
-      transition: transform 0.3s ease;
     }
-    .icon-discord:hover { transform: rotate(360deg); }
-    
     @media (max-width: 600px) {
-      .footer-container { flex-direction: column; text-align: center; }
-      .glossary { display: none; }
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+      }
+      header h1 {
+        font-size: 2em;
+      }
+      .background .content h2 {
+        font-size: 2em;
+      }
+      .card {
+        width: 16em;
+        height: 24em;
+      }
+    }
+    @media (min-width: 1600px) {
+      .card {
+        width: 18em;
+      }
+    }
+    @keyframes contentFadeIn {
+      from { opacity: 0; transform: translate(-50%, -40%) scale(0.95); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
     }
   </style>
 </head>
@@ -255,36 +359,83 @@
       </ul>
     </nav>
   </header>
-
-  <!-- Glossary Sidebar -->
-  <div class="glossary">
-    <h2>Glossary</h2>
-    <ul>
-      <li><a href="#server-settings">Server Settings</a></li>
-      <li><a href="#game-mechanics">Game Mechanics</a></li>
-      <li><a href="#players-rules">Players &amp; Game Rules</a></li>
-      <li><a href="#challenges">Challenges</a></li>
-      <li><a href="#penalties">Penalties</a></li>
-      <li><a href="#commands">Commands</a></li>
-    </ul>
+  
+  <!-- Custom Scrollbar (Draggable) -->
+  <div class="custom-scrollbar">
+    <div class="scrollbar-thumb"></div>
   </div>
-
+  
+  <!-- TOP BACKGROUND SECTION -->
   <section class="background" id="top">
-    <div class="content page-enter">
-      <div class="message-header">
-        <img class="profile-pic" src="ps9lu.png" alt="Profile Picture">
-        <div class="message-info">
-          <span class="name">ps9lu</span>
-          <span class="date">March 17, 2025</span>
-        </div>
-      </div>
-      <h2>Credits</h2>
-      <p>PSFL Owner: psyklu | @ps9lu</p>
-      <p>PSFL Co-Owner: luvprkr | @pka</p>
-      <p>PSFL Website Designer: 495BC | @siyazof</p>
+    <div class="content">
+      <h2>Unleash Your Passion</h2>
+      <p>
+        Start your ro-football career today at 
+        <a href="https://discord.gg/psfl">discord.gg/psfl</a>
+      </p>
     </div>
   </section>
-
+  
+  <!-- PORTFOLIO SECTION -->
+  <section class="portfolio" id="portfolio">
+    <h2>Our Portfolio</h2>
+    <div class="card-grid" id="cardGrid">
+      <!-- Card 1: Stats -->
+      <div class="card-grid-space" data-index="0">
+        <div class="num">1</div>
+        <a href="stats.html">
+          <div class="card desc-bottom">
+            <img src="stats.png" alt="Stats">
+            <div class="card-content">
+              <h3>Stats</h3>
+              <p>View your stats from games here.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <!-- Card 2: Standings -->
+      <div class="card-grid-space" data-index="1">
+        <div class="num">2</div>
+        <a href="standings.html">
+          <div class="card left-align bg-up desc-bottom">
+            <img src="standings.png" alt="Standings">
+            <div class="card-content">
+              <h3>Standings</h3>
+              <p>Check your team's standing here.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <!-- Card 3: Rulebook -->
+      <div class="card-grid-space" data-index="2">
+        <div class="num">3</div>
+        <a href="rulebook.html">
+          <div class="card desc-bottom">
+            <img src="rulebook.png" alt="Rulebook">
+            <div class="card-content">
+              <h3>Rulebook</h3>
+              <p>Read the league game rules here.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <!-- Card 4: Credits -->
+      <div class="card-grid-space" data-index="3">
+        <div class="num">4</div>
+        <a href="credits.html">
+          <div class="card desc-bottom">
+            <img src="credits.png" alt="Credits">
+            <div class="card-content">
+              <h3>Credits</h3>
+              <p>Meet the team behind PSFL.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- FOOTER SECTION -->
   <footer class="footer" id="footer">
     <div class="footer-container">
       <div class="footer-col">
@@ -314,7 +465,7 @@
       </div>
     </div>
   </footer>
-
+  
   <script>
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
