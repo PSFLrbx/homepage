@@ -56,18 +56,19 @@
       list-style: none;
       display: flex;
       gap: 20px;
-    }
-    nav ul li a {
-      color: #ccc;
-      font-size: 1em;
       text-transform: uppercase;
       letter-spacing: 1px;
+    }
+    nav ul li a {
       padding: 8px 12px;
       border-radius: 4px;
-      transition: background 0.3s ease;
+      background: #222;
+      color: #ccc;
+      transition: background 0.3s ease, color 0.3s ease;
     }
-    nav ul li a:hover {
-      background-color: #333;
+    nav ul li a:hover,
+    nav ul li a.active {
+      background-color: orange;
       color: #fff;
     }
     /* Main Content */
@@ -343,7 +344,6 @@
     
     let currentIndex = 0;
     const dots = document.querySelectorAll(".pagination .dot");
-    // Changed table id to "stats-table"
     const tableEl = document.getElementById("stats-table");
     
     // CSV cache for 30 seconds
@@ -371,11 +371,11 @@
       return lines.map(line => line.split(","));
     }
     
-    // Build table body merging first two CSV columns as "Player" and using columns 3, 4, and 5 for stats
+    // Build table body merging the first two CSV columns into "Player"
+    // and using columns 3, 4, and 5 for "Games", "Yards", and "Touchdowns"
     function buildTableBody(data) {
       const tbody = document.createElement("tbody");
-      // Assuming the first row is header, and CSV columns are:
-      // [FirstName, LastName, Games, Yards, Touchdowns]
+      // Assume first row is header
       for (let i = 1; i < data.length; i++) {
         const row = document.createElement("tr");
         const playerCell = document.createElement("td");
