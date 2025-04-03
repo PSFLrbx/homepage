@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Stats | PSFL</title>
   <!-- Open Graph & Twitter Meta -->
-  <meta property="og:title" content="PSFL Standings" />
-  <meta property="og:description" content="Check your team's standing in the PSFL ro-football league." />
+  <meta property="og:title" content="PSFL Stats" />
+  <meta property="og:description" content="Check your player's stats in the PSFL ro-football league." />
   <meta property="og:image" content="logo.png" />
-  <meta property="og:url" content="https://psflrbx.github.io/homepage/standings.html" />
+  <meta property="og:url" content="https://psflrbx.github.io/homepage/stats.html" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
     /* Global Reset & Body */
     * {
@@ -35,11 +35,10 @@
     /* Header */
     header {
       background-color: #222;
-      padding: 20px 40px;
+      padding: 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
     .branding {
       display: flex;
@@ -57,19 +56,18 @@
       list-style: none;
       display: flex;
       gap: 20px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
     }
     nav ul li a {
+      color: #ccc;
+      font-size: 1em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       padding: 8px 12px;
       border-radius: 4px;
-      background: #222;
-      color: #ccc;
-      transition: background 0.3s ease, color 0.3s ease;
+      transition: background 0.3s ease;
     }
-    nav ul li a:hover,
-    nav ul li a.active {
-      background-color: orange;
+    nav ul li a:hover {
+      background-color: #333;
       color: #fff;
     }
     /* Main Content */
@@ -121,7 +119,7 @@
       border-radius: 8px;
       background-color: #111;
     }
-    /* Standings Table (for stats, same structure) */
+    /* Stats Table */
     .standings-table {
       width: 100%;
       border-collapse: collapse;
@@ -165,6 +163,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 0;
     }
     .rank-badge {
       display: flex;
@@ -238,8 +237,6 @@
     }
     .footer-col ul {
       list-style: none;
-      padding: 0;
-      margin: 0;
     }
     .footer-col ul li {
       margin-bottom: 8px;
@@ -306,7 +303,6 @@
       background: url('discord.png') no-repeat center center;
       background-size: cover;
     }
-    /* Responsive Adjustments */
     @media (max-width: 600px) {
       .main-content { padding: 20px; }
       .table-wrapper { width: 100%; }
@@ -346,7 +342,7 @@
       <button id="nextPage">&raquo;</button>
     </div>
     <div class="table-wrapper">
-      <table class="standings-table" id="standings-table">
+      <table class="standings-table" id="stats-table">
         <thead>
           <tr>
             <th>Team</th>
@@ -390,15 +386,47 @@
     </div>
   </footer>
 
-  <!-- JavaScript for CSV Parsing and Table Building -->
   <script>
-    // Basic CSV parser: splits on newlines and commas (assumes no commas within fields)
+    // CSV URLs for 5 pages (example for Stats page)
+    const csvUrls = [
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTaCoNjF522XiQcmuG1FBHK6LbLY6pkDcQjxM6ESEaXJqflwndse0VqsXRbrpCWmBowu8TNW5k-AHki/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vRNfdMclgC6hSB6O_Gui7SsybfR2179fX57nkn9vpU24hptG-I7xybFpdIR5tv1hkNyvKLDA2OSsmut/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTlOIuefJ8umKaeWiW1yZfIr02xKIJqLpc-oFV0RgMXWY1gpF-2Kz-BafD9cdEEMK7kZzO1V0pM-U-O/pub?gid=0&single=true&output=csv"
+    ];
+    
+    let currentIndex = 0;
+    const dots = document.querySelectorAll(".pagination .dot");
+    // Changed table id to "stats-table"
+    const tableEl = document.getElementById("stats-table");
+    
+    // CSV cache for 30 seconds
+    const csvCache = {};
+    const CACHE_TTL = 30000;
+    
+    async function getCSVData(url) {
+      const now = Date.now();
+      if (csvCache[url] && (now - csvCache[url].timestamp < CACHE_TTL)) {
+        return csvCache[url].text;
+      }
+      const fullUrl = `${url}&t=${now}`;
+      const response = await fetch(fullUrl);
+      console.log("Fetch status:", response.status);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const text = await response.text();
+      csvCache[url] = { text, timestamp: now };
+      return text;
+    }
+    
     function parseCSV(text) {
       const lines = text.trim().split("\n");
       return lines.map(line => line.split(","));
     }
     
-    // Build table body merging the first two CSV columns into "Team" and using the next columns for "Record" and "PD"
+    // Build table body merging the first two CSV columns into "Team", with Record and PD
     function buildTableBody(data) {
       const tbody = document.createElement("tbody");
       for (let i = 1; i < data.length; i++) {
@@ -417,33 +445,10 @@
       return tbody;
     }
     
-    // Fetch CSV from URL, parse it, build table body, and update the table with the given id.
-    async function loadCSVandMerge(url, tableId) {
-      try {
-        const now = Date.now();
-        // Check cache first
-        if (csvCache[url] && (now - csvCache[url].timestamp < CACHE_TTL)) {
-          return csvCache[url].text;
-        }
-        const fullUrl = `${url}&t=${now}`;
-        const response = await fetch(fullUrl);
-        console.log("Fetch status:", response.status);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const text = await response.text();
-        csvCache[url] = { text, timestamp: now };
-        return text;
-      } catch (error) {
-        console.error("Error loading CSV:", error);
-        throw error;
-      }
-    }
-    
     async function updateTable() {
       try {
         const url = csvUrls[currentIndex];
-        const csvText = await loadCSVandMerge(url, tableEl.id);
+        const csvText = await getCSVData(url);
         const data = parseCSV(csvText);
         const tbody = buildTableBody(data);
         const tableBodyContainer = document.querySelector(`#${tableEl.id} tbody`);
@@ -461,7 +466,6 @@
       });
     }
     
-    // Event listeners for pagination controls
     document.getElementById("prevPage").addEventListener("click", () => {
       currentIndex = (currentIndex - 1 + csvUrls.length) % csvUrls.length;
       updateTable();
@@ -477,31 +481,12 @@
       });
     });
     
-    // CSV URLs for 5 pages (replace with your actual CSV URLs)
-    const csvUrls = [
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTaCoNjF522XiQcmuG1FBHK6LbLY6pkDcQjxM6ESEaXJqflwndse0VqsXRbrpCWmBowu8TNW5k-AHki/pub?gid=0&single=true&output=csv",
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vRNfdMclgC6hSB6O_Gui7SsybfR2179fX57nkn9vpU24hptG-I7xybFpdIR5tv1hkNyvKLDA2OSsmut/pub?gid=0&single=true&output=csv",
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTlOIuefJ8umKaeWiW1yZfIr02xKIJqLpc-oFV0RgMXWY1gpF-2Kz-BafD9cdEEMK7kZzO1V0pM-U-O/pub?gid=0&single=true&output=csv"
-    ];
-    
-    let currentIndex = 0;
-    const dots = document.querySelectorAll(".pagination .dot");
-    const tableEl = document.getElementById("standings-table");
-    
-    // CSV cache for 30 seconds
-    const csvCache = {};
-    const CACHE_TTL = 30000;
-    
-    // Auto-refresh every 30 seconds
     setInterval(updateTable, 30000);
     updateActiveDot();
     updateTable();
   </script>
   
   <script>
-    // Smooth scrolling & custom scrollbar scripts
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
     }
