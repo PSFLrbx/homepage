@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PSFL – Standings</title>
-  <!-- Open Graph & Twitter Meta -->
+  <title>Stats | PSFL</title>
   <meta property="og:title" content="PSFL Standings" />
   <meta property="og:description" content="Check your team's standing in the PSFL ro-football league." />
   <meta property="og:image" content="logo.png" />
@@ -12,59 +11,29 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
-    /* Base Variables and Resets */
-    :root {
-      --primary-bg: #111;
-      --secondary-bg: #222;
-      --accent: orange;
-      --overlay: rgba(0,0,0,0.35);
-      --transition: 0.5s ease;
-    }
-    html {
-      scroll-behavior: smooth;
-      scrollbar-width: none;
-    }
-    ::-webkit-scrollbar {
-      display: none;
-    }
-    *, *::before, *::after {
-      margin: 0; padding: 0;
+    /* Global Reset & Body */
+    * {
+      margin: 0; 
+      padding: 0; 
       box-sizing: border-box;
     }
     body {
       font-family: 'IBM Plex Sans', sans-serif;
-      background: var(--primary-bg);
+      background-color: #111;
       color: #fff;
       line-height: 1.6;
     }
-    /* Custom Scrollbar (Draggable) */
-    .custom-scrollbar {
-      position: fixed;
-      right: 5px;
-      top: 0;
-      width: 8px;
-      height: 100vh;
-      background: rgba(255,255,255,0.1);
-      border-radius: 4px;
-      z-index: 102;
-      pointer-events: auto;
+    a {
+      color: orange;
+      text-decoration: none;
+      transition: color 0.3s ease;
     }
-    .scrollbar-thumb {
-      width: 100%;
-      background: var(--accent);
-      border-radius: 4px;
-      position: absolute;
-      top: 0;
-      height: 20%;
-      transition: height 0.3s, top 0.3s;
-      cursor: grab;
-    }
-    .scrollbar-thumb:active {
-      cursor: grabbing;
+    a:hover {
+      color: #ffb84d;
     }
     /* Header */
     header {
-      background: var(--secondary-bg);
+      background-color: #222;
       padding: 20px;
       display: flex;
       align-items: center;
@@ -79,7 +48,8 @@
       width: 60px;
     }
     header h1 {
-      font-size: 2.5em;
+      font-size: 2em;
+      margin: 0;
     }
     nav ul {
       list-style: none;
@@ -96,53 +66,67 @@
       transition: background 0.3s ease;
     }
     nav ul li a:hover {
-      background: #333;
+      background-color: #333;
       color: #fff;
     }
-    /* Standings Section */
-    .standings {
-      background: #131313;
-      padding: 60px 20px 80px;
+    /* Main Content */
+    .main-content {
+      padding: 40px 20px;
+      background-color: #111;
+      min-height: 80vh;
       text-align: center;
     }
-    .standings h2 {
+    .main-content h2 {
       font-size: 2em;
-      margin-bottom: 1em;
+      margin-bottom: 20px;
     }
-    .standings-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      max-width: 1200px;
+    /* Pagination Controls */
+    .pagination {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .pagination button {
+      background: none;
+      border: none;
+      color: orange;
+      font-size: 1.5em;
+      cursor: pointer;
+      margin: 0 10px;
+      transition: color 0.3s ease;
+    }
+    .pagination button:hover {
+      color: #ffb84d;
+    }
+    .pagination .dot {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      background-color: #444;
+      border-radius: 50%;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .pagination .dot.active {
+      background-color: orange;
+    }
+    /* Table Wrapper */
+    .table-wrapper {
+      width: 85vw;
       margin: 0 auto;
-      padding: 0 20px;
-    }
-    .conference {
-      background: var(--secondary-bg);
+      overflow-x: auto;
       border-radius: 8px;
-      box-shadow: 0 0 2em -0.5em rgba(0,0,0,0.7);
-      padding: 20px;
-      border: 3px solid #444;
+      background-color: #111;
     }
-    .conference h3 {
-      font-size: 1.8em;
-      margin-bottom: 0.5em;
-      color: var(--accent);
-    }
-    /* Table Styles with Fixed Layout */
+    /* Standings Table */
     .standings-table {
       width: 100%;
       border-collapse: collapse;
-      table-layout: fixed;
       text-align: center;
-      margin-top: 10px;
+      font-family: 'IBM Plex Sans', sans-serif;
     }
-    .standings-table colgroup col:nth-child(1) {
-      width: 50%;
-    }
-    .standings-table colgroup col:nth-child(2),
-    .standings-table colgroup col:nth-child(3) {
-      width: 25%;
+    .standings-table thead {
+      background-color: #222;
     }
     .standings-table thead th {
       padding: 15px;
@@ -150,23 +134,92 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       border-bottom: 2px solid #444;
-      text-align: center;
     }
-    .standings-table tbody td {
+    .standings-table tbody tr {
+      transition: background 0.2s ease;
+    }
+    .standings-table tbody tr:nth-child(even) {
+      background-color: #1a1a1a;
+    }
+    .standings-table tbody tr:hover {
+      background-color: #333;
+    }
+    .standings-table td {
       padding: 15px;
       border-bottom: 1px solid #444;
       font-size: 0.95em;
-      text-align: center;
+      word-wrap: break-word;
+    }
+    /* Rank Cell */
+    .rank-cell {
+      min-width: 80px;
+      min-height: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+    .rank-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 35px;
+      height: 35px;
+      background: #222;
+      border: 2px solid #444;
+      border-radius: 6px;
+      box-shadow: inset 1px 1px 2px #000;
+    }
+    .team-name {
+      font-size: 0.85em;
+      line-height: 1.2;
+    }
+    /* Glow Effects for Top 3 Ranks */
+    .rank-1 {
+      border-color: gold;
+      animation: glowGold 2s infinite;
+    }
+    @keyframes glowGold {
+      0% { box-shadow: 0 0 5px gold; }
+      50% { box-shadow: 0 0 15px gold; }
+      100% { box-shadow: 0 0 5px gold; }
+    }
+    .rank-2 {
+      border-color: silver;
+      animation: glowSilver 2s infinite;
+    }
+    @keyframes glowSilver {
+      0% { box-shadow: 0 0 5px silver; }
+      50% { box-shadow: 0 0 15px silver; }
+      100% { box-shadow: 0 0 5px silver; }
+    }
+    .rank-3 {
+      border-color: #cd7f32;
+      animation: glowBronze 2s infinite;
+    }
+    @keyframes glowBronze {
+      0% { box-shadow: 0 0 5px #cd7f32; }
+      50% { box-shadow: 0 0 15px #cd7f32; }
+      100% { box-shadow: 0 0 5px #cd7f32; }
+    }
+    /* Font-scaling for large numeric values */
+    .shrink {
+      font-size: 0.8em;
+    }
+    @media (max-width: 900px) {
+      .main-content { padding: 20px; }
+      .table-wrapper { width: 100%; }
     }
     /* Footer */
     footer {
-      background: var(--secondary-bg);
-      padding: 50px 0;
+      background-color: #222;
       text-align: center;
+      padding: 30px 0;
     }
     .footer-container {
-      max-width: 1000px;
       width: 90%;
+      max-width: 1000px;
       margin: 0 auto;
       display: flex;
       flex-wrap: wrap;
@@ -176,11 +229,10 @@
     .footer-col h4 {
       margin-bottom: 15px;
       font-size: 1.2em;
+      color: #fff;
     }
     .footer-col ul {
       list-style: none;
-      padding: 0;
-      margin: 0;
     }
     .footer-col ul li {
       margin-bottom: 8px;
@@ -191,12 +243,12 @@
       transition: color 0.3s ease;
     }
     .footer-col ul li a:hover {
-      color: var(--accent);
+      color: orange;
     }
     .social-icons {
       display: flex;
-      gap: 10px;
       align-items: center;
+      gap: 10px;
     }
     .icon {
       width: 40px;
@@ -206,6 +258,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      text-decoration: none;
       color: #fff;
       font-size: 1.2em;
       transition: background 0.3s ease;
@@ -214,50 +267,9 @@
     .icon:hover {
       background: #666;
     }
-    .tooltip {
-      position: absolute;
-      bottom: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--secondary-bg);
-      color: #fff;
-      font-size: 0.75em;
-      padding: 6px 10px;
-      border-radius: 4px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      white-space: nowrap;
-    }
-    .tooltip::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 5px;
-      border-style: solid;
-      border-color: var(--secondary-bg) transparent transparent transparent;
-    }
-    .icon:hover .tooltip {
-      opacity: 1;
-    }
     .icon-discord {
-      background: url('discord.png') no-repeat center;
+      background: url('discord.png') no-repeat center center;
       background-size: cover;
-    }
-    /* Responsive Adjustments */
-    @media (max-width: 600px) {
-      .standings-grid {
-        grid-template-columns: 1fr;
-      }
-      .footer-container {
-        flex-direction: column;
-        text-align: center;
-      }
-      header h1 {
-        font-size: 2em;
-      }
     }
   </style>
 </head>
@@ -279,41 +291,26 @@
     </nav>
   </header>
 
-  <!-- Custom Scrollbar (Draggable) -->
-  <div class="custom-scrollbar">
-    <div class="scrollbar-thumb"></div>
+  <!-- Main Content (Example content for Stats page) -->
+  <div class="main-content">
+    <h2>Player Stats</h2>
+    <div class="pagination">
+      <button id="prevPage">&laquo;</button>
+      <span class="dot" data-index="0"></span>
+      <span class="dot" data-index="1"></span>
+      <span class="dot" data-index="2"></span>
+      <span class="dot" data-index="3"></span>
+      <span class="dot" data-index="4"></span>
+      <button id="nextPage">&raquo;</button>
+    </div>
+    <div class="table-wrapper">
+      <table class="standings-table" id="standings-table">
+        <!-- Table header and body inserted dynamically -->
+      </table>
+    </div>
   </div>
 
-  <!-- Standings Section -->
-  <section class="standings">
-    <h2>Standings</h2>
-    <div class="standings-grid">
-      <!-- SEC Conference -->
-      <div class="conference">
-        <h3>SEC Conference</h3>
-        <table class="standings-table" id="table-sec">
-          <!-- The colgroup and thead will be inserted via JavaScript -->
-        </table>
-      </div>
-      <!-- BIG Conference -->
-      <div class="conference">
-        <h3>BIG Conference</h3>
-        <table class="standings-table" id="table-big"></table>
-      </div>
-      <!-- XII Conference -->
-      <div class="conference">
-        <h3>XII Conference</h3>
-        <table class="standings-table" id="table-xii"></table>
-      </div>
-      <!-- ACC Conference -->
-      <div class="conference">
-        <h3>ACC Conference</h3>
-        <table class="standings-table" id="table-acc"></table>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer Section -->
+  <!-- Footer -->
   <footer>
     <div class="footer-container">
       <div class="footer-col">
@@ -344,65 +341,104 @@
     </div>
   </footer>
 
-  <!-- JavaScript: CSV Parsing and Table Generation -->
   <script>
-    // Simple CSV parser (this basic parser assumes no commas within fields)
+    // CSV links for 5 pages (example for Stats page)
+    const csvUrls = [
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTaCoNjF522XiQcmuG1FBHK6LbLY6pkDcQjxM6ESEaXJqflwndse0VqsXRbrpCWmBowu8TNW5k-AHki/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vRNfdMclgC6hSB6O_Gui7SsybfR2179fX57nkn9vpU24hptG-I7xybFpdIR5tv1hkNyvKLDA2OSsmut/pub?gid=0&single=true&output=csv",
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTlOIuefJ8umKaeWiW1yZfIr02xKIJqLpc-oFV0RgMXWY1gpF-2Kz-BafD9cdEEMK7kZzO1V0pM-U-O/pub?gid=0&single=true&output=csv"
+    ];
+    
+    let currentIndex = 0;
+    const dots = document.querySelectorAll(".pagination .dot");
+    const tableEl = document.getElementById("standings-table");
+    
+    // CSV cache for 30 seconds
+    const csvCache = {};
+    const CACHE_TTL = 30000;
+    
+    async function getCSVData(url) {
+      const now = Date.now();
+      if (csvCache[url] && (now - csvCache[url].timestamp < CACHE_TTL)) {
+        return csvCache[url].text;
+      }
+      const fullUrl = `${url}&t=${now}`;
+      const response = await fetch(fullUrl);
+      const text = await response.text();
+      csvCache[url] = { text, timestamp: now };
+      return text;
+    }
+    
     function parseCSV(text) {
       const lines = text.trim().split("\n");
       return lines.map(line => line.split(","));
     }
-
-    // Build HTML for a table with a merged "Team" column using a colgroup
-    function buildMergedTableHTML(data) {
-      // data[0] is CSV header (ignored here since we supply our own)
-      let html = "<colgroup>";
-      html += '<col style="width:50%;">';
-      html += '<col style="width:25%;">';
-      html += '<col style="width:25%;">';
-      html += "</colgroup>";
-      html += "<thead><tr>";
-      html += "<th>Team</th><th>Record</th><th>PD</th>";
-      html += "</tr></thead>";
-      html += "<tbody>";
+    
+    // Build table body merging columns 1 and 2 as "Team", with Record and PD
+    function buildTableBody(data) {
+      const tbody = document.createElement("tbody");
       for (let i = 1; i < data.length; i++) {
-        const row = data[i];
-        // Merge first two CSV columns for "Team"
-        const team = row[0].trim() + " " + row[1].trim();
-        const record = row[2] ? row[2].trim() : "";
-        const pd = row[3] ? row[3].trim() : "";
-        html += "<tr>";
-        html += `<td>${team}</td>`;
-        html += `<td>${record}</td>`;
-        html += `<td>${pd}</td>`;
-        html += "</tr>";
+        const row = document.createElement("tr");
+        // Merge first two columns for Team
+        const teamCell = document.createElement("td");
+        teamCell.textContent = data[i][0].trim() + " " + data[i][1].trim();
+        row.appendChild(teamCell);
+        // Next is Record
+        const recordCell = document.createElement("td");
+        recordCell.textContent = data[i][2].trim();
+        row.appendChild(recordCell);
+        // Finally PD
+        const pdCell = document.createElement("td");
+        pdCell.textContent = data[i][3].trim();
+        row.appendChild(pdCell);
+        tbody.appendChild(row);
       }
-      html += "</tbody>";
-      return html;
+      return tbody;
     }
-
-    // Load CSV from a URL and update the table with given id
-    function loadCSVMerged(url, tableId) {
-      fetch(url)
-        .then(response => response.text())
-        .then(text => {
-          const data = parseCSV(text);
-          const tableHTML = buildMergedTableHTML(data);
-          document.getElementById(tableId).innerHTML = tableHTML;
-        })
-        .catch(err => {
-          console.error("Error loading CSV from " + url, err);
-          document.getElementById(tableId).innerHTML = "<thead><tr><th>Error</th></tr></thead><tbody><tr><td>Failed to load data</td></tr></tbody>";
-        });
+    
+    async function updateTable() {
+      try {
+        const url = csvUrls[currentIndex];
+        const csvText = await getCSVData(url);
+        const data = parseCSV(csvText);
+        const tbody = buildTableBody(data);
+        const tableBodyContainer = document.querySelector(`#${tableEl.id} tbody`);
+        tableBodyContainer.replaceWith(tbody);
+        updateActiveDot();
+      } catch (error) {
+        console.error("Error updating table:", error);
+        tableEl.innerHTML = "<thead><tr><th>Error</th></tr></thead><tbody><tr><td>Failed to load data</td></tr></tbody>";
+      }
     }
-
-    // CSV URLs for each conference
-    loadCSVMerged("https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pub?gid=0&single=true&output=csv", "table-sec");
-    loadCSVMerged("https://docs.google.com/spreadsheets/d/e/2PACX-1vTBYA1JSJfRi4b-2fF0Dt5HJuJ-nRWMGl-ksoMRODmQail38y4UlTCcfT70yuMuzKp9rykfwdvIs3e9/pub?gid=0&single=true&output=csv", "table-big");
-    loadCSVMerged("https://docs.google.com/spreadsheets/d/e/2PACX-1vRp86GK7e4fwNdQ_mkqZJXkbv279LvP4g5s8-bBFqNyZMHfFbK4W_jsg1F41qGfUHpVx-TX31eIjGlc/pub?gid=0&single=true&output=csv", "table-xii");
-    loadCSVMerged("https://docs.google.com/spreadsheets/d/e/2PACX-1vRWmQZvtt3XbDQ64Duy4MKADGrgOkR6Qh50DQfb3vwcWPWijNMl2uRM9HyDMZHwCj8id9zWEejEEnqY/pub?gid=0&single=true&output=csv", "table-acc");
+    
+    function updateActiveDot() {
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle("active", idx === currentIndex);
+      });
+    }
+    
+    document.getElementById("prevPage").addEventListener("click", () => {
+      currentIndex = (currentIndex - 1 + csvUrls.length) % csvUrls.length;
+      updateTable();
+    });
+    document.getElementById("nextPage").addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % csvUrls.length;
+      updateTable();
+    });
+    dots.forEach((dot, idx) => {
+      dot.addEventListener("click", () => {
+        currentIndex = idx;
+        updateTable();
+      });
+    });
+    
+    setInterval(updateTable, 30000);
+    updateActiveDot();
+    updateTable();
   </script>
-
-  <!-- Custom Scrollbar Script (unchanged) -->
+  
   <script>
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
