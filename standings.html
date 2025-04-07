@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PSFL – Standings</title>
-  <!-- Open Graph & Twitter Meta -->
   <meta property="og:title" content="PSFL" />
   <meta property="og:description" content="Unleash your passion and define the game. Join the ro-football revolution." />
   <meta property="og:image" content="logo.png" />
@@ -12,7 +11,6 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Base Variables and Resets */
     :root {
       --primary-bg: #111;
       --secondary-bg: #222;
@@ -24,10 +22,10 @@
     }
     html {
       scroll-behavior: smooth;
-      scrollbar-width: none; /* hide scrollbar in Firefox */
+      scrollbar-width: none;
     }
     ::-webkit-scrollbar {
-      display: none; /* hide scrollbar in WebKit */
+      display: none;
     }
     *, *::before, *::after {
       margin: 0; 
@@ -40,7 +38,6 @@
       color: #fff;
       line-height: 1.6;
     }
-    /* Custom Draggable Scrollbar */
     .custom-scrollbar {
       position: fixed;
       right: 5px;
@@ -65,7 +62,6 @@
     .scrollbar-thumb:active {
       cursor: grabbing;
     }
-    /* Header & Navigation */
     header {
       padding: 20px 40px;
       background: var(--secondary-bg);
@@ -105,8 +101,6 @@
       background: var(--accent);
       color: #fff;
     }
-    
-    /* Standings Section */
     .standings {
       background: #131313;
       padding: 60px 20px 80px;
@@ -136,14 +130,12 @@
       margin-bottom: 0.5em;
       color: var(--accent);
     }
-    /* Table with fixed layout so columns line up */
     table.standings-table {
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
       margin-top: 10px;
     }
-    /* Three columns: first is 50%, next two are 25% each */
     table.standings-table colgroup col:nth-child(1) {
       width: 50%;
     }
@@ -165,15 +157,12 @@
     tbody td:nth-child(3) {
       text-align: center;
     }
-    /* Add a hover effect for table rows */
     tbody tr {
       transition: background 0.3s ease;
     }
     tbody tr:hover {
       background: #1a1a1a;
     }
-    
-    /* Footer Section */
     footer {
       background: var(--secondary-bg);
       padding: 50px 0;
@@ -261,8 +250,6 @@
       background: url('discord.png') no-repeat center;
       background-size: cover;
     }
-    
-    /* Responsive Adjustments */
     @media (max-width: 600px) {
       .standings-grid {
         grid-template-columns: 1fr;
@@ -295,17 +282,12 @@
       </ul>
     </nav>
   </header>
-  
-  <!-- Custom Scrollbar (Draggable) -->
   <div class="custom-scrollbar">
     <div class="scrollbar-thumb"></div>
   </div>
-  
-  <!-- STANDINGS SECTION -->
   <section class="standings">
     <h2>Standings</h2>
     <div class="standings-grid">
-      <!-- SEC Conference -->
       <div class="conference">
         <h3>SEC Conference</h3>
         <table class="standings-table" id="table-sec">
@@ -324,7 +306,6 @@
           <tbody></tbody>
         </table>
       </div>
-      <!-- BIG Conference -->
       <div class="conference">
         <h3>BIG Conference</h3>
         <table class="standings-table" id="table-big">
@@ -343,7 +324,6 @@
           <tbody></tbody>
         </table>
       </div>
-      <!-- XII Conference -->
       <div class="conference">
         <h3>XII Conference</h3>
         <table class="standings-table" id="table-xii">
@@ -362,7 +342,6 @@
           <tbody></tbody>
         </table>
       </div>
-      <!-- ACC Conference -->
       <div class="conference">
         <h3>ACC Conference</h3>
         <table class="standings-table" id="table-acc">
@@ -383,8 +362,6 @@
       </div>
     </div>
   </section>
-  
-  <!-- FOOTER SECTION -->
   <footer>
     <div class="footer-container">
       <div class="footer-col">
@@ -413,30 +390,21 @@
       </div>
     </div>
   </footer>
-  
-  <!-- JavaScript for CSV Parsing and Merged Column Table -->
   <script>
-    // Basic CSV parser: splits on newlines and commas (assumes no commas within fields).
     function parseCSV(text) {
       const lines = text.trim().split("\n");
       return lines.map(line => line.split(","));
     }
-    // Create a <tbody> that merges the first two CSV columns into "Team"
-    // and uses the next columns for "Record" and "PD."
     function buildTableBody(data) {
       const tbody = document.createElement("tbody");
-      // Start from row 1 to skip CSV header row
       for (let i = 1; i < data.length; i++) {
         const row = document.createElement("tr");
-        // Merge first two columns as "Team"
         const teamCell = document.createElement("td");
         teamCell.textContent = data[i][0].trim() + " " + data[i][1].trim();
         row.appendChild(teamCell);
-        // Next column is "Record"
         const recordCell = document.createElement("td");
         recordCell.textContent = data[i][2].trim();
         row.appendChild(recordCell);
-        // Last column is "PD"
         const pdCell = document.createElement("td");
         pdCell.textContent = data[i][3].trim();
         row.appendChild(pdCell);
@@ -444,7 +412,6 @@
       }
       return tbody;
     }
-    // Fetch CSV from URL, parse, build table body, append to <table> with given id.
     function loadCSVandMerge(url, tableId) {
       fetch(url)
         .then(resp => resp.text())
@@ -456,15 +423,11 @@
         })
         .catch(err => console.error("Error loading CSV:", err));
     }
-    
-    // Load your four CSV files (replace with your actual CSV URLs)
     loadCSVandMerge("https://docs.google.com/spreadsheets/d/e/2PACX-1vT3n7oTwpC5VIsv98L17nEJ-eIaBGwsc5cSR3mCys7U1SH-OatWkulEBVRxjp1RAM-rg0S8sEH4jsvQ/pub?gid=0&single=true&output=csv", "table-sec");
     loadCSVandMerge("https://docs.google.com/spreadsheets/d/e/2PACX-1vTBYA1JSJfRi4b-2fF0Dt5HJuJ-nRWMGl-ksoMRODmQail38y4UlTCcfT70yuMuzKp9rykfwdvIs3e9/pub?gid=0&single=true&output=csv", "table-big");
     loadCSVandMerge("https://docs.google.com/spreadsheets/d/e/2PACX-1vRp86GK7e4fwNdQ_mkqZJXkbv279LvP4g5s8-bBFqNyZMHfFbK4W_jsg1F41qGfUHpVx-TX31eIjGlc/pub?gid=0&single=true&output=csv", "table-xii");
     loadCSVandMerge("https://docs.google.com/spreadsheets/d/e/2PACX-1vRWmQZvtt3XbDQ64Duy4MKADGrgOkR6Qh50DQfb3vwcWPWijNMl2uRM9HyDMZHwCj8id9zWEejEEnqY/pub?gid=0&single=true&output=csv", "table-acc");
   </script>
-  
-  <!-- Custom Scrollbar Script -->
   <script>
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
