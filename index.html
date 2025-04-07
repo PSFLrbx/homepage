@@ -214,7 +214,6 @@
       justify-content: flex-end;
       transition: background 0.3s ease, transform 0.3s ease;
       z-index: 2;
-      /* Add a min-height so all black overlays match in size: */
       min-height: 4em;
     }
     .card-content:hover {
@@ -352,13 +351,9 @@
     </div>
     <nav></nav>
   </header>
-  
-  <!-- Custom Scrollbar (Draggable) -->
   <div class="custom-scrollbar">
     <div class="scrollbar-thumb"></div>
   </div>
-  
-  <!-- TOP BACKGROUND SECTION -->
   <section class="background" id="top">
     <div class="content">
       <h2>Unleash Your Passion</h2>
@@ -368,12 +363,9 @@
       </p>
     </div>
   </section>
-  
-  <!-- PORTFOLIO SECTION -->
   <section class="portfolio" id="portfolio">
     <h2>Our Portfolio</h2>
     <div class="card-grid" id="cardGrid">
-      <!-- Card 1: Stats -->
       <div class="card-grid-space" data-index="0">
         <div class="num">1</div>
         <a href="stats.html">
@@ -386,7 +378,6 @@
           </div>
         </a>
       </div>
-      <!-- Card 2: Standings -->
       <div class="card-grid-space" data-index="1">
         <div class="num">2</div>
         <a href="standings.html">
@@ -399,7 +390,6 @@
           </div>
         </a>
       </div>
-      <!-- Card 3: Rulebook -->
       <div class="card-grid-space" data-index="2">
         <div class="num">3</div>
         <a href="rulebook.html">
@@ -412,7 +402,6 @@
           </div>
         </a>
       </div>
-      <!-- Card 4: Credits -->
       <div class="card-grid-space" data-index="3">
         <div class="num">4</div>
         <a href="credits.html">
@@ -427,8 +416,6 @@
       </div>
     </div>
   </section>
-  
-  <!-- FOOTER SECTION -->
   <footer class="footer" id="footer">
     <div class="footer-container">
       <div class="footer-col">
@@ -458,7 +445,6 @@
       </div>
     </div>
   </footer>
-  
   <script>
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
@@ -536,9 +522,7 @@
       window.addEventListener('resize', updateCustomScrollbar);
     });
   </script>
-  
   <script>
-    // Tween-out on navigation click before navigating
     const navLinks = document.querySelectorAll('nav ul li a');
     navLinks.forEach(link => {
       link.addEventListener('click', function(e) {
