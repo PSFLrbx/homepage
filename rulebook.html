@@ -6,7 +6,6 @@
   <title>PSFL Rulebook</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
-    /* Base Variables & Global Resets */
     :root {
       --primary-bg: #111;
       --secondary-bg: #222;
@@ -38,8 +37,6 @@
     a:hover { 
       color: var(--light-accent);
     }
-    
-    /* Header & Navigation (Updated to match other pages) */
     header {
       background-color: var(--secondary-bg);
       padding: 20px 40px;
@@ -78,8 +75,6 @@
       background-color: var(--accent);
       color: #fff;
     }
-    
-    /* Glossary Sidebar */
     .glossary {
       position: fixed;
       top: 150px;
@@ -99,8 +94,12 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    .glossary ul { list-style: none; }
-    .glossary ul li { margin-bottom: 10px; }
+    .glossary ul { 
+      list-style: none; 
+    }
+    .glossary ul li { 
+      margin-bottom: 10px; 
+    }
     .glossary ul li a {
       font-size: 0.9em;
       color: #ccc;
@@ -113,8 +112,6 @@
     .glossary ul li a:hover { 
       color: var(--accent); 
     }
-    
-    /* Background & Content */
     .background {
       position: relative;
       min-height: 150vh;
@@ -150,8 +147,6 @@
       from { transform: translateX(-200%); opacity: 0; }
       to   { transform: translateX(0); opacity: 1; }
     }
-    
-    /* Rulebook Card Sections */
     .rule-section {
       background: var(--card-bg);
       margin-bottom: 30px;
@@ -169,8 +164,6 @@
     .rule-section p { 
       margin-bottom: 15px; 
     }
-    
-    /* Rule Cards: one bullet point per row */
     .rule-cards {
       display: flex;
       flex-direction: column;
@@ -184,8 +177,6 @@
       width: 100%;
       font-size: 0.95em;
     }
-    
-    /* Message Header */
     .message-header {
       display: flex;
       align-items: center;
@@ -210,8 +201,6 @@
       font-size: 0.9em;
       color: #aaa;
     }
-    
-    /* Footer */
     footer {
       background-color: var(--secondary-bg);
       padding: 50px 0;
@@ -230,7 +219,9 @@
       font-size: 1.2em;
       color: #fff;
     }
-    .footer-col ul { list-style: none; }
+    .footer-col ul { 
+      list-style: none; 
+    }
     .footer-col ul li {
       margin-bottom: 8px;
     }
@@ -289,7 +280,6 @@
     .icon-discord:hover {
       transform: rotate(360deg);
     }
-    
     @media (max-width: 600px) {
       .footer-container {
         flex-direction: column;
@@ -319,8 +309,6 @@
       </ul>
     </nav>
   </header>
-
-  <!-- Glossary Sidebar -->
   <div class="glossary">
     <h2>Glossary</h2>
     <ul>
@@ -332,7 +320,6 @@
       <li><a href="#commands">Commands</a></li>
     </ul>
   </div>
-
   <section class="background">
     <div class="content page-enter">
       <div class="message-header">
@@ -342,10 +329,7 @@
           <span class="date">March 17, 2025</span>
         </div>
       </div>
-      
-      <!-- Updated Rulebook Content with Card Sections -->
       <h2>PSFL Games Rulebook</h2>
-      
       <div class="rule-section" id="server-settings">
         <h3>Server Settings</h3>
         <div class="rule-cards">
@@ -359,7 +343,6 @@
           <div class="rule-card">Weather: As Scheduled</div>
         </div>
       </div>
-      
       <div class="rule-section" id="game-mechanics">
         <h3>Game Mechanics</h3>
         <div class="rule-cards">
@@ -371,7 +354,6 @@
           <div class="rule-card">Mercy Rule: OFF</div>
         </div>
       </div>
-      
       <div class="rule-section" id="players-rules">
         <h3>Players &amp; Game Rules</h3>
         <div class="rule-cards">
@@ -394,7 +376,6 @@
           <div class="rule-card">Only 2 QB runs per drive.</div>
         </div>
       </div>
-      
       <div class="rule-section" id="challenges">
         <h3>Challenges</h3>
         <p>If the auto-ref call is disputed, coaches (+AC) may challenge. The referee reviews the challenge and issues a verdict. Teams have three challenges per game; a successful challenge returns the challenge without penalty. Challenges may only be issued for:</p>
@@ -406,7 +387,6 @@
           <div class="rule-card">Ineligible Players (not signed, suspended, alt-account)</div>
         </div>
       </div>
-      
       <div class="rule-section" id="penalties">
         <h3>Penalties</h3>
         <div class="rule-cards">
@@ -420,7 +400,6 @@
           <div class="rule-card"><strong>More than one fake per halftime</strong> — Results in a 2-point deduction and skipping the special play.</div>
         </div>
       </div>
-      
       <div class="rule-section" id="commands">
         <h3>Commands (Refs)</h3>
         <div class="rule-cards">
@@ -442,11 +421,9 @@
           <div class="rule-card">:padmin "user"</div>
         </div>
       </div>
-      
       <p style="margin-top: 30px; text-align: center; font-weight: bold;">Signed by 495BC and Lu</p>
     </div>
   </section>
-
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-col">
@@ -476,9 +453,7 @@
       </div>
     </div>
   </footer>
-
   <script>
-    // Parallax Effect for Background
     let targetY = 0, currentY = 0;
     const parallaxSpeed = 0.3;
     function updateParallax() {
@@ -490,8 +465,6 @@
       targetY = -(window.pageYOffset * parallaxSpeed);
     });
     updateParallax();
-
-    // Tween-out on navigation click before navigating
     const navLinks = document.querySelectorAll('nav ul li a');
     navLinks.forEach(link => {
       link.addEventListener('click', function(e) {
@@ -503,17 +476,13 @@
         setTimeout(() => { window.location.href = targetUrl; }, 1200);
       });
     });
-
-    // Glossary Active Section Handling using IntersectionObserver
     const glossaryLinks = document.querySelectorAll('.glossary a');
     const sections = Array.from(document.querySelectorAll('.rule-section'));
-    
     const observerOptions = {
       root: null,
       rootMargin: '0px',
       threshold: 0.4
     };
-    
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         const id = entry.target.getAttribute('id');
@@ -525,7 +494,6 @@
         }
       });
     }, observerOptions);
-    
     sections.forEach(section => {
       observer.observe(section);
     });
