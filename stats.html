@@ -365,10 +365,12 @@
       return lines.map(line => line.split(","));
     }
     
-    // Build table header dynamically from the CSV header row:
-    // Merge first two columns as "Player" and then output remaining headers.
+    // Modified: Build table header dynamically with added "Rank" column.
     function buildTableHeader(headerRow) {
       const tr = document.createElement("tr");
+      const rankTh = document.createElement("th");
+      rankTh.textContent = "Rank";
+      tr.appendChild(rankTh);
       const playerTh = document.createElement("th");
       playerTh.textContent = "Player";
       tr.appendChild(playerTh);
@@ -380,12 +382,15 @@
       return tr;
     }
     
-    // Build table body merging first two CSV columns into "Player" and then output the rest.
+    // Modified: Build table body with rank numbers.
     function buildTableBody(data) {
       const tbody = document.createElement("tbody");
       // Skip header row (index 0)
       for (let i = 1; i < data.length; i++) {
         const row = document.createElement("tr");
+        const rankCell = document.createElement("td");
+        rankCell.textContent = i;
+        row.appendChild(rankCell);
         const playerCell = document.createElement("td");
         playerCell.textContent = data[i][0].trim() + " " + data[i][1].trim();
         row.appendChild(playerCell);
@@ -403,13 +408,22 @@
       try {
         const url = csvUrls[currentIndex];
         const csvText = await getCSVData(url);
-        const data = parseCSV(csvText);
+        let data = parseCSV(csvText);
         if (data.length < 1) {
           throw new Error("CSV data is empty");
         }
         const headerRow = data[0];
+        // Find the "PTs" column (from index 2 onward)
+        const ptsIndex = headerRow.findIndex((header, index) => index >= 2 && header.trim() === "PTs");
+        if (ptsIndex === -1) {
+          console.error("PTs column not found, skipping sorting");
+        } else {
+          // Sort rows (excluding header) in descending order by PTs
+          const sortedRows = data.slice(1).sort((a, b) => Number(b[ptsIndex]) - Number(a[ptsIndex]));
+          data = [headerRow].concat(sortedRows);
+        }
         const thead = document.createElement("thead");
-        thead.appendChild(buildTableHeader(headerRow));
+        thead.appendChild(buildTableHeader(data[0]));
         const tbody = buildTableBody(data);
         const table = document.getElementById(tableEl.id);
         table.innerHTML = "";
