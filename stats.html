@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Stats | PSFL</title>
-  <!-- Open Graph & Twitter Meta -->
   <meta property="og:title" content="PSFL Stats" />
   <meta property="og:description" content="Check your player's stats in the PSFL ro-football league." />
   <meta property="og:image" content="logo.png" />
@@ -12,7 +11,6 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <style>
-    /* Global Reset & Body */
     * {
       margin: 0;
       padding: 0;
@@ -32,7 +30,6 @@
     a:hover {
       color: #ffb84d;
     }
-    /* Header */
     header {
       background-color: #222;
       padding: 20px 40px;
@@ -72,7 +69,6 @@
       background-color: orange;
       color: #fff;
     }
-    /* Main Content */
     .main-content {
       padding: 40px 20px;
       background-color: #111;
@@ -83,7 +79,6 @@
       font-size: 2em;
       margin-bottom: 20px;
     }
-    /* Pagination Controls */
     .pagination {
       text-align: center;
       margin-bottom: 20px;
@@ -113,7 +108,6 @@
     .pagination .dot.active {
       background-color: orange;
     }
-    /* Table Wrapper */
     .table-wrapper {
       width: 85vw;
       margin: 0 auto;
@@ -121,7 +115,6 @@
       border-radius: 8px;
       background-color: #111;
     }
-    /* Stats Table */
     .standings-table {
       width: 100%;
       border-collapse: collapse;
@@ -153,7 +146,6 @@
       font-size: 0.95em;
       word-wrap: break-word;
     }
-    /* For stats, center all data except first column (Player) */
     .standings-table td:not(:first-child) {
       text-align: center;
     }
@@ -161,7 +153,6 @@
       .main-content { padding: 20px; }
       .table-wrapper { width: 100%; }
     }
-    /* Footer */
     footer {
       background-color: #222;
       text-align: center;
@@ -258,7 +249,6 @@
   </style>
 </head>
 <body>
-  <!-- Header -->
   <header>
     <div class="branding">
       <div class="logo"><img src="logo.png" alt="PSFL Logo"></div>
@@ -274,8 +264,6 @@
       </ul>
     </nav>
   </header>
-
-  <!-- Main Content (Player Stats) -->
   <div class="main-content">
     <h2>Player Stats</h2>
     <div class="pagination">
@@ -289,12 +277,9 @@
     </div>
     <div class="table-wrapper">
       <table class="standings-table" id="stats-table">
-        <!-- Table header and body will be built dynamically -->
       </table>
     </div>
   </div>
-
-  <!-- Footer -->
   <footer>
     <div class="footer-container">
       <div class="footer-col">
@@ -324,9 +309,7 @@
       </div>
     </div>
   </footer>
-
   <script>
-    // CSV URLs for 5 pages (example for Stats page)
     const csvUrls = [
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBOJL88EtTsYD92usYJzXuYVeppCtgzbWVv3242OnlYppdY0d_4aB7oiUcdxBQPXG4NH18waveVt_i/pub?gid=0&single=true&output=csv",
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4RsqqIV-QSsp3hPj7hn6LpdW3CMS2YgOYG5aw6iSk2-TQjhU_uTUru2fI4pR4cWmYlS4Iiphkshpf/pub?gid=0&single=true&output=csv",
@@ -334,16 +317,11 @@
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vRNfdMclgC6hSB6O_Gui7SsybfR2179fX57nkn9vpU24hptG-I7xybFpdIR5tv1hkNyvKLDA2OSsmut/pub?gid=0&single=true&output=csv",
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTlOIuefJ8umKaeWiW1yZfIr02xKIJqLpc-oFV0RgMXWY1gpF-2Kz-BafD9cdEEMK7kZzO1V0pM-U-O/pub?gid=0&single=true&output=csv"
     ];
-    
     let currentIndex = 0;
     const dots = document.querySelectorAll(".pagination .dot");
-    // Use the id "stats-table" for the stats page.
     const tableEl = document.getElementById("stats-table");
-    
-    // CSV cache for 30 seconds
     const csvCache = {};
     const CACHE_TTL = 30000;
-    
     async function getCSVData(url) {
       const now = Date.now();
       if (csvCache[url] && (now - csvCache[url].timestamp < CACHE_TTL)) {
@@ -359,13 +337,10 @@
       csvCache[url] = { text, timestamp: now };
       return text;
     }
-    
     function parseCSV(text) {
       const lines = text.trim().split("\n");
       return lines.map(line => line.split(","));
     }
-    
-    // Modified: Build table header dynamically with added "Rank" column.
     function buildTableHeader(headerRow) {
       const tr = document.createElement("tr");
       const rankTh = document.createElement("th");
@@ -381,11 +356,8 @@
       }
       return tr;
     }
-    
-    // Modified: Build table body with rank numbers.
     function buildTableBody(data) {
       const tbody = document.createElement("tbody");
-      // Skip header row (index 0)
       for (let i = 1; i < data.length; i++) {
         const row = document.createElement("tr");
         const rankCell = document.createElement("td");
@@ -403,7 +375,6 @@
       }
       return tbody;
     }
-    
     async function updateTable() {
       try {
         const url = csvUrls[currentIndex];
@@ -413,12 +384,10 @@
           throw new Error("CSV data is empty");
         }
         const headerRow = data[0];
-        // Find the "PTs" column (from index 2 onward)
         const ptsIndex = headerRow.findIndex((header, index) => index >= 2 && header.trim() === "PTs");
         if (ptsIndex === -1) {
           console.error("PTs column not found, skipping sorting");
         } else {
-          // Sort rows (excluding header) in descending order by PTs
           const sortedRows = data.slice(1).sort((a, b) => Number(b[ptsIndex]) - Number(a[ptsIndex]));
           data = [headerRow].concat(sortedRows);
         }
@@ -435,13 +404,11 @@
         tableEl.innerHTML = "<thead><tr><th>Error</th></tr></thead><tbody><tr><td>Failed to load data</td></tr></tbody>";
       }
     }
-    
     function updateActiveDot() {
       dots.forEach((dot, idx) => {
         dot.classList.toggle("active", idx === currentIndex);
       });
     }
-    
     document.getElementById("prevPage").addEventListener("click", () => {
       currentIndex = (currentIndex - 1 + csvUrls.length) % csvUrls.length;
       updateTable();
@@ -456,12 +423,10 @@
         updateTable();
       });
     });
-    
     setInterval(updateTable, 30000);
     updateActiveDot();
     updateTable();
   </script>
-  
   <script>
     function easeInOutQuad(t) { 
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
